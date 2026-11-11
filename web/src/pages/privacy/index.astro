@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import {loadChrome} from '../../lib/pages/loadPage'
+import {t} from '../../i18n/utils'
+
+const locale = 'en'
+const {settings, navigation, footer} = await loadChrome()
+const title = `${t(locale, 'legal.privacyTitle')} - ${t(locale, 'site.name')}`
+const description = t(locale, 'legal.privacyMeta')
+
+const sections = [
+  {heading: 'legal.privacyCollectHeading', body: 'legal.privacyCollectBody'},
+  {heading: 'legal.privacyUseHeading', body: 'legal.privacyUseBody'},
+  {heading: 'legal.privacyShareHeading', body: 'legal.privacyShareBody'},
+  {heading: 'legal.privacyRetainHeading', body: 'legal.privacyRetainBody'},
+  {heading: 'legal.privacyRightsHeading', body: 'legal.privacyRightsBody'},
+  {heading: 'legal.privacyContactHeading', body: 'legal.privacyContactBody'},
+] as const
+---
+
+<BaseLayout
+  locale={locale}
+  title={title}
+  description={description}
+  settings={settings}
+  navigation={navigation}
+  footer={footer}
+>
+  <section class="section-pad">
+    <div class="container-site mx-auto max-w-3xl space-y-8">
+      <header class="space-y-3">
+        <h1 class="display-md text-fg">{t(locale, 'legal.privacyTitle')}</h1>
+        <p class="text-sm text-fg-subtle">{t(locale, 'legal.privacyUpdated')}</p>
+        <p class="prose-measure text-fg-muted">{t(locale, 'legal.privacyIntro')}</p>
+      </header>
+      {
+        sections.map((section) => (
+          <section class="space-y-2">
+            <h2 class="text-xl font-semibold text-fg">{t(locale, section.heading)}</h2>
+            <p class="prose-measure text-fg-muted">{t(locale, section.body)}</p>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

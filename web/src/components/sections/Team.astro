@@ -1,0 +1,79 @@
+---
+import type {Locale} from '../../i18n/locales'
+import SanityImage from '../sanity/SanityImage.astro'
+import {resolveLocaleString} from '../../lib/sanity/locale'
+import type {LocaleString, LocaleText, SanityImage as Img} from '../../lib/sanity/types'
+
+interface Props {
+  locale: Locale
+  localized?: boolean
+  section: {
+    heading?: string | LocaleString
+    intro?: string | LocaleText
+    groups?: Array<{
+      title?: string | LocaleString
+      members?: Array<{
+        name?: string
+        role?: string | LocaleString
+        bio?: string | LocaleText
+        photo?: Img
+      }>
+    }>
+  }
+}
+
+const {locale, section} = Astro.props
+const str = (v: string | LocaleString | undefined) =>
+  typeof v === 'string' ? v : resolveLocaleString(v, locale)
+
+const heading = str(section.heading)
+const intro = str(section.intro)
+const groups = (section.groups || []).map((g) => ({
+  title: str(g.title),
+  members: (g.members || []).filter((m) => m.name),
+}))
+---
+
+{
+  (heading || groups.length > 0) && (
+    <section class="section-pad section-defer" data-reveal>
+      <div class="container-site space-y-12">
+        {(heading || intro) && (
+          <div class="max-w-2xl space-y-3">
+            {heading && <h2 class="display-md text-fg">{heading}</h2>}
+            {intro && <p class="prose-measure text-base leading-relaxed text-fg-muted sm:text-lg">{intro}</p>}
+          </div>
+        )}
+        {groups.map((group) => (
+          <div class="space-y-5">
+            {group.title && <p class="eyebrow">{group.title}</p>}
+            <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {group.members.map((member) => (
+                <li class="card card-spotlight flex gap-4 p-4 sm:p-5" data-reveal-child>
+                  {member.photo && (
+                    <SanityImage
+                      image={member.photo}
+                      locale={locale}
+                      class="size-16 shrink-0 rounded-2xl object-cover"
+                      widths={[128, 256]}
+                      sizes="64px"
+                      maxWidth={256}
+                      altFallback={member.name}
+                    />
+                  )}
+                  <div class="min-w-0">
+                    <p class="font-semibold text-fg">{member.name}</p>
+                    {str(member.role) && <p class="text-sm text-fg-muted">{str(member.role)}</p>}
+                    {str(member.bio) && (
+                      <p class="mt-2 text-sm leading-relaxed text-fg-subtle">{str(member.bio)}</p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}

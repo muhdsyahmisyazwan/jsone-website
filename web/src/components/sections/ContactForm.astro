@@ -1,0 +1,252 @@
+---
+import type {Locale} from '../../i18n/locales'
+import {t} from '../../i18n/utils'
+import {resolveLocaleString} from '../../lib/sanity/locale'
+import type {LocaleString, LocaleText} from '../../lib/sanity/types'
+
+interface Props {
+  locale: Locale
+  localized?: boolean
+  section: {
+    heading?: string | LocaleString
+    intro?: string | LocaleText
+    showPhone?: boolean
+    showCompany?: boolean
+    successMessage?: string | LocaleString
+  }
+}
+
+const {locale, section} = Astro.props
+const str = (v: string | LocaleString | undefined) =>
+  typeof v === 'string' ? v : resolveLocaleString(v, locale)
+
+const heading = str(section.heading) || t(locale, 'nav.contact')
+const intro = str(section.intro)
+const showPhone = section.showPhone !== false
+const showCompany = section.showCompany !== false
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined
+const sendingLabel = t(locale, 'common.sending')
+const submitLabel = t(locale, 'common.submit')
+const errorGeneric = t(locale, 'form.error')
+const errorMissing = t(locale, 'form.errorMissing')
+const errorEmail = t(locale, 'form.errorEmail')
+const errorTooLong = t(locale, 'form.errorTooLong')
+
+const fieldClass =
+  'peer w-full rounded-2xl border border-border bg-bg-elevated px-4 pb-2.5 pt-6 text-base text-fg shadow-[var(--shadow-sm)] transition-[border-color] placeholder:text-transparent focus-visible:border-primary'
+const labelClass =
+  'pointer-events-none absolute left-4 top-1/2 origin-left -translate-y-1/2 text-sm text-fg-subtle transition-all peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-primary peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs'
+---
+
+<section class="section-pad section-defer" id="contact" data-reveal>
+  <div class="container-site mx-auto max-w-2xl space-y-8">
+    <div class="space-y-3 text-center">
+      <h2 class="display-md text-fg">{heading}</h2>
+      {intro && <p class="prose-measure mx-auto text-fg-muted">{intro}</p>}
+    </div>
+
+      <form
+      class="relative space-y-5 rounded-[var(--radius-xl)] border border-border bg-bg-elevated p-4 shadow-[var(--shadow-md)] sm:p-8"
+      method="POST"
+      action="/api/contact"
+      data-contact-form
+    >
+      <div class="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+        <label>
+          Company URL
+          <input type="text" name="company_url" tabindex="-1" autocomplete="off" />
+        </label>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="relative block sm:col-span-2">
+          <span class="sr-only">({t(locale, 'common.required')})</span>
+          <input
+            type="text"
+            name="name"
+            required
+            autocomplete="name"
+            enterkeyhint="next"
+            placeholder={t(locale, 'form.name')}
+            class={fieldClass}
+          />
+          <span class={labelClass}>{t(locale, 'form.name')}</span>
+        </label>
+        <label class="relative block sm:col-span-2">
+          <input
+            type="email"
+            name="email"
+            required
+            autocomplete="email"
+            inputmode="email"
+            enterkeyhint="next"
+            placeholder={t(locale, 'form.email')}
+            class={fieldClass}
+          />
+          <span class={labelClass}>{t(locale, 'form.email')}</span>
+        </label>
+        {
+          showPhone && (
+            <label class="relative block">
+              <input
+                type="tel"
+                name="phone"
+                autocomplete="tel"
+                inputmode="tel"
+                enterkeyhint="next"
+                placeholder={t(locale, 'form.phone')}
+                class={fieldClass}
+              />
+              <span class={labelClass}>{t(locale, 'form.phone')}</span>
+            </label>
+          )
+        }
+        {
+          showCompany && (
+            <label class="relative block">
+              <input
+                type="text"
+                name="company"
+                autocomplete="organization"
+                enterkeyhint="next"
+                placeholder={t(locale, 'form.company')}
+                class={fieldClass}
+              />
+              <span class={labelClass}>{t(locale, 'form.company')}</span>
+            </label>
+          )
+        }
+      </div>
+
+      <label class="relative block">
+        <textarea
+          name="message"
+          required
+          rows="5"
+          enterkeyhint="send"
+          placeholder={t(locale, 'form.message')}
+          class="peer w-full rounded-2xl border border-border bg-bg px-4 pb-2.5 pt-7 text-base text-fg shadow-[var(--shadow-sm)] transition-[border-color] placeholder:text-transparent focus-visible:border-primary"
+        ></textarea>
+        <span class="pointer-events-none absolute left-4 top-4 text-sm text-fg-subtle transition-all peer-focus:top-2.5 peer-focus:text-xs peer-focus:text-primary peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:text-xs">
+          {t(locale, 'form.message')}
+        </span>
+      </label>
+
+      <label class="flex min-h-11 cursor-pointer items-start gap-3 text-sm text-fg-muted">
+        <input
+          type="checkbox"
+          name="consent"
+          value="yes"
+          required
+          class="mt-1 size-5 shrink-0 rounded border-border accent-primary"
+        />
+        <span>{t(locale, 'form.consent')}</span>
+      </label>
+
+      {
+        turnstileSiteKey ? (
+          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="auto" />
+        ) : (
+          import.meta.env.DEV && (
+            <p class="text-xs text-fg-subtle">{t(locale, 'form.turnstileMissing')}</p>
+          )
+        )
+      }
+
+      <input type="hidden" name="locale" value={locale} />
+      <button
+        type="submit"
+        data-submit
+        class="btn btn-brand w-full disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+      >
+        {submitLabel}
+      </button>
+      <div aria-live="polite" aria-atomic="true" class="space-y-2">
+        <p class="hidden text-sm font-medium text-success" data-form-success role="status">
+          {str(section.successMessage) || t(locale, 'form.success')}
+        </p>
+        <p class="hidden text-sm font-medium text-danger" data-form-error role="alert">
+          {errorGeneric}
+        </p>
+      </div>
+    </form>
+  </div>
+</section>
+
+{turnstileSiteKey && (
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+)}
+
+<script
+  define:vars={{
+    sendingLabel,
+    submitLabel,
+    errorGeneric,
+    errorMissing,
+    errorEmail,
+    errorTooLong,
+  }}
+>
+  function messageForError(code) {
+    if (code === 'missing_fields') return errorMissing
+    if (code === 'invalid_email') return errorEmail
+    if (code === 'too_long') return errorTooLong
+    return errorGeneric
+  }
+
+  function bindContactForm() {
+    const form = document.querySelector('[data-contact-form]')
+    if (!(form instanceof HTMLFormElement) || form.dataset.bound === 'true') return
+    form.dataset.bound = 'true'
+
+    const success = form.querySelector('[data-form-success]')
+    const error = form.querySelector('[data-form-error]')
+    const submit = form.querySelector('[data-submit]')
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault()
+      success?.classList.add('hidden')
+      error?.classList.add('hidden')
+
+      if (!form.reportValidity()) return
+
+      if (submit instanceof HTMLButtonElement) {
+        submit.disabled = true
+        submit.textContent = sendingLabel
+      }
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          body: new FormData(form),
+          headers: {Accept: 'application/json'},
+        })
+        const data = await res.json().catch(() => ({}))
+        if (!res.ok || !data.ok) {
+          if (error) {
+            error.textContent = messageForError(data.error)
+            error.classList.remove('hidden')
+          }
+          if (window.turnstile) window.turnstile.reset()
+          return
+        }
+        success?.classList.remove('hidden')
+        form.reset()
+        if (window.turnstile) window.turnstile.reset()
+      } catch {
+        if (error) {
+          error.textContent = errorGeneric
+          error.classList.remove('hidden')
+        }
+      } finally {
+        if (submit instanceof HTMLButtonElement) {
+          submit.disabled = false
+          submit.textContent = submitLabel
+        }
+      }
+    })
+  }
+
+  bindContactForm()
+  document.addEventListener('astro:page-load', bindContactForm)
+</script>

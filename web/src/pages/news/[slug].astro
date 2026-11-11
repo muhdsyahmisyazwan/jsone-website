@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import SanityImage from '../../components/sanity/SanityImage.astro'
+import PortableText from '../../components/sanity/PortableText.astro'
+import {localePath} from '../../i18n/paths'
+import {t} from '../../i18n/utils'
+import {loadNewsArticle, newsStaticPaths} from '../../lib/pages/loadPage'
+
+export async function getStaticPaths() {
+  return newsStaticPaths('en')
+}
+
+const {slug} = Astro.params
+const locale = 'en' as const
+const data = await loadNewsArticle(locale, slug!)
+if (!data) {
+  throw new Error(`News article not found: ${slug}`)
+}
+const {article} = data
+---
+
+<BaseLayout
+  locale={locale}
+  title={data.title}
+  description={data.description}
+  ogImage={article.seo?.ogImage || article.mainImage}
+  settings={data.settings}
+  navigation={data.navigation}
+  footer={data.footer}
+>
+  <article class="section-pad">
+    <div class="container-site mx-auto max-w-3xl space-y-8">
+      <a href={localePath(locale, '/news/')} class="text-sm font-semibold text-primary hover:opacity-80">
+        ← {t(locale, 'nav.news')}
+      </a>
+      <header class="space-y-4">
+        {
+          article.publishedAt && (
+            <time class="font-mono text-sm text-fg-subtle" datetime={article.publishedAt}>
+              {new Date(article.publishedAt).toLocaleDateString(locale)}
+            </time>
+          )
+        }
+        <h1 class="display-md text-fg">{article.title}</h1>
+        {article.excerpt && <p class="text-lg leading-relaxed text-fg-muted">{article.excerpt}</p>}
+      </header>
+      {
+        article.mainImage && (
+          <SanityImage
+            image={article.mainImage}
+            locale={locale}
+            class="w-full rounded-[var(--radius-xl)] object-cover shadow-[var(--shadow-md)]"
+            sizes="(max-width: 768px) 100vw, 48rem"
+            maxWidth={1200}
+            priority
+            lazy={false}
+            altFallback={article.title}
+          />
+        )
+      }
+      <PortableText value={article.body} />
+    </div>
+  </article>
+</BaseLayout>

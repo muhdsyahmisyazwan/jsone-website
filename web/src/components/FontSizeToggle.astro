@@ -1,0 +1,101 @@
+---
+import type {Locale} from '../i18n/locales'
+import {t} from '../i18n/utils'
+
+interface Props {
+  locale: Locale
+  class?: string
+}
+
+const {locale, class: className = ''} = Astro.props
+const label = t(locale, 'fontSize.label')
+const setSmall = t(locale, 'fontSize.setSmall')
+const setMedium = t(locale, 'fontSize.setMedium')
+const setLarge = t(locale, 'fontSize.setLarge')
+const small = t(locale, 'fontSize.small')
+const medium = t(locale, 'fontSize.medium')
+const large = t(locale, 'fontSize.large')
+---
+
+<div
+  class:list={[
+    'inline-flex h-11 items-center rounded-full border border-border bg-bg-elevated p-1 shadow-[var(--shadow-sm)]',
+    className,
+  ]}
+  role="group"
+  aria-label={label}
+  data-font-size-toggle
+>
+  <button
+    type="button"
+    class="inline-flex size-9 items-center justify-center rounded-full text-[0.7rem] font-bold text-fg-muted transition-colors data-[active=true]:bg-primary data-[active=true]:text-primary-fg"
+    data-font-size="sm"
+    aria-label={setSmall}
+    title={small}
+  >
+    A
+  </button>
+  <button
+    type="button"
+    class="inline-flex size-9 items-center justify-center rounded-full text-[0.85rem] font-bold text-fg-muted transition-colors data-[active=true]:bg-primary data-[active=true]:text-primary-fg"
+    data-font-size="md"
+    aria-label={setMedium}
+    title={medium}
+  >
+    A
+  </button>
+  <button
+    type="button"
+    class="inline-flex size-9 items-center justify-center rounded-full text-[1rem] font-bold text-fg-muted transition-colors data-[active=true]:bg-primary data-[active=true]:text-primary-fg"
+    data-font-size="lg"
+    aria-label={setLarge}
+    title={large}
+  >
+    A
+  </button>
+</div>
+
+<script>
+  const SCALE_KEY = 'jsone-font-scale'
+  const ALLOWED = new Set(['sm', 'md', 'lg'])
+
+  function applyFontScale(scale: string) {
+    const next = ALLOWED.has(scale) ? scale : 'md'
+    document.documentElement.setAttribute('data-font-scale', next)
+    try {
+      localStorage.setItem(SCALE_KEY, next)
+    } catch {}
+    return next
+  }
+
+  function syncFontToggles() {
+    const current = document.documentElement.getAttribute('data-font-scale') || 'md'
+    document.querySelectorAll('[data-font-size-toggle]').forEach((group) => {
+      group.querySelectorAll('[data-font-size]').forEach((btn) => {
+        if (!(btn instanceof HTMLElement)) return
+        const value = btn.getAttribute('data-font-size') || 'md'
+        btn.dataset.active = String(value === current)
+        btn.setAttribute('aria-pressed', String(value === current))
+      })
+    })
+  }
+
+  function bindFontSizeToggle() {
+    document.querySelectorAll('[data-font-size-toggle]').forEach((group) => {
+      if (!(group instanceof HTMLElement) || group.dataset.bound === 'true') return
+      group.dataset.bound = 'true'
+      group.querySelectorAll('[data-font-size]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const value = btn.getAttribute('data-font-size') || 'md'
+          applyFontScale(value)
+          syncFontToggles()
+        })
+      })
+    })
+    syncFontToggles()
+  }
+
+  bindFontSizeToggle()
+  document.addEventListener('astro:page-load', bindFontSizeToggle)
+  document.addEventListener('astro:after-swap', syncFontToggles)
+</script>

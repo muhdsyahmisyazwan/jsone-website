@@ -1,0 +1,77 @@
+---
+import {localePath} from '../i18n/paths'
+import type {Locale} from '../i18n/locales'
+import {t} from '../i18n/utils'
+import type {SiteSettings} from '../lib/sanity/types'
+
+interface Props {
+  locale: Locale
+  settings?: SiteSettings | null
+}
+
+const {locale, settings} = Astro.props
+const phone = settings?.phone || t(locale, 'site.phone')
+const tel = phone.replace(/[^\d+]/g, '')
+const wa = phone.replace(/\D/g, '').replace(/^0/, '60')
+---
+
+<nav
+  class="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-bg-elevated/98 px-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[var(--shadow-lg)] md:hidden"
+  aria-label={t(locale, 'mobile.barLabel')}
+  data-mobile-cta
+>
+  <div class="mx-auto grid max-w-lg grid-cols-3 gap-2">
+    <a
+      href={`tel:${tel}`}
+      class="inline-flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-xl border border-border bg-bg px-2 text-[0.7rem] font-semibold text-fg active:bg-bg-muted"
+    >
+      <svg class="size-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+        <path stroke-linecap="round" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.8.3 1.6.6 2.3a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.8-1.1a2 2 0 0 1 2.1-.4c.7.3 1.5.5 2.3.6a2 2 0 0 1 1.7 2Z"></path>
+      </svg>
+      {t(locale, 'mobile.call')}
+    </a>
+    <a
+      href={`https://wa.me/${wa}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-xl border border-border bg-bg px-2 text-[0.7rem] font-semibold text-fg active:bg-bg-muted"
+    >
+      <svg class="size-5 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12.04 2a9.9 9.9 0 0 0-8.5 14.9L2 22l5.25-1.38A9.9 9.9 0 1 0 12.04 2Zm0 1.8a8.1 8.1 0 0 1 6.85 12.2l-.3.48.3 1.74-1.78-.47-.47.3A8.1 8.1 0 1 1 12.04 3.8Zm4.55 10.9c-.2-.1-1.2-.6-1.38-.66-.19-.07-.33-.1-.47.1-.14.19-.54.66-.66.8-.12.13-.24.15-.44.05-.2-.1-.84-.31-1.6-.99-.59-.52-.99-1.17-1.1-1.37-.12-.19-.01-.3.09-.4.09-.09.2-.24.3-.36.1-.12.13-.2.2-.34.06-.13.03-.25-.02-.35-.05-.1-.47-1.13-.64-1.55-.17-.41-.34-.35-.47-.36h-.4c-.14 0-.35.05-.54.25-.19.2-.7.69-.7 1.67s.72 1.94.82 2.07c.1.14 1.41 2.15 3.42 3.02 1.2.52 1.67.56 2.27.47.37-.05 1.2-.49 1.37-.96.17-.47.17-.88.12-.96-.05-.08-.18-.13-.38-.23Z"></path>
+      </svg>
+      {t(locale, 'mobile.whatsapp')}
+    </a>
+    <a
+      href={localePath(locale, '/contact/')}
+      class="inline-flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-xl bg-accent px-2 text-[0.7rem] font-semibold text-accent-fg active:brightness-95"
+    >
+      <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+        <path stroke-linecap="round" d="M4 6h16v12H4zM4 8l8 5 8-5"></path>
+      </svg>
+      {t(locale, 'mobile.contact')}
+    </a>
+  </div>
+</nav>
+
+<script>
+  function bindMobileCtaKeyboard() {
+    const bar = document.querySelector('[data-mobile-cta]')
+    if (!(bar instanceof HTMLElement) || bar.dataset.bound === 'true') return
+    bar.dataset.bound = 'true'
+
+    const vv = window.visualViewport
+    if (!vv) return
+
+    const sync = () => {
+      const keyboardOpen = window.innerHeight - vv.height > 120
+      document.body.classList.toggle('keyboard-open', keyboardOpen)
+    }
+
+    vv.addEventListener('resize', sync)
+    vv.addEventListener('scroll', sync)
+    sync()
+  }
+
+  bindMobileCtaKeyboard()
+  document.addEventListener('astro:page-load', bindMobileCtaKeyboard)
+</script>

@@ -1,0 +1,83 @@
+---
+import type {Locale} from '../i18n/locales'
+import {localePath} from '../i18n/paths'
+import {t} from '../i18n/utils'
+import Icon from './icons/Icon.astro'
+import type {ServiceIconName} from './icons/names'
+
+interface Props {
+  locale: Locale
+}
+
+const {locale} = Astro.props
+
+const capabilities: {title: string; body: string; icon: ServiceIconName}[] = [
+  {title: 'home.capEcmTitle', body: 'home.capEcmBody', icon: 'layers'},
+  {title: 'home.capProcessTitle', body: 'home.capProcessBody', icon: 'workflow'},
+  {title: 'home.capAmsTitle', body: 'home.capAmsBody', icon: 'support'},
+  {title: 'home.capIntegrationTitle', body: 'home.capIntegrationBody', icon: 'plug'},
+]
+
+const howSteps = [
+  {title: 'home.howStep1Title', body: 'home.howStep1Body'},
+  {title: 'home.howStep2Title', body: 'home.howStep2Body'},
+  {title: 'home.howStep3Title', body: 'home.howStep3Body'},
+  {title: 'home.howStep4Title', body: 'home.howStep4Body'},
+] as const
+---
+
+<section class="relative overflow-hidden">
+  <div class="pointer-events-none absolute inset-0 surface-grid opacity-50" aria-hidden="true"></div>
+  <div class="container-site space-y-4 py-20 lg:py-24">
+    <p class="eyebrow">{t(locale, 'nav.solutions')}</p>
+    <h1 class="display-xl max-w-3xl text-fg">{t(locale, 'solutions.heroTitle')}</h1>
+    <p class="prose-measure text-base text-fg-muted sm:text-lg">
+      {t(locale, 'solutions.heroSubtitle')}
+    </p>
+  </div>
+</section>
+
+<section class="section-pad section-defer" data-reveal>
+  <div class="container-site space-y-10">
+    <div class="space-y-3">
+      <h2 class="display-md text-fg">{t(locale, 'solutions.expertiseHeading')}</h2>
+      <p class="prose-measure text-fg-muted">{t(locale, 'solutions.expertiseBody')}</p>
+    </div>
+    <ul class="grid gap-4 sm:grid-cols-2" data-reveal-stagger>
+      {
+        capabilities.map((item) => (
+          <li class="card card-spotlight flex flex-col gap-4 p-5 sm:p-6" data-reveal-child>
+            <span class="inline-flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <Icon name={item.icon} class="size-5" />
+            </span>
+            <h3 class="text-lg font-semibold text-fg">{t(locale, item.title)}</h3>
+            <p class="text-sm leading-relaxed text-fg-muted">{t(locale, item.body)}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section-pad section-defer border-t border-border" data-reveal>
+  <div class="container-site space-y-8">
+    <div class="space-y-3">
+      <h2 class="display-md text-fg">{t(locale, 'home.howHeading')}</h2>
+      <p class="prose-measure text-fg-muted">{t(locale, 'home.howBody')}</p>
+    </div>
+    <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
+      {
+        howSteps.map((step, index) => (
+          <li class="space-y-2" data-reveal-child>
+            <p class="metric text-sm font-semibold text-primary">{String(index + 1).padStart(2, '0')}</p>
+            <h3 class="font-semibold text-fg">{t(locale, step.title)}</h3>
+            <p class="text-sm text-fg-muted">{t(locale, step.body)}</p>
+          </li>
+        ))
+      }
+    </ol>
+    <a href={localePath(locale, '/contact/')} class="btn btn-primary">
+      {t(locale, 'home.ctaPrimary')}
+    </a>
+  </div>
+</section>

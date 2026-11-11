@@ -1,0 +1,41 @@
+---
+import type {Locale} from '../i18n/locales'
+import {t} from '../i18n/utils'
+
+interface Props {
+  locale: Locale
+}
+
+const {locale} = Astro.props
+const exitHref = `/api/exit-preview?redirect=${encodeURIComponent(Astro.url.pathname)}`
+---
+
+<div
+  class="sticky top-0 z-50 hidden border-b border-accent bg-bg-invert px-4 py-2 text-center text-sm text-fg-invert"
+  role="status"
+  data-preview-banner
+>
+  <span class="mr-3">{t(locale, 'preview.active')}</span>
+  <a href={exitHref} class="font-semibold text-accent underline-offset-2 hover:underline">
+    {t(locale, 'preview.exit')}
+  </a>
+</div>
+
+<script>
+  function showPreviewBanner() {
+    const cookies = document.cookie.split(';').map((c) => c.trim())
+    if (!cookies.some((c) => c.startsWith('__sanity_preview_ui=1'))) return
+    const banner = document.querySelector('[data-preview-banner]')
+    banner?.classList.remove('hidden')
+    let robots = document.querySelector('meta[name="robots"]')
+    if (!robots) {
+      robots = document.createElement('meta')
+      robots.setAttribute('name', 'robots')
+      document.head.appendChild(robots)
+    }
+    robots.setAttribute('content', 'noindex, nofollow')
+  }
+
+  showPreviewBanner()
+  document.addEventListener('astro:page-load', showPreviewBanner)
+</script>

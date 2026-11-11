@@ -1,0 +1,319 @@
+---
+import {ClientRouter} from 'astro:transitions'
+import Analytics from '../components/Analytics.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import MobileCtaBar from '../components/MobileCtaBar.astro'
+import PreviewBanner from '../components/PreviewBanner.astro'
+import {getLocaleAlternates} from '../i18n/paths'
+import {getLocaleFromPath, htmlLang, type Locale} from '../i18n/locales'
+import {t} from '../i18n/utils'
+import {getResponsiveImage, hasImage} from '../lib/sanity/image'
+import {resolveLocaleString} from '../lib/sanity/locale'
+import type {Footer as FooterDoc, Navigation, SanityImage, SiteSettings} from '../lib/sanity/types'
+import '../styles/global.css'
+
+interface Props {
+  locale?: Locale
+  title?: string
+  description?: string
+  ogImage?: SanityImage | null
+  settings?: SiteSettings | null
+  navigation?: Navigation | null
+  footer?: FooterDoc | null
+  noindex?: boolean
+}
+
+const currentPath = Astro.url.pathname
+const locale = Astro.props.locale ?? getLocaleFromPath(currentPath)
+const settings = Astro.props.settings ?? null
+const navigation = Astro.props.navigation ?? null
+const footer = Astro.props.footer ?? null
+const noindex = Astro.props.noindex ?? false
+
+const siteName =
+  resolveLocaleString(settings?.siteName, locale) || t(locale, 'site.name')
+const legalName = settings?.legalName || t(locale, 'site.legalName')
+const tagline =
+  resolveLocaleString(settings?.tagline, locale) || t(locale, 'site.tagline')
+
+const defaultTitle = `${siteName} - ${tagline}`
+const title = Astro.props.title ?? defaultTitle
+const description =
+  Astro.props.description ??
+  resolveLocaleString(settings?.defaultSeo?.metaDescription, locale) ??
+  tagline
+
+const ogImage = Astro.props.ogImage ?? settings?.defaultSeo?.ogImage
+const ogUrl =
+  ogImage && hasImage(ogImage) ? getResponsiveImage(ogImage, {maxWidth: 1200})?.src : undefined
+
+const lang = htmlLang[locale]
+const alternates = getLocaleAlternates(currentPath)
+const canonicalURL = new URL(Astro.url.pathname, Astro.site)
+const siteOrigin = Astro.site?.origin || 'https://www.jsone.com.my'
+
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: legalName,
+  alternateName: siteName,
+  url: siteOrigin,
+  email: settings?.email || t(locale, 'site.email'),
+  telephone: settings?.phone || t(locale, 'site.phone'),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress:
+      'B-07-08, Tower B, Vertical Business Suite, Avenue 3, Bangsar South, No. 8, Jalan Kerinchi',
+    addressLocality: 'Kuala Lumpur',
+    postalCode: '59200',
+    addressCountry: 'MY',
+  },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '09:00',
+    closes: '18:00',
+  },
+}
+
+const webPageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description,
+  url: canonicalURL.toString(),
+  inLanguage: lang,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: siteName,
+    url: siteOrigin,
+  },
+}
+---
+
+<!doctype html>
+<html lang={lang} data-theme="light" data-theme-pref="system" data-font-scale="md">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f4f7fb" />
+    <script is:inline>
+      ;(function () {
+        function applyJsonePrefs(root) {
+          try {
+            var el = root || document.documentElement
+            var pref = localStorage.getItem('jsone-theme') || 'system'
+            var dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+            var resolved = pref === 'light' || pref === 'dark' ? pref : dark ? 'dark' : 'light'
+            el.setAttribute('data-theme', resolved)
+            el.setAttribute('data-theme-pref', pref)
+            var scale = localStorage.getItem('jsone-font-scale') || 'md'
+            if (scale !== 'sm' && scale !== 'md' && scale !== 'lg') scale = 'md'
+            el.setAttribute('data-font-scale', scale)
+            var doc = el.ownerDocument || document
+            var meta = doc.querySelector('meta[name="theme-color"]')
+            if (meta) meta.setAttribute('content', resolved === 'dark' ? '#000c28' : '#f4f7fb')
+          } catch (e) {}
+        }
+        applyJsonePrefs()
+        // ClientRouter swaps in SSR defaults - re-apply saved prefs
+        if (!window.__jsoneThemeBoot) {
+          window.__jsoneThemeBoot = true
+          document.addEventListener('astro:before-swap', function (event) {
+            applyJsonePrefs(event.newDocument.documentElement)
+          })
+          document.addEventListener('astro:after-swap', function () {
+            applyJsonePrefs()
+          })
+        }
+      })()
+    </script>
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    {
+      noindex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta name="robots" content="index, follow" />
+      )
+    }
+
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={lang.replace('-', '_')} />
+    {
+      alternates
+        .filter((a) => a.locale !== locale)
+        .map(({locale: code}) => (
+          <meta property="og:locale:alternate" content={htmlLang[code].replace('-', '_')} />
+        ))
+    }
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    {ogUrl && <meta property="og:image" content={ogUrl} />}
+
+    <meta name="twitter:card" content={ogUrl ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogUrl && <meta name="twitter:image" content={ogUrl} />}
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/images/logo.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="canonical" href={canonicalURL} />
+    {
+      alternates.map(({locale: code, href}) => (
+        <link rel="alternate" hreflang={htmlLang[code]} href={new URL(href, Astro.site)} />
+      ))
+    }
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL(alternates.find((a) => a.locale === 'en')?.href ?? '/', Astro.site)}
+    />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <title>{title}</title>
+    <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />
+    <ClientRouter />
+    <Analytics />
+  </head>
+  <body class="mobile-cta-pad flex min-h-dvh flex-col">
+    <PreviewBanner locale={locale} />
+    <a class="skip-link" href="#main-content">{t(locale, 'nav.skipToContent')}</a>
+    <Header
+      locale={locale}
+      currentPath={currentPath}
+      settings={settings}
+      navigation={navigation}
+    />
+    <main id="main-content" class="flex-1" tabindex="-1">
+      <slot />
+    </main>
+    <Footer locale={locale} settings={settings} footer={footer} />
+    <MobileCtaBar locale={locale} settings={settings} />
+
+    <script>
+      function bindReveal() {
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        const nodes = document.querySelectorAll('[data-reveal]')
+        if (reduce || !('IntersectionObserver' in window)) {
+          nodes.forEach((el) => el.classList.add('is-revealed'))
+          return
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue
+              entry.target.classList.add('is-revealed')
+              io.unobserve(entry.target)
+            }
+          },
+          {rootMargin: '0px 0px -6% 0px', threshold: 0.1},
+        )
+        nodes.forEach((el) => {
+          if (!el.classList.contains('is-revealed')) io.observe(el)
+        })
+      }
+
+      function bindSpotlight() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+        if (window.matchMedia('(hover: none)').matches) return
+        document.querySelectorAll('.card-spotlight').forEach((card) => {
+          if (!(card instanceof HTMLElement) || card.dataset.spotBound === 'true') return
+          card.dataset.spotBound = 'true'
+          card.addEventListener('pointermove', (event) => {
+            const rect = card.getBoundingClientRect()
+            card.style.setProperty('--spot-x', `${event.clientX - rect.left}px`)
+            card.style.setProperty('--spot-y', `${event.clientY - rect.top}px`)
+          })
+        })
+      }
+
+      function bindCountUp() {
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        const nodes = document.querySelectorAll('[data-count]')
+        if (!nodes.length) return
+        const run = (el: Element) => {
+          if (!(el instanceof HTMLElement) || el.dataset.counted === 'true') return
+          el.dataset.counted = 'true'
+          const target = el.dataset.count || '0'
+          const numeric = parseFloat(target.replace(/[^\d.]/g, ''))
+          const suffix = target.replace(/[\d.\s]/g, '')
+          if (reduce || Number.isNaN(numeric)) {
+            el.textContent = target
+            return
+          }
+          const duration = 900
+          const start = performance.now()
+          const tick = (now: number) => {
+            const p = Math.min(1, (now - start) / duration)
+            const eased = 1 - Math.pow(1 - p, 3)
+            const value = Math.round(numeric * eased)
+            el.textContent = `${value}${suffix}`
+            if (p < 1) requestAnimationFrame(tick)
+          }
+          requestAnimationFrame(tick)
+        }
+        if (!('IntersectionObserver' in window)) {
+          nodes.forEach(run)
+          return
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue
+              run(entry.target)
+              io.unobserve(entry.target)
+            }
+          },
+          {threshold: 0.4},
+        )
+        nodes.forEach((el) => io.observe(el))
+      }
+
+      function bindMarquee() {
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        document.querySelectorAll('.marquee').forEach((el) => {
+          if (!(el instanceof HTMLElement)) return
+          if (reduce) {
+            el.classList.add('is-inview')
+            return
+          }
+          if (el.dataset.marqueeBound === 'true') return
+          el.dataset.marqueeBound = 'true'
+          if (!('IntersectionObserver' in window)) {
+            el.classList.add('is-inview')
+            return
+          }
+          const io = new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) {
+                entry.target.classList.toggle('is-inview', entry.isIntersecting)
+              }
+            },
+            {rootMargin: '10% 0px', threshold: 0.05},
+          )
+          io.observe(el)
+        })
+      }
+
+      function bindUi() {
+        bindReveal()
+        bindSpotlight()
+        bindCountUp()
+        bindMarquee()
+      }
+
+      bindUi()
+      document.addEventListener('astro:page-load', bindUi)
+    </script>
+  </body>
+</html>

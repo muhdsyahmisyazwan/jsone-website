@@ -1,0 +1,49 @@
+---
+interface Props {
+  class?: string
+}
+
+const {class: className = ''} = Astro.props
+---
+
+<svg
+  class={className}
+  viewBox="0 0 720 420"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <defs>
+    <linearGradient id="ng-line" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00B8E0" stop-opacity="0.15"></stop>
+      <stop offset="50%" stop-color="#00B8E0" stop-opacity="0.7"></stop>
+      <stop offset="100%" stop-color="#C0C820" stop-opacity="0.35"></stop>
+    </linearGradient>
+    <radialGradient id="ng-node" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#8CE0F2"></stop>
+      <stop offset="100%" stop-color="#00B8E0"></stop>
+    </radialGradient>
+  </defs>
+  <g stroke="url(#ng-line)" stroke-width="1.25">
+    <path d="M80 210H220M220 210L320 120M220 210L320 300M320 120H460M320 300H460M460 120L560 180M460 300L560 240M560 180H640M560 240H640"></path>
+    <path d="M320 120V60M320 300V360M460 120V70M460 300V350" opacity="0.55"></path>
+  </g>
+  <g>
+    <circle cx="80" cy="210" r="7" fill="url(#ng-node)"></circle>
+    <circle cx="220" cy="210" r="10" fill="url(#ng-node)"></circle>
+    <circle cx="320" cy="120" r="8" fill="url(#ng-node)"></circle>
+    <circle cx="320" cy="300" r="8" fill="url(#ng-node)"></circle>
+    <circle cx="460" cy="120" r="9" fill="url(#ng-node)"></circle>
+    <circle cx="460" cy="300" r="9" fill="url(#ng-node)"></circle>
+    <circle cx="560" cy="180" r="7" fill="#C0C820"></circle>
+    <circle cx="560" cy="240" r="7" fill="#C0C820"></circle>
+    <circle cx="640" cy="180" r="5" fill="#8CE0F2"></circle>
+    <circle cx="640" cy="240" r="5" fill="#8CE0F2"></circle>
+  </g>
+  <g fill="currentColor" opacity="0.35" font-family="ui-monospace,monospace" font-size="11">
+    <text x="68" y="240">ECM</text>
+    <text x="300" y="100">BPM</text>
+    <text x="444" y="100">AMS</text>
+    <text x="530" y="168">API</text>
+  </g>
+</svg>

@@ -1,0 +1,211 @@
+---
+import SanityImage from './sanity/SanityImage.astro'
+import {localePath} from '../i18n/paths'
+import type {Locale} from '../i18n/locales'
+import {t} from '../i18n/utils'
+import {resolveLocaleLink} from '../lib/sanity/links'
+import {resolveLocaleString} from '../lib/sanity/locale'
+import type {Footer as FooterDoc, SiteSettings} from '../lib/sanity/types'
+
+interface Props {
+  locale: Locale
+  settings?: SiteSettings | null
+  footer?: FooterDoc | null
+}
+
+const {locale, settings, footer} = Astro.props
+const year = new Date().getFullYear()
+
+const siteName =
+  resolveLocaleString(settings?.siteName, locale) || t(locale, 'site.name')
+const legalName = settings?.legalName || t(locale, 'site.legalName')
+const registration = t(locale, 'site.registration')
+const tagline =
+  resolveLocaleString(footer?.tagline, locale) ||
+  resolveLocaleString(settings?.tagline, locale) ||
+  t(locale, 'site.tagline')
+const address =
+  resolveLocaleString(settings?.address, locale) || t(locale, 'site.address')
+const email = settings?.email || t(locale, 'site.email')
+const phone = settings?.phone || t(locale, 'site.phone')
+const hours = t(locale, 'site.hours')
+const hoursNote = t(locale, 'site.hoursNote')
+const copyright =
+  resolveLocaleString(footer?.copyright, locale) || t(locale, 'footer.rights')
+const logoAlt = t(locale, 'nav.logoAlt')
+
+const fallbackNav = [
+  {label: t(locale, 'nav.home'), href: localePath(locale, '/')},
+  {label: t(locale, 'nav.about'), href: localePath(locale, '/about/')},
+  {label: t(locale, 'nav.solutions'), href: localePath(locale, '/solutions/')},
+  {label: t(locale, 'nav.contact'), href: localePath(locale, '/contact/')},
+]
+
+const columns =
+  footer?.columns
+    ?.map((col) => {
+      const heading = resolveLocaleString(col.heading, locale)
+      const links = (col.links || [])
+        .map((l) => resolveLocaleLink(l, locale))
+        .filter(Boolean) as {href: string; label: string; openInNewTab?: boolean}[]
+      if (!heading && links.length === 0) return null
+      return {heading, links}
+    })
+    .filter(Boolean) ?? []
+
+const legalLinks =
+  (footer?.legalLinks || [])
+    .map((l) => resolveLocaleLink(l, locale))
+    .filter(Boolean) as {href: string; label: string}[]
+
+const showFallbackNav = columns.length === 0
+---
+
+<footer class="mt-auto border-t border-border bg-bg-muted/60">
+  <div class="container-site grid gap-10 py-12 sm:gap-12 sm:py-16 lg:grid-cols-[1.2fr_1fr_1fr]">
+    <div class="space-y-5">
+      {
+        settings?.logo ? (
+          <SanityImage
+            image={settings.logo}
+            locale={locale}
+            altFallback={logoAlt}
+            class="logo-theme h-10 w-auto max-w-[11rem] object-contain"
+            widths={[200, 400]}
+            sizes="176px"
+            maxWidth={400}
+          />
+        ) : (
+          <img
+            src="/images/logo.png"
+            alt={logoAlt}
+            width="160"
+            height="44"
+            class="logo-theme h-10 w-auto max-w-[11rem] object-contain"
+            loading="lazy"
+            decoding="async"
+          />
+        )
+      }
+      <p class="text-lg font-semibold tracking-tight text-fg">{legalName}</p>
+      <p class="font-mono text-xs text-fg-subtle">{registration}</p>
+      <p class="prose-measure text-sm leading-relaxed text-fg-muted">{tagline}</p>
+
+      <div class="space-y-3">
+        <p class="eyebrow">{t(locale, 'footer.newsletterHeading')}</p>
+        <p class="text-sm text-fg-muted">{t(locale, 'footer.newsletterBody')}</p>
+        <form class="flex flex-col gap-2 sm:flex-row" action={localePath(locale, '/contact/')} method="get">
+          <label class="sr-only" for="footer-newsletter">{t(locale, 'footer.newsletterPlaceholder')}</label>
+          <input
+            id="footer-newsletter"
+            type="email"
+            name="email"
+            autocomplete="email"
+            inputmode="email"
+            enterkeyhint="go"
+            required
+            placeholder={t(locale, 'footer.newsletterPlaceholder')}
+            class="min-h-11 w-full rounded-full border border-border bg-bg-elevated px-4 text-base text-fg"
+          />
+          <button type="submit" class="btn btn-brand w-full shrink-0 sm:w-auto">
+            {t(locale, 'footer.newsletterSubmit')}
+          </button>
+        </form>
+        <p class="text-xs text-fg-subtle">{t(locale, 'footer.newsletterNote')}</p>
+      </div>
+    </div>
+
+    <nav aria-label={t(locale, 'footer.navigation')} class="grid gap-10 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-3">
+      <div>
+        <p class="eyebrow mb-4">{t(locale, 'nav.mainNavigation')}</p>
+        <ul class="space-y-2.5">
+          {
+            (showFallbackNav
+              ? fallbackNav
+              : (columns[0]?.links || []).map((l) => ({label: l.label, href: l.href}))
+            ).map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="inline-flex min-h-11 items-center text-sm text-fg-muted transition-colors hover:text-primary"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <p class="eyebrow mb-4">{t(locale, 'footer.legalHeading')}</p>
+        <ul class="space-y-2.5">
+          {
+            (legalLinks.length
+              ? legalLinks
+              : [
+                  {href: localePath(locale, '/privacy/'), label: t(locale, 'footer.privacy')},
+                  {href: localePath(locale, '/terms/'), label: t(locale, 'footer.terms')},
+                ]
+            ).map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="inline-flex min-h-11 items-center text-sm text-fg-muted transition-colors hover:text-primary"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="space-y-3">
+        <p class="eyebrow">{t(locale, 'footer.contactHeading')}</p>
+        <a
+          class="block text-sm leading-relaxed text-fg-muted underline-offset-2 hover:text-primary hover:underline"
+          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {address}
+        </a>
+        <p>
+          <a
+            class="inline-flex min-h-11 items-center text-sm text-fg hover:text-primary"
+            href={`tel:${phone.replace(/[^\d+]/g, '')}`}
+          >
+            {phone}
+          </a>
+        </p>
+        <p>
+          <a class="inline-flex min-h-11 items-center text-sm text-fg hover:text-primary" href={`mailto:${email}`}>
+            {email}
+          </a>
+        </p>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-fg-subtle">
+            {t(locale, 'footer.hoursHeading')}
+          </p>
+          <p class="mt-1 text-sm text-fg-muted">{hours}</p>
+          <p class="mt-1 text-xs text-fg-subtle">{hoursNote}</p>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="border-t border-border">
+    <div class="container-site flex flex-col gap-6 py-8">
+      <p
+        class="display-lg max-w-full select-none overflow-hidden text-fg/10"
+        aria-label={t(locale, 'footer.wordmarkAria')}
+      >
+        {siteName}
+      </p>
+      <div class="flex flex-wrap items-center justify-between gap-3 text-sm text-fg-subtle">
+        <p>© {year} {legalName}. {copyright}</p>
+      </div>
+    </div>
+  </div>
+</footer>

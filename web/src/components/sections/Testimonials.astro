@@ -1,0 +1,81 @@
+---
+import type {Locale} from '../../i18n/locales'
+import Icon from '../icons/Icon.astro'
+import SanityImage from '../sanity/SanityImage.astro'
+import {resolveLocaleString} from '../../lib/sanity/locale'
+import type {LocaleString, LocaleText, SanityImage as Img} from '../../lib/sanity/types'
+
+interface Props {
+  locale: Locale
+  localized?: boolean
+  section: {
+    heading?: string | LocaleString
+    items?: Array<{
+      quote?: string | LocaleText
+      author?: string
+      role?: string | LocaleString
+      avatar?: Img
+    }>
+  }
+}
+
+const {locale, section} = Astro.props
+const str = (v: string | LocaleString | undefined) =>
+  typeof v === 'string' ? v : resolveLocaleString(v, locale)
+
+const heading = str(section.heading)
+const items = (section.items || [])
+  .map((item) => ({
+    quote: str(item.quote),
+    author: item.author,
+    role: str(item.role),
+    avatar: item.avatar,
+  }))
+  .filter((i) => i.quote)
+---
+
+{
+  (heading || items.length > 0) && (
+    <section class="section-pad section-defer bg-bg-muted/40" data-reveal>
+      <div class="container-site space-y-8">
+        {heading && <h2 class="display-md text-fg">{heading}</h2>}
+        <div
+          class="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:thin] sm:-mx-1 sm:px-1"
+          role="list"
+        >
+          {items.map((item) => (
+            <article
+              class="card card-spotlight flex w-[min(85%,20rem)] shrink-0 snap-center flex-col gap-5 p-5 sm:w-[26rem] sm:p-6"
+              role="listitem"
+              data-reveal-child
+            >
+              <span class="text-primary" aria-hidden="true">
+                <Icon name="quote" class="size-8" />
+              </span>
+              <blockquote class="flex-1 text-base leading-relaxed text-fg-muted sm:text-lg">
+                “{item.quote}”
+              </blockquote>
+              <div class="flex items-center gap-3 border-t border-border pt-4">
+                {item.avatar && (
+                  <SanityImage
+                    image={item.avatar}
+                    locale={locale}
+                    class="size-12 rounded-full object-cover ring-2 ring-primary/30"
+                    widths={[96, 192]}
+                    sizes="48px"
+                    maxWidth={192}
+                    altFallback={item.author}
+                  />
+                )}
+                <div class="min-w-0">
+                  {item.author && <p class="font-semibold text-fg">{item.author}</p>}
+                  {item.role && <p class="text-sm text-fg-subtle">{item.role}</p>}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

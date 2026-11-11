@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Sections from '../components/sections/Sections.astro'
+import {loadContentPage, pageStaticPaths} from '../lib/pages/loadPage'
+
+export async function getStaticPaths() {
+  return pageStaticPaths('en')
+}
+
+const {slug} = Astro.params
+const data = await loadContentPage('en', slug!)
+if (!data) {
+  throw new Error(`Page not found: ${slug}`)
+}
+---
+
+<BaseLayout
+  locale="en"
+  title={data.title}
+  description={data.description}
+  ogImage={data.page.seo?.ogImage}
+  settings={data.settings}
+  navigation={data.navigation}
+  footer={data.footer}
+>
+  <Sections locale="en" sections={data.page.sections} />
+</BaseLayout>

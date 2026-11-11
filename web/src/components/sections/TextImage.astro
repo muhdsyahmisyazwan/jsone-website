@@ -1,0 +1,98 @@
+---
+import type {Locale} from '../../i18n/locales'
+import SanityImage from '../sanity/SanityImage.astro'
+import PortableText from '../sanity/PortableText.astro'
+import {resolveLocaleLink, resolveLink} from '../../lib/sanity/links'
+import {resolveLocaleString} from '../../lib/sanity/locale'
+import type {
+  Link,
+  LocaleLink,
+  LocaleString,
+  PortableTextBlock,
+  SanityImage as Img,
+} from '../../lib/sanity/types'
+
+interface Props {
+  locale: Locale
+  localized?: boolean
+  section: {
+    heading?: string | LocaleString
+    body?:
+      | PortableTextBlock[]
+      | {
+          en?: {value?: PortableTextBlock[]; reviewed?: boolean}
+          ms?: {value?: PortableTextBlock[]; reviewed?: boolean}
+          zh?: {value?: PortableTextBlock[]; reviewed?: boolean}
+        }
+    image?: Img
+    imagePosition?: 'left' | 'right'
+    cta?: Link | LocaleLink
+  }
+}
+
+const {locale, localized = false, section} = Astro.props
+
+const heading =
+  typeof section.heading === 'string'
+    ? section.heading
+    : resolveLocaleString(section.heading, locale)
+
+function resolveBody(): PortableTextBlock[] | undefined {
+  if (!section.body) return undefined
+  if (Array.isArray(section.body)) return section.body
+  const field = section.body
+  const pick = (loc: Locale) => {
+    const entry = field[loc]
+    if (!entry?.reviewed || !entry.value?.length) return undefined
+    return entry.value
+  }
+  return pick(locale) ?? pick('en')
+}
+
+const body = resolveBody()
+const cta = localized
+  ? resolveLocaleLink(section.cta as LocaleLink, locale)
+  : resolveLink(section.cta as Link, locale)
+const imageLeft = section.imagePosition === 'left'
+---
+
+{
+  heading && (
+    <section class="section-pad section-defer" data-reveal>
+      <div
+        class:list={[
+          'container-site grid items-center gap-10 lg:grid-cols-2 lg:gap-16',
+          imageLeft && 'lg:[&>div:first-child]:order-2',
+        ]}
+      >
+        <div class="min-w-0 space-y-5">
+          <h2 class="display-md text-fg">{heading}</h2>
+          {body && (
+            <div class="prose-measure space-y-3 text-fg-muted">
+              <PortableText value={body} />
+            </div>
+          )}
+          {cta && (
+            <a
+              href={cta.href}
+              class="btn btn-brand"
+              target={cta.openInNewTab ? '_blank' : undefined}
+              rel={cta.openInNewTab ? 'noopener noreferrer' : undefined}
+            >
+              {cta.label}
+            </a>
+          )}
+        </div>
+        <div class="min-w-0">
+          <SanityImage
+            image={section.image}
+            locale={locale}
+            class="w-full rounded-[var(--radius-xl)] object-cover shadow-[var(--shadow-lg)]"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            maxWidth={1200}
+          />
+        </div>
+      </div>
+    </section>
+  )
+}

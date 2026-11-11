@@ -1,0 +1,81 @@
+---
+import type {PortableTextBlock} from '../../lib/sanity/types'
+
+interface Props {
+  value?: PortableTextBlock[] | null
+  class?: string
+}
+
+const {value = [], class: className = ''} = Astro.props
+
+function renderChildren(block: PortableTextBlock): string {
+  const markDefs = new Map((block.markDefs || []).map((m) => [m._key, m]))
+  return (block.children || [])
+    .map((span) => {
+      let text = (span.text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+      for (const mark of span.marks || []) {
+        if (mark === 'strong') text = `<strong>${text}</strong>`
+        else if (mark === 'em') text = `<em>${text}</em>`
+        else {
+          const def = markDefs.get(mark)
+          if (def?.href) {
+            const blank = def.blank ? ' target="_blank" rel="noopener noreferrer"' : ''
+            text = `<a href="${def.href}"${blank}>${text}</a>`
+          }
+        }
+      }
+      return text
+    })
+    .join('')
+}
+
+type ListBuf = {tag: 'ul' | 'ol'; items: string[]}
+
+const htmlParts: string[] = []
+let list: ListBuf | null = null
+
+function flushList() {
+  if (!list) return
+  htmlParts.push(`<${list.tag} class="list-inside ${list.tag === 'ul' ? 'list-disc' : 'list-decimal'} space-y-2 my-4">${list.items.map((i) => `<li>${i}</li>`).join('')}</${list.tag}>`)
+  list = null
+}
+
+for (const block of value || []) {
+  if (block._type !== 'block') continue
+  const inner = renderChildren(block)
+
+  if (block.listItem === 'bullet' || block.listItem === 'number') {
+    const tag = block.listItem === 'number' ? 'ol' : 'ul'
+    if (!list || list.tag !== tag) {
+      flushList()
+      list = {tag, items: []}
+    }
+    list.items.push(inner)
+    continue
+  }
+
+  flushList()
+
+  switch (block.style) {
+    case 'h2':
+      htmlParts.push(`<h2 class="mt-8 text-2xl font-semibold text-fg">${inner}</h2>`)
+      break
+    case 'h3':
+      htmlParts.push(`<h3 class="mt-6 text-xl font-semibold text-fg">${inner}</h3>`)
+      break
+    case 'blockquote':
+      htmlParts.push(
+        `<blockquote class="my-4 border-l-4 border-primary pl-4 text-fg-muted italic">${inner}</blockquote>`,
+      )
+      break
+    default:
+      htmlParts.push(`<p class="my-3 leading-relaxed text-fg-muted">${inner}</p>`)
+  }
+}
+flushList()
+---
+
+{htmlParts.length > 0 && <div class:list={['prose-sanity max-w-none', className]} set:html={htmlParts.join('')} />}

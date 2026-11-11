@@ -1,0 +1,353 @@
+---
+import ThemeToggle from './ThemeToggle.astro'
+import FontSizeToggle from './FontSizeToggle.astro'
+import SanityImage from './sanity/SanityImage.astro'
+import {localePath} from '../i18n/paths'
+import type {Locale} from '../i18n/locales'
+import {t} from '../i18n/utils'
+import {resolveLocaleString} from '../lib/sanity/locale'
+import type {Navigation, SiteSettings} from '../lib/sanity/types'
+
+interface Props {
+  locale: Locale
+  currentPath: string
+  settings?: SiteSettings | null
+  navigation?: Navigation | null
+}
+
+const {locale, currentPath, settings, navigation} = Astro.props
+
+const fallbackLinks = [
+  {label: t(locale, 'nav.home'), href: localePath(locale, '/')},
+  {
+    label: t(locale, 'nav.about'),
+    href: localePath(locale, '/about/'),
+    children: [
+      {label: t(locale, 'nav.aboutOverview'), href: localePath(locale, '/about/')},
+      {label: t(locale, 'nav.aboutTeam'), href: localePath(locale, '/about/team/')},
+    ],
+  },
+  {label: t(locale, 'nav.solutions'), href: localePath(locale, '/solutions/')},
+  {label: t(locale, 'nav.industries'), href: localePath(locale, '/industries/')},
+  {label: t(locale, 'nav.clients'), href: localePath(locale, '/clients/')},
+  {label: t(locale, 'nav.contact'), href: localePath(locale, '/contact/')},
+]
+
+const cmsLinks = (navigation?.items || [])
+  .map((item) => {
+    const label = resolveLocaleString(item.label, locale)
+    if (!label) return null
+    const href =
+      item.linkType === 'external' && item.href
+        ? item.href
+        : localePath(locale, item.internalPath || '/')
+    const children = (item.children || [])
+      .map((child) => {
+        const childLabel = resolveLocaleString(child.label, locale)
+        if (!childLabel || !child.internalPath) return null
+        return {label: childLabel, href: localePath(locale, child.internalPath)}
+      })
+      .filter(Boolean) as {label: string; href: string}[]
+    return {label, href, children, external: item.linkType === 'external'}
+  })
+  .filter(Boolean) as {
+  label: string
+  href: string
+  children: {label: string; href: string}[]
+  external?: boolean
+}[]
+
+const links =
+  cmsLinks.length > 0
+    ? cmsLinks
+    : fallbackLinks.map((l) => ({
+        ...l,
+        children: ('children' in l && l.children) || ([] as {label: string; href: string}[]),
+        external: false as boolean | undefined,
+      }))
+
+const siteName =
+  resolveLocaleString(settings?.siteName, locale) || t(locale, 'site.name')
+const logoAlt =
+  (settings?.logo &&
+    resolveLocaleString(
+      typeof settings.logo.alt === 'object' ? settings.logo.alt : undefined,
+      locale,
+    )) ||
+  t(locale, 'nav.logoAlt')
+const navLabel = t(locale, 'nav.mainNavigation')
+const openMenu = t(locale, 'nav.openMenu')
+const closeMenu = t(locale, 'nav.closeMenu')
+const getInTouch = t(locale, 'nav.getInTouch')
+const contactHref = localePath(locale, '/contact/')
+
+function isActive(href: string, external?: boolean) {
+  if (external) return false
+  if (href === localePath(locale, '/')) {
+    return currentPath === href || currentPath === href.replace(/\/$/, '')
+  }
+  return currentPath === href || currentPath.startsWith(href)
+}
+---
+
+<header
+  class="sticky top-0 z-50 px-3 pt-[max(0.5rem,env(safe-area-inset-top))] transition-[padding] duration-200 sm:px-4"
+  data-site-header
+>
+  <div
+    class="container-site relative z-50 flex h-[var(--header-height)] items-center justify-between gap-2 rounded-2xl border border-border bg-bg-elevated/95 px-3 shadow-[var(--shadow-sm)] backdrop-blur-md transition-[height,border-radius,box-shadow,padding] duration-200 sm:bg-bg-elevated/80 sm:px-4 sm:backdrop-blur-xl lg:gap-4"
+    data-header-inner
+  >
+    <a
+      href={localePath(locale, '/')}
+      class="relative z-10 flex min-h-11 shrink-0 items-center gap-3"
+      data-header-brand
+    >
+      {
+        settings?.logo ? (
+          <SanityImage
+            image={settings.logo}
+            locale={locale}
+            altFallback={logoAlt}
+            class="logo-theme h-8 w-auto max-w-[7.5rem] object-contain transition-[height,max-width] duration-200 sm:h-9 sm:max-w-[9.5rem] lg:max-w-[10.5rem]"
+            widths={[200, 400]}
+            sizes="168px"
+            maxWidth={400}
+            lazy={false}
+            priority
+          />
+        ) : (
+          <img
+            src="/images/logo.png"
+            alt={logoAlt}
+            width="148"
+            height="40"
+            class="logo-theme h-8 w-auto max-w-[7.5rem] object-contain transition-[height,max-width] duration-200 sm:h-9 sm:max-w-[9.5rem] lg:max-w-[10.5rem]"
+            decoding="async"
+          />
+        )
+      }
+      <span class="sr-only">{siteName}</span>
+    </a>
+
+    <nav class="hidden min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1 lg:flex" aria-label={navLabel}>
+      {
+        links.map((link) => {
+          const active = isActive(link.href, link.external)
+          if (link.children?.length) {
+            return (
+              <div class="relative group/nav">
+                <a
+                  href={link.href}
+                  class:list={[
+                    'rounded-full px-3 py-2 text-sm font-medium transition-colors',
+                    active ? 'text-primary' : 'text-fg-muted hover:text-fg',
+                  ]}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  {link.label}
+                </a>
+                <div class="invisible absolute left-0 top-full z-50 min-w-[13rem] pt-2 opacity-0 transition group-hover/nav:visible group-hover/nav:opacity-100 group-focus-within/nav:visible group-focus-within/nav:opacity-100">
+                  <div class="rounded-2xl border border-border bg-bg-elevated p-2 shadow-[var(--shadow-lg)]">
+                    {link.children.map((child) => (
+                      <a
+                        href={child.href}
+                        class="block rounded-xl px-3 py-2.5 text-sm text-fg-muted transition-colors hover:bg-bg-muted hover:text-fg"
+                      >
+                        {child.label}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )
+          }
+          return (
+            <a
+              href={link.href}
+              class:list={[
+                'rounded-full px-3 py-2 text-sm font-medium transition-colors',
+                active ? 'text-primary' : 'text-fg-muted hover:text-fg',
+              ]}
+              aria-current={active ? 'page' : undefined}
+              target={link.external ? '_blank' : undefined}
+              rel={link.external ? 'noopener noreferrer' : undefined}
+            >
+              {link.label}
+              {link.external && <span class="sr-only"> ({t(locale, 'common.opensNewTab')})</span>}
+            </a>
+          )
+        })
+      }
+    </nav>
+
+    <div class="relative z-10 flex shrink-0 items-center gap-1.5 sm:gap-2">
+      <div class="hidden md:block">
+        <FontSizeToggle locale={locale} />
+      </div>
+      <ThemeToggle locale={locale} class="shrink-0" />
+      <div class="hidden md:block">
+        <a href={contactHref} class="btn btn-primary whitespace-nowrap">
+          {getInTouch}
+        </a>
+      </div>
+      <button
+        type="button"
+        class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-bg-elevated text-fg lg:hidden"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        aria-label={openMenu}
+      >
+        <svg class="size-5" data-icon-open viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+        <svg class="hidden size-5" data-icon-close viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div
+    id="mobile-nav"
+    class="fixed inset-0 z-50 hidden bg-bg/98 lg:hidden"
+    data-mobile-nav
+    hidden
+  >
+    <div class="flex h-full flex-col px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]">
+      <div class="mb-6 flex items-center justify-between">
+        <p class="eyebrow">{navLabel}</p>
+        <button
+          type="button"
+          class="inline-flex size-12 shrink-0 items-center justify-center rounded-full border border-border"
+          data-menu-close
+          aria-label={closeMenu}
+        >
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"></path>
+          </svg>
+        </button>
+      </div>
+      <nav class="flex flex-1 flex-col gap-1 overflow-y-auto" aria-label={navLabel}>
+        {
+          links.map((link) => (
+            <>
+              <a
+                href={link.href}
+                class="min-h-12 rounded-2xl px-3 py-3.5 text-2xl font-semibold tracking-tight text-fg"
+                data-menu-link
+              >
+                {link.label}
+              </a>
+              {link.children?.map((child) => (
+                <a
+                  href={child.href}
+                  class="min-h-12 rounded-xl px-4 py-3 text-base text-fg-muted"
+                  data-menu-link
+                >
+                  {child.label}
+                </a>
+              ))}
+            </>
+          ))
+        }
+      </nav>
+      <div class="mt-4 space-y-3 border-t border-border pt-4">
+        <div class="flex flex-wrap items-center justify-end gap-2">
+          <FontSizeToggle locale={locale} />
+          <ThemeToggle locale={locale} class="shrink-0" />
+        </div>
+        <a href={contactHref} class="btn btn-primary w-full" data-menu-link>
+          {getInTouch}
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script define:vars={{openMenu, closeMenu}}>
+  function bindHeader() {
+    const header = document.querySelector('[data-site-header]')
+    const inner = document.querySelector('[data-header-inner]')
+    const toggle = document.querySelector('[data-menu-toggle]')
+    const closeBtn = document.querySelector('[data-menu-close]')
+    const panel = document.querySelector('[data-mobile-nav]')
+    const iconOpen = toggle?.querySelector('[data-icon-open]')
+    const iconClose = toggle?.querySelector('[data-icon-close]')
+    if (!(toggle instanceof HTMLElement) || !(panel instanceof HTMLElement)) return
+    if (toggle.dataset.bound === 'true') return
+    toggle.dataset.bound = 'true'
+
+    let lastFocused = null
+
+    function getFocusable() {
+      return [...panel.querySelectorAll('a[href], button, select, [tabindex]:not([tabindex="-1"])')].filter(
+        (el) => el instanceof HTMLElement && !el.hasAttribute('disabled') && el.offsetParent !== null,
+      )
+    }
+
+    function setOpen(next) {
+      toggle.setAttribute('aria-expanded', String(next))
+      toggle.setAttribute('aria-label', next ? closeMenu : openMenu)
+      panel.classList.toggle('hidden', !next)
+      panel.hidden = !next
+      document.documentElement.classList.toggle('overflow-hidden', next)
+      document.body.classList.toggle('overflow-hidden', next)
+      iconOpen?.classList.toggle('hidden', next)
+      iconClose?.classList.toggle('hidden', !next)
+      if (next) {
+        lastFocused = document.activeElement
+        const first = getFocusable()[0]
+        first?.focus()
+      } else {
+        ;(lastFocused instanceof HTMLElement ? lastFocused : toggle).focus()
+      }
+    }
+
+    toggle.addEventListener('click', () => {
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true')
+    })
+    closeBtn?.addEventListener('click', () => setOpen(false))
+    panel.querySelectorAll('[data-menu-link]').forEach((link) => {
+      link.addEventListener('click', () => setOpen(false))
+    })
+    document.addEventListener('keydown', (event) => {
+      if (toggle.getAttribute('aria-expanded') !== 'true') return
+      if (event.key === 'Escape') {
+        setOpen(false)
+        return
+      }
+      if (event.key !== 'Tab') return
+      const focusable = getFocusable()
+      if (!focusable.length) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    })
+
+    if (header instanceof HTMLElement && inner instanceof HTMLElement) {
+      if (header.dataset.scrollBound === 'true') return
+      header.dataset.scrollBound = 'true'
+      const onScroll = () => {
+        const condensed = window.scrollY > 24
+        header.dataset.condensed = String(condensed)
+        header.classList.toggle('pt-1', condensed)
+        inner.classList.toggle('h-14', condensed)
+        inner.classList.toggle('rounded-xl', condensed)
+        inner.classList.toggle('shadow-[var(--shadow-md)]', condensed)
+      }
+      onScroll()
+      window.addEventListener('scroll', onScroll, {passive: true})
+    }
+  }
+
+  bindHeader()
+  document.addEventListener('astro:page-load', bindHeader)
+</script>

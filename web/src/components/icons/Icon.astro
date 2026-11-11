@@ -1,0 +1,57 @@
+---
+/**
+ * Lightweight inline SVG icons for services / UI accents.
+ * No external icon library - names map to a fixed set; unknown names fall back to "layers".
+ */
+interface Props {
+  name?: string
+  class?: string
+}
+
+const {name = 'layers', class: className = 'size-5'} = Astro.props
+
+const icons: Record<string, string> = {
+  layers:
+    'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
+  workflow:
+    'M6 3v6M6 15v6M18 3v2M18 11v10M3 9h6M15 7h6M3 15h6',
+  support:
+    'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01',
+  plug:
+    'M12 22v-5M9 8V2M15 8V2M6 8h12v4a6 6 0 0 1-12 0V8z',
+  shield:
+    'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
+  chart:
+    'M3 3v18h18M7 16v-5M12 16V8M17 16V7',
+  users:
+    'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+  spark:
+    'M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8',
+  arrow:
+    'M5 12h14M13 6l6 6-6 6',
+  chevron:
+    'M6 9l6 6 6-6',
+  quote:
+    'M3 21c3 0 7-1 7-8V5H4v8h4c0 4-1 6-5 8zm11 0c3 0 7-1 7-8V5h-6v8h4c0 4-1 6-5 8z',
+  plus:
+    'M12 5v14M5 12h14',
+}
+
+const resolved = icons[name] ? name : 'layers'
+const path = icons[resolved]
+const isFill = resolved === 'quote'
+---
+
+<svg
+  class={className}
+  viewBox="0 0 24 24"
+  fill={isFill ? 'currentColor' : 'none'}
+  stroke={isFill ? 'none' : 'currentColor'}
+  stroke-width={isFill ? undefined : '1.75'}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  <path d={path}></path>
+</svg>
+

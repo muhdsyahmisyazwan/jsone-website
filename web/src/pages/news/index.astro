@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import SanityImage from '../../components/sanity/SanityImage.astro'
+import {localePath} from '../../i18n/paths'
+import {t} from '../../i18n/utils'
+import {loadNewsIndex} from '../../lib/pages/loadPage'
+
+const locale = 'en' as const
+const data = await loadNewsIndex(locale)
+---
+
+<BaseLayout
+  locale={locale}
+  title={data.title}
+  description={data.description}
+  settings={data.settings}
+  navigation={data.navigation}
+  footer={data.footer}
+>
+  <section class="section-pad" data-reveal>
+    <div class="container-site space-y-10">
+      <div class="space-y-3">
+        <p class="eyebrow">{t(locale, 'nav.news')}</p>
+        <h1 class="display-lg text-fg">{t(locale, 'nav.news')}</h1>
+      </div>
+      {
+        data.articles.length === 0 ? (
+          <p class="text-fg-muted">{t(locale, 'news.empty')}</p>
+        ) : (
+          <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {data.articles.map((article) => (
+              <li>
+                <a
+                  href={localePath(locale, `/news/${article.slug}/`)}
+                  class="card card-spotlight group flex h-full flex-col overflow-hidden"
+                >
+                  {article.mainImage && (
+                    <SanityImage
+                      image={article.mainImage}
+                      locale={locale}
+                      class="aspect-[16/10] w-full object-cover"
+                      sizes="(max-width: 1024px) 100vw, 33vw"
+                      maxWidth={800}
+                      altFallback={article.title}
+                    />
+                  )}
+                  <div class="flex flex-1 flex-col gap-2 p-5">
+                    {article.publishedAt && (
+                      <time
+                        class="font-mono text-xs uppercase tracking-wider text-fg-subtle"
+                        datetime={article.publishedAt}
+                      >
+                        {new Date(article.publishedAt).toLocaleDateString(locale)}
+                      </time>
+                    )}
+                    <h2 class="text-lg font-semibold text-fg group-hover:text-primary">
+                      {article.title}
+                    </h2>
+                    {article.excerpt && (
+                      <p class="text-sm leading-relaxed text-fg-muted">{article.excerpt}</p>
+                    )}
+                    <span class="mt-auto pt-3 text-sm font-semibold text-primary">
+                      {t(locale, 'common.readMore')}
+                    </span>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

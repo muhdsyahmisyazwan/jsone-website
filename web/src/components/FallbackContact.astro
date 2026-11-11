@@ -1,0 +1,60 @@
+---
+import type {Locale} from '../i18n/locales'
+import {t} from '../i18n/utils'
+import ContactForm from './sections/ContactForm.astro'
+
+interface Props {
+  locale: Locale
+}
+
+const {locale} = Astro.props
+
+const email = t(locale, 'site.email')
+const phone = t(locale, 'site.phone')
+const address = t(locale, 'site.address')
+const hours = t(locale, 'site.hours')
+const hoursNote = t(locale, 'site.hoursNote')
+---
+
+<section class="relative overflow-hidden">
+  <div class="pointer-events-none absolute inset-0 surface-grid opacity-50" aria-hidden="true"></div>
+  <div class="container-site grid gap-10 py-20 lg:grid-cols-2 lg:items-end lg:py-24">
+    <div class="space-y-4">
+      <p class="eyebrow">{t(locale, 'nav.contact')}</p>
+      <h1 class="display-xl text-fg">{t(locale, 'contact.heroTitle')}</h1>
+      <p class="prose-measure text-base text-fg-muted sm:text-lg">
+        {t(locale, 'contact.heroSubtitle')}
+      </p>
+    </div>
+    <div class="space-y-4 rounded-[var(--radius-xl)] border border-border bg-bg-elevated p-6 shadow-[var(--shadow-sm)]">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-fg-subtle">
+        {t(locale, 'contact.detailsHeading')}
+      </h2>
+      <p class="text-sm leading-relaxed text-fg-muted">{address}</p>
+      <p>
+        <a class="text-sm font-semibold text-primary hover:opacity-80" href={`tel:${phone.replace(/[^\d+]/g, '')}`}>
+          {phone}
+        </a>
+      </p>
+      <p>
+        <a class="text-sm font-semibold text-primary hover:opacity-80" href={`mailto:${email}`}>
+          {email}
+        </a>
+      </p>
+      <div class="border-t border-border pt-4 text-sm text-fg-muted">
+        <p>{hours}</p>
+        <p class="mt-1">{hoursNote}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ContactForm
+  locale={locale}
+  section={{
+    heading: t(locale, 'nav.getInTouch'),
+    intro: t(locale, 'contact.formIntro'),
+    showPhone: true,
+    showCompany: true,
+  }}
+/>

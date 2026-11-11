@@ -1,0 +1,291 @@
+---
+import Icon from './icons/Icon.astro'
+import NetworkGraph from './illustrations/NetworkGraph.astro'
+import {localePath} from '../i18n/paths'
+import type {Locale} from '../i18n/locales'
+import {t} from '../i18n/utils'
+
+interface Props {
+  locale: Locale
+}
+
+const {locale} = Astro.props
+
+const title = t(locale, 'home.title')
+const highlight = t(locale, 'home.titleHighlight')
+const titleHtml = highlight && title.includes(highlight)
+  ? title.replace(
+      highlight,
+      `<span class="gradient-text">${highlight}</span>`,
+    )
+  : title
+
+const capabilities = [
+  {title: 'home.capEcmTitle', body: 'home.capEcmBody', icon: 'layers'},
+  {title: 'home.capProcessTitle', body: 'home.capProcessBody', icon: 'workflow'},
+  {title: 'home.capAmsTitle', body: 'home.capAmsBody', icon: 'support'},
+  {title: 'home.capIntegrationTitle', body: 'home.capIntegrationBody', icon: 'plug'},
+] as const
+
+const stats = [
+  {valueKey: 'home.statsExperienceValue', labelKey: 'home.statsExperienceLabel'},
+  {valueKey: 'home.statsProjectsValue', labelKey: 'home.statsProjectsLabel'},
+  {valueKey: 'home.statsClientsValue', labelKey: 'home.statsClientsLabel'},
+] as const
+
+const howSteps = [
+  {title: 'home.howStep1Title', body: 'home.howStep1Body'},
+  {title: 'home.howStep2Title', body: 'home.howStep2Body'},
+  {title: 'home.howStep3Title', body: 'home.howStep3Body'},
+  {title: 'home.howStep4Title', body: 'home.howStep4Body'},
+] as const
+
+const industries = [
+  'home.indOil',
+  'home.indGov',
+  'home.indFinance',
+  'home.indTelco',
+  'home.indHealthcare',
+  'home.indManufacturing',
+] as const
+
+const whyItems = [
+  {key: 'home.whyOpentext', icon: 'shield'},
+  {key: 'home.whyExperience', icon: 'chart'},
+  {key: 'home.whyConsulting', icon: 'users'},
+  {key: 'home.whyPartnership', icon: 'spark'},
+] as const
+
+const partnerLabels = [
+  'OpenText',
+  'SAP',
+  'Extended ECM',
+  'Data Archiving',
+  'Document Access',
+  'VIM',
+  'Accounts Payable',
+  'AMS',
+]
+---
+
+<section class="hero-stage relative overflow-hidden">
+  <div class="pointer-events-none absolute inset-0 surface-grid opacity-70" aria-hidden="true"></div>
+  <div
+    class="pointer-events-none absolute -right-20 top-10 hidden w-[min(52vw,36rem)] opacity-80 lg:block"
+    aria-hidden="true"
+  >
+    <NetworkGraph class="w-full text-fg-subtle" />
+  </div>
+
+  <div class="container-site relative grid min-h-[calc(100svh-var(--header-height)-1rem)] items-center gap-8 py-12 sm:gap-10 sm:py-16 lg:min-h-[calc(100dvh-var(--header-height)-1rem)] lg:grid-cols-[1.15fr_0.85fr] lg:py-20">
+    <div class="space-y-6 sm:space-y-7">
+      <p class="eyebrow">{t(locale, 'site.name')} · OpenText</p>
+      <h1 class="display-xl max-w-3xl text-fg" set:html={titleHtml} />
+      <p class="prose-measure text-base leading-relaxed text-fg-muted sm:text-lg">
+        {t(locale, 'home.description')}
+      </p>
+      <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+        <a href={localePath(locale, '/contact/')} class="btn btn-primary w-full sm:w-auto">
+          {t(locale, 'home.ctaPrimary')}
+        </a>
+        <a href={localePath(locale, '/solutions/')} class="btn btn-ghost w-full sm:w-auto">
+          {t(locale, 'home.ctaSecondary')}
+        </a>
+      </div>
+      <div class="grid max-w-xl grid-cols-3 gap-2 border-t border-border pt-6 sm:gap-4">
+        {
+          stats.map((stat) => (
+            <div class="min-w-0">
+              <p
+                class="metric text-xl font-semibold text-fg sm:text-3xl"
+                data-count={t(locale, stat.valueKey)}
+              >
+                {t(locale, stat.valueKey)}
+              </p>
+              <p class="mt-1 text-[0.7rem] leading-snug text-fg-subtle sm:text-sm">{t(locale, stat.labelKey)}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="relative hidden lg:block">
+      <div class="card overflow-hidden p-1">
+        <div class="rounded-[calc(var(--radius-lg)-2px)] bg-bg-muted/70 p-6 surface-dots">
+          <NetworkGraph class="w-full text-fg-subtle" />
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            {
+              capabilities.slice(0, 2).map((item) => (
+                <div class="rounded-xl border border-border bg-bg-elevated/80 p-3">
+                  <p class="font-mono text-[0.65rem] uppercase tracking-wider text-primary">
+                    {t(locale, item.title)}
+                  </p>
+                  <p class="mt-1 text-xs text-fg-muted line-clamp-2">{t(locale, item.body)}</p>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="border-y border-border bg-bg-elevated/70 py-8" aria-label={t(locale, 'home.partnersHeading')}>
+  <div class="container-site mb-4">
+    <p class="eyebrow text-center">{t(locale, 'home.partnersHeading')}</p>
+  </div>
+  <div class="marquee is-inview">
+    <div class="marquee-track px-4">
+      {
+        [...partnerLabels, ...partnerLabels].map((label) => (
+          <span class="inline-flex min-h-11 items-center rounded-full border border-border bg-bg px-5 font-mono text-sm text-fg-muted">
+            {label}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section-pad section-defer" data-reveal>
+  <div class="container-site grid items-end gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
+    <div class="space-y-4" data-reveal-child>
+      <p class="eyebrow">01 - EIM</p>
+      <h2 class="display-md text-fg">{t(locale, 'home.aboutHeading')}</h2>
+    </div>
+    <p class="prose-measure text-base leading-relaxed text-fg-muted sm:text-lg" data-reveal-child>
+      {t(locale, 'home.aboutBody')}
+    </p>
+  </div>
+</section>
+
+<section class="section-pad section-defer bg-bg-muted/40" data-reveal>
+  <div class="container-site space-y-10">
+    <div class="max-w-2xl space-y-3">
+      <p class="eyebrow">02 - {t(locale, 'home.howHeading')}</p>
+      <h2 class="display-md text-fg">{t(locale, 'home.howHeading')}</h2>
+      <p class="prose-measure text-fg-muted">{t(locale, 'home.howBody')}</p>
+    </div>
+    <ol class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {
+        howSteps.map((step, index) => (
+          <li class="card card-spotlight relative p-5 sm:p-6" data-reveal-child>
+            <span class="metric text-sm text-primary">0{index + 1}</span>
+            <h3 class="mt-3 text-lg font-semibold text-fg">{t(locale, step.title)}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-fg-muted">{t(locale, step.body)}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<section class="section-pad section-defer" data-reveal>
+  <div class="container-site space-y-10">
+    <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+      <div class="max-w-xl space-y-3">
+        <p class="eyebrow">03 - Capabilities</p>
+        <h2 class="display-md text-fg">{t(locale, 'home.capabilitiesHeading')}</h2>
+      </div>
+      <a href={localePath(locale, '/solutions/')} class="btn btn-ghost">
+        {t(locale, 'common.learnMore')}
+        <Icon name="arrow" class="size-4" />
+      </a>
+    </div>
+
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 lg:auto-rows-fr">
+      {
+        capabilities.map((item, index) => (
+          <li
+            class:list={[
+              'card card-spotlight flex flex-col gap-4 p-5 sm:p-6',
+              index === 0 && 'sm:col-span-2 lg:col-span-2 lg:row-span-2',
+            ]}
+            data-reveal-child
+          >
+            <span class="inline-flex size-11 items-center justify-center rounded-2xl bg-primary-soft text-primary">
+              <Icon name={item.icon} class="size-5" />
+            </span>
+            <div class="space-y-2">
+              <h3 class="text-xl font-semibold text-fg">{t(locale, item.title)}</h3>
+              <p class="text-sm leading-relaxed text-fg-muted sm:text-base">{t(locale, item.body)}</p>
+            </div>
+            <a
+              href={localePath(locale, '/solutions/')}
+              class="mt-auto inline-flex min-h-11 items-center gap-1.5 py-2 text-sm font-semibold text-primary"
+            >
+              {t(locale, 'common.learnMore')}
+              <Icon name="arrow" class="size-4" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section-pad section-defer" data-reveal>
+  <div class="container-site grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+    <div class="space-y-4">
+      <p class="eyebrow">04 - Industries</p>
+      <h2 class="display-md text-fg">{t(locale, 'home.industriesHeading')}</h2>
+      <p class="prose-measure text-fg-muted">{t(locale, 'home.industriesBody')}</p>
+    </div>
+    <ul class="flex flex-wrap gap-3">
+      {
+        industries.map((key) => (
+          <li
+            class="rounded-full border border-border bg-bg-elevated px-4 py-2.5 text-sm font-medium text-fg shadow-[var(--shadow-sm)]"
+            data-reveal-child
+          >
+            {t(locale, key)}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section-pad section-defer" data-reveal>
+  <div class="container-site">
+    <div class="panel-invert surface-grid p-6 sm:p-10 lg:p-14">
+      <div class="relative z-[1] grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+        <div>
+          <p class="eyebrow text-[#8CE0F2]">05 - Why</p>
+          <h2 class="display-md mt-3 text-white">{t(locale, 'home.whyHeading')}</h2>
+        </div>
+        <ul class="grid gap-3 sm:grid-cols-2">
+          {
+            whyItems.map((item) => (
+              <li class="flex gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+                <span class="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#00B8E0]/20 text-[#8CE0F2]">
+                  <Icon name={item.icon} class="size-4" />
+                </span>
+                <p class="text-sm font-medium leading-snug text-white/95 sm:text-base">
+                  {t(locale, item.key)}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad section-defer" data-reveal>
+  <div class="container-site">
+    <div class="panel-invert overflow-hidden px-6 py-12 sm:px-10 sm:py-16">
+      <div class="relative z-[1] max-w-2xl space-y-5">
+        <h2 class="display-md text-white">{t(locale, 'home.ctaHeading')}</h2>
+        <p class="prose-measure text-base leading-relaxed text-white/80">
+          {t(locale, 'home.ctaBody')}
+        </p>
+        <a href={localePath(locale, '/contact/')} class="btn btn-primary">
+          {t(locale, 'home.ctaPrimary')}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

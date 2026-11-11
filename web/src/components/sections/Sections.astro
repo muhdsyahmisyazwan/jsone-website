@@ -1,0 +1,102 @@
+---
+import type {Locale} from '../../i18n/locales'
+import type {Section} from '../../lib/sanity/types'
+import Hero from './Hero.astro'
+import TextImage from './TextImage.astro'
+import ServicesGrid from './ServicesGrid.astro'
+import Team from './Team.astro'
+import Testimonials from './Testimonials.astro'
+import Cta from './Cta.astro'
+import Faq from './Faq.astro'
+import ContactForm from './ContactForm.astro'
+import LogoStrip from './LogoStrip.astro'
+
+interface Props {
+  locale: Locale
+  sections?: Section[] | null
+  /** When true, sections use field-level locale* shapes (homepage). */
+  localized?: boolean
+}
+
+const {locale, sections = [], localized = false} = Astro.props
+
+const homeTypes = new Set([
+  'homeHero',
+  'homeTextImage',
+  'homeServicesGrid',
+  'homeTeam',
+  'homeTestimonials',
+  'homeCta',
+  'homeFaq',
+  'homeContactForm',
+  'homeLogoStrip',
+])
+---
+
+{
+  (sections || []).map((section) => {
+    const isLocalized = localized || homeTypes.has(section._type)
+    // homeHero → hero, hero → hero
+    const kind = section._type.startsWith('home')
+      ? section._type.replace(/^home/, '').replace(/^./, (c) => c.toLowerCase())
+      : section._type
+
+    switch (kind) {
+      case 'hero':
+        return <Hero locale={locale} localized={isLocalized} section={section as any} />
+      case 'textImage':
+        return (
+          <div class="section-defer">
+            <TextImage locale={locale} localized={isLocalized} section={section as any} />
+          </div>
+        )
+      case 'servicesGrid':
+        return (
+          <div class="section-defer">
+            <ServicesGrid locale={locale} localized={isLocalized} section={section as any} />
+          </div>
+        )
+      case 'team':
+        return (
+          <div class="section-defer">
+            <Team locale={locale} localized={isLocalized} section={section as any} />
+          </div>
+        )
+      case 'testimonials':
+        return (
+          <div class="section-defer">
+            <Testimonials locale={locale} localized={isLocalized} section={section as any} />
+          </div>
+        )
+      case 'cta':
+        return (
+          <div class="section-defer">
+            <Cta locale={locale} localized={isLocalized} section={section as any} />
+          </div>
+        )
+      case 'faq':
+        return (
+          <div class="section-defer">
+            <Faq locale={locale} localized={isLocalized} section={section as any} />
+          </div>
+        )
+      case 'contactForm':
+        return (
+          <div class="section-defer">
+            <ContactForm locale={locale} localized={isLocalized} section={section as any} />
+          </div>
+        )
+      case 'logoStrip':
+        return (
+          <div class="section-defer">
+            <LogoStrip locale={locale} localized={isLocalized} section={section as any} />
+          </div>
+        )
+      default:
+        if (import.meta.env.DEV) {
+          console.warn(`[sections] Unknown block type: ${section._type}`)
+        }
+        return null
+    }
+  })
+}

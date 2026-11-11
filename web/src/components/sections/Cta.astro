@@ -1,0 +1,69 @@
+---
+import type {Locale} from '../../i18n/locales'
+import {resolveLocaleLink, resolveLink} from '../../lib/sanity/links'
+import {resolveLocaleString} from '../../lib/sanity/locale'
+import type {Link, LocaleLink, LocaleString, LocaleText} from '../../lib/sanity/types'
+
+interface Props {
+  locale: Locale
+  localized?: boolean
+  section: {
+    heading?: string | LocaleString
+    body?: string | LocaleText
+    primaryCta?: Link | LocaleLink
+    secondaryCta?: Link | LocaleLink
+  }
+}
+
+const {locale, localized = false, section} = Astro.props
+const str = (v: string | LocaleString | undefined) =>
+  typeof v === 'string' ? v : resolveLocaleString(v, locale)
+
+const heading = str(section.heading)
+const body = str(section.body)
+const primary = localized
+  ? resolveLocaleLink(section.primaryCta as LocaleLink, locale)
+  : resolveLink(section.primaryCta as Link, locale)
+const secondary = localized
+  ? resolveLocaleLink(section.secondaryCta as LocaleLink, locale)
+  : resolveLink(section.secondaryCta as Link, locale)
+---
+
+{
+  heading && (
+    <section class="section-pad section-defer" data-reveal>
+      <div class="container-site">
+        <div class="panel-invert surface-grid overflow-hidden px-6 py-12 sm:px-10 sm:py-16">
+          <div class="relative z-[1] max-w-2xl space-y-5">
+            <h2 class="display-md text-white">{heading}</h2>
+            {body && <p class="prose-measure text-base leading-relaxed text-white/80">{body}</p>}
+            {(primary || secondary) && (
+              <div class="flex flex-wrap gap-3">
+                {primary && (
+                  <a
+                    href={primary.href}
+                    class="btn btn-primary"
+                    target={primary.openInNewTab ? '_blank' : undefined}
+                    rel={primary.openInNewTab ? 'noopener noreferrer' : undefined}
+                  >
+                    {primary.label}
+                  </a>
+                )}
+                {secondary && (
+                  <a
+                    href={secondary.href}
+                    class="btn btn-on-dark"
+                    target={secondary.openInNewTab ? '_blank' : undefined}
+                    rel={secondary.openInNewTab ? 'noopener noreferrer' : undefined}
+                  >
+                    {secondary.label}
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

@@ -1,0 +1,88 @@
+---
+import type {Locale} from '../../i18n/locales'
+import {t} from '../../i18n/utils'
+import Icon from '../icons/Icon.astro'
+import {serviceIconName} from '../icons/names'
+import {resolveLocaleLink, resolveLink} from '../../lib/sanity/links'
+import {resolveLocaleString} from '../../lib/sanity/locale'
+import type {Link, LocaleLink, LocaleString, LocaleText} from '../../lib/sanity/types'
+
+interface Props {
+  locale: Locale
+  localized?: boolean
+  section: {
+    heading?: string | LocaleString
+    intro?: string | LocaleText
+    items?: Array<{
+      title?: string | LocaleString
+      description?: string | LocaleText
+      link?: Link | LocaleLink
+    }>
+  }
+}
+
+const {locale, localized = false, section} = Astro.props
+const str = (v: string | LocaleString | undefined) =>
+  typeof v === 'string' ? v : resolveLocaleString(v, locale)
+
+const heading = str(section.heading)
+const intro = str(section.intro)
+const items = (section.items || [])
+  .map((item) => ({
+    title: str(item.title),
+    description: str(item.description),
+    link: localized
+      ? resolveLocaleLink(item.link as LocaleLink, locale)
+      : resolveLink(item.link as Link, locale),
+  }))
+  .filter((i) => i.title)
+
+const learnMore = t(locale, 'common.learnMore')
+---
+
+{
+  (heading || items.length > 0) && (
+    <section class="section-pad section-defer" data-reveal>
+      <div class="container-site space-y-10">
+        {(heading || intro) && (
+          <div class="max-w-2xl space-y-3">
+            {heading && <h2 class="display-md text-fg">{heading}</h2>}
+            {intro && <p class="prose-measure text-base leading-relaxed text-fg-muted sm:text-lg">{intro}</p>}
+          </div>
+        )}
+        <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {items.map((item, index) => (
+            <li
+              class:list={[
+                'card card-spotlight flex flex-col gap-4 p-5 sm:p-6',
+                index === 0 && items.length > 2 && 'sm:col-span-2',
+              ]}
+              data-reveal-child
+            >
+              <span class="inline-flex size-11 items-center justify-center rounded-2xl bg-primary-soft text-primary">
+                <Icon name={serviceIconName(index)} class="size-5" />
+              </span>
+              <div class="space-y-2">
+                <h3 class="text-lg font-semibold text-fg sm:text-xl">{item.title}</h3>
+                {item.description && (
+                  <p class="text-sm leading-relaxed text-fg-muted">{item.description}</p>
+                )}
+              </div>
+              {item.link && (
+                <a
+                  href={item.link.href}
+                  class="mt-auto inline-flex min-h-11 items-center gap-1.5 py-2 text-sm font-semibold text-primary"
+                  target={item.link.openInNewTab ? '_blank' : undefined}
+                  rel={item.link.openInNewTab ? 'noopener noreferrer' : undefined}
+                >
+                  {item.link.label || learnMore}
+                  <Icon name="arrow" class="size-4" />
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import FallbackSolutions from '../../components/FallbackSolutions.astro'
+import Sections from '../../components/sections/Sections.astro'
+import {loadCmsOrFallbackRoute} from '../../lib/pages/loadPage'
+
+const data = await loadCmsOrFallbackRoute('en', 'solutions', {
+  titleKey: 'solutions.metaTitle',
+  descriptionKey: 'solutions.metaDescription',
+})
+---
+
+<BaseLayout
+  locale={data.locale}
+  title={data.title}
+  description={data.description}
+  ogImage={data.page?.seo?.ogImage}
+  settings={data.settings}
+  navigation={data.navigation}
+  footer={data.footer}
+>
+  {
+    data.page ? (
+      <Sections locale={data.locale} sections={data.page.sections} />
+    ) : (
+      <FallbackSolutions locale={data.locale} />
+    )
+  }
+</BaseLayout>

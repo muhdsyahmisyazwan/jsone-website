@@ -1,0 +1,25 @@
+[Unit]
+Description=JS One website (Node static + API)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/jsone/server
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=4321
+Environment=STATIC_DIR=/var/www/jsone/web/dist
+# Load secrets (create this file; chmod 600)
+EnvironmentFile=-/var/www/jsone/web/.env
+ExecStart=/usr/bin/node /var/www/jsone/server/dist/index.js
+Restart=on-failure
+RestartSec=5
+
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

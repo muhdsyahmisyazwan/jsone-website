@@ -1,0 +1,9 @@
+# Local Pages Functions simulation (optional):
+#   npx wrangler pages dev ./dist
+#
+# Production secrets are set in Cloudflare Pages → Settings → Environment variables.
+# Do not put secrets in this file.
+
+name = "jsone-web"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "dist"

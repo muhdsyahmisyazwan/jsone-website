@@ -1,0 +1,16 @@
+---
+/**
+ * Used when Sanity homepage content is missing / unconfigured.
+ * All visible copy still comes from i18n JSON files.
+ */
+import HomeHero from './HomeHero.astro'
+import type {Locale} from '../i18n/locales'
+
+interface Props {
+  locale: Locale
+}
+
+const {locale} = Astro.props
+---
+
+<HomeHero locale={locale} />

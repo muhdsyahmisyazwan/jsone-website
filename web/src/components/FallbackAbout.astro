@@ -1,0 +1,153 @@
+---
+import type {Locale} from '../i18n/locales'
+import {t} from '../i18n/utils'
+import Icon from './icons/Icon.astro'
+import {serviceIconName} from './icons/names'
+import NetworkGraph from './illustrations/NetworkGraph.astro'
+
+interface Props {
+  locale: Locale
+}
+
+const {locale} = Astro.props
+
+const whyCards = [
+  {title: 'about.whyProcessTitle', body: 'about.whyProcessBody'},
+  {title: 'about.whyDevTitle', body: 'about.whyDevBody'},
+  {title: 'about.whyDataTitle', body: 'about.whyDataBody'},
+  {title: 'about.whyManagedTitle', body: 'about.whyManagedBody'},
+] as const
+
+const timeline = [
+  {
+    year: '2006',
+    label: 'about.timeline2006Label',
+    events: [
+      {title: 'about.timeline2006SetupTitle', body: 'about.timeline2006SetupBody'},
+      {title: 'about.timeline2006PartnerTitle', body: 'about.timeline2006PartnerBody'},
+      {title: 'about.timeline2006ProjectTitle', body: 'about.timeline2006ProjectBody'},
+      {title: 'about.timeline2006SapAwardTitle', body: 'about.timeline2006SapAwardBody'},
+      {title: 'about.timeline2006SapCertTitle', body: 'about.timeline2006SapCertBody'},
+    ],
+  },
+  {
+    year: '2017',
+    label: 'about.timeline2017Label',
+    events: [{title: 'about.timeline2017BigDataTitle', body: 'about.timeline2017BigDataBody'}],
+  },
+  {
+    year: '2018',
+    label: 'about.timeline2018Label',
+    events: [
+      {title: 'about.timeline2018MscTitle', body: 'about.timeline2018MscBody'},
+      {title: 'about.timeline2018RegionalTitle', body: 'about.timeline2018RegionalBody'},
+    ],
+  },
+  {
+    year: '2019',
+    label: 'about.timeline2019Label',
+    events: [{title: 'about.timeline2019BwTitle', body: 'about.timeline2019BwBody'}],
+  },
+] as const
+---
+
+<section class="relative overflow-hidden">
+  <div class="pointer-events-none absolute inset-0 surface-grid opacity-50" aria-hidden="true"></div>
+  <div class="container-site grid items-center gap-10 py-20 lg:grid-cols-2 lg:py-24">
+    <div class="space-y-4">
+      <p class="eyebrow">{t(locale, 'nav.about')}</p>
+      <h1 class="display-xl text-fg">{t(locale, 'about.heroTitle')}</h1>
+      <p class="prose-measure text-base text-fg-muted sm:text-lg">
+        {t(locale, 'about.heroSubtitle')}
+      </p>
+    </div>
+    <div class="hidden lg:block">
+      <NetworkGraph class="w-full text-fg-subtle" />
+    </div>
+  </div>
+</section>
+
+<section class="section-pad section-defer" data-reveal>
+  <div class="container-site grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+    <div class="panel-invert relative aspect-[4/3] overflow-hidden surface-grid">
+      <p class="absolute bottom-6 left-6 z-[1] max-w-[14rem] text-lg font-semibold leading-snug text-white sm:bottom-8 sm:left-8 sm:text-xl">
+        {t(locale, 'about.imageCallout')}
+      </p>
+    </div>
+    <div class="space-y-6">
+      <h2 class="display-md text-fg">{t(locale, 'about.overviewHeading')}</h2>
+      <p class="prose-measure text-fg-muted">{t(locale, 'about.overviewBody1')}</p>
+      <p class="prose-measure text-fg-muted">{t(locale, 'about.overviewBody2')}</p>
+      <div class="grid gap-4 border-t border-border pt-6 sm:grid-cols-3">
+        <div>
+          <h3 class="font-semibold text-fg">{t(locale, 'about.missionHeading')}</h3>
+          <p class="mt-2 text-sm text-fg-muted">{t(locale, 'about.missionBody')}</p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-fg">{t(locale, 'about.visionHeading')}</h3>
+          <p class="mt-2 text-sm text-fg-muted">{t(locale, 'about.visionBody')}</p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-fg">{t(locale, 'about.valueHeading')}</h3>
+          <p class="mt-2 text-sm text-fg-muted">{t(locale, 'about.valueBody')}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad section-defer bg-bg-muted/40" data-reveal>
+  <div class="container-site space-y-10">
+    <h2 class="display-md text-fg">{t(locale, 'about.whyHeading')}</h2>
+    <ul class="grid gap-4 sm:grid-cols-2">
+      {
+        whyCards.map((card, index) => (
+          <li class="card card-spotlight flex flex-col gap-4 p-6" data-reveal-child>
+            <span class="inline-flex size-11 items-center justify-center rounded-2xl bg-primary-soft text-primary">
+              <Icon name={serviceIconName(index)} class="size-5" />
+            </span>
+            <h3 class="text-lg font-semibold text-fg">{t(locale, card.title)}</h3>
+            <p class="text-sm leading-relaxed text-fg-muted sm:text-base">{t(locale, card.body)}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section-pad section-defer" data-reveal>
+  <div class="container-site space-y-10">
+    <h2 class="display-md text-fg">{t(locale, 'about.journeyHeading')}</h2>
+    <div class="relative mx-auto max-w-3xl space-y-3">
+      <div
+        class="pointer-events-none absolute bottom-0 left-[0.7rem] top-2 w-px bg-border sm:left-[0.85rem]"
+        aria-hidden="true"
+      >
+      </div>
+      {
+        timeline.map((group, index) => (
+          <details class="group relative pl-10 sm:pl-12" open={index === 0}>
+            <summary class="min-h-11 cursor-pointer list-none py-2 marker:content-none [&::-webkit-details-marker]:hidden">
+              <span
+                class="absolute left-0 top-2.5 size-6 rounded-full border-4 border-bg bg-primary sm:size-7"
+                aria-hidden="true"
+              />
+              <span class="flex flex-wrap items-baseline gap-x-2 text-base font-semibold text-fg sm:text-lg">
+                <span class="metric text-primary">{group.year}</span>
+                <span>{t(locale, group.label)}</span>
+              </span>
+            </summary>
+            <ul class="mt-4 space-y-3 pb-3">
+              {group.events.map((event) => (
+                <li class="card space-y-1 p-4">
+                  <p class="font-semibold text-fg">{t(locale, event.title)}</p>
+                  <p class="text-sm text-fg-muted">{t(locale, event.body)}</p>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

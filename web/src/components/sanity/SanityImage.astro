@@ -1,0 +1,52 @@
+---
+import type {Locale} from '../../i18n/locales'
+import {getResponsiveImage, hasImage} from '../../lib/sanity/image'
+import {resolveImageAlt} from '../../lib/sanity/locale'
+import type {SanityImage as SanityImageType} from '../../lib/sanity/types'
+
+interface Props {
+  image?: SanityImageType | null
+  locale: Locale
+  altFallback?: string
+  class?: string
+  widths?: number[]
+  sizes?: string
+  maxWidth?: number
+  /** Lazy-load below the fold by default; set false for LCP/hero images. */
+  lazy?: boolean
+  priority?: boolean
+}
+
+const {
+  image,
+  locale,
+  altFallback = '',
+  class: className = '',
+  widths,
+  sizes,
+  maxWidth = 1600,
+  lazy = true,
+  priority = false,
+} = Astro.props
+
+const responsive = image && hasImage(image) ? getResponsiveImage(image, {widths, sizes, maxWidth}) : null
+const alt = resolveImageAlt(image, locale, altFallback)
+const loading = priority || !lazy ? 'eager' : 'lazy'
+const fetchpriority = priority ? 'high' : undefined
+---
+
+{
+  responsive ? (
+    <img
+      src={responsive.src}
+      srcset={responsive.srcSet}
+      sizes={responsive.sizes}
+      alt={alt}
+      width={responsive.width}
+      class={className}
+      loading={loading}
+      decoding="async"
+      fetchpriority={fetchpriority}
+    />
+  ) : null
+}

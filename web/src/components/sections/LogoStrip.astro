@@ -1,0 +1,61 @@
+---
+import type {Locale} from '../../i18n/locales'
+import SanityImage from '../sanity/SanityImage.astro'
+import {resolveLocaleString} from '../../lib/sanity/locale'
+import type {LocaleString, SanityImage as Img} from '../../lib/sanity/types'
+
+interface Props {
+  locale: Locale
+  localized?: boolean
+  section: {
+    heading?: string | LocaleString
+    logos?: Array<{image?: Img; href?: string}>
+  }
+}
+
+const {locale, section} = Astro.props
+const heading =
+  typeof section.heading === 'string'
+    ? section.heading
+    : resolveLocaleString(section.heading, locale)
+const logos = (section.logos || []).filter((l) => l.image)
+const loop = [...logos, ...logos]
+---
+
+{
+  logos.length > 0 && (
+    <section class="section-defer border-y border-border bg-bg-elevated/50 py-12" data-reveal>
+      <div class="container-site space-y-8">
+        {heading && <p class="eyebrow text-center">{heading}</p>}
+        <div class="marquee is-inview">
+          <div class="marquee-track items-center px-4">
+            {loop.map((logo) => {
+              const img = (
+                <SanityImage
+                  image={logo.image}
+                  locale={locale}
+                  class="logo-theme h-9 w-auto max-w-[8rem] object-contain opacity-70 transition [@media(hover:hover)_and_(pointer:fine)]:hover:opacity-100 sm:h-11 sm:max-w-[10rem]"
+                  widths={[160, 240, 320]}
+                  sizes="160px"
+                  maxWidth={320}
+                />
+              )
+              return logo.href ? (
+                <a
+                  href={logo.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex min-h-11 items-center"
+                >
+                  {img}
+                </a>
+              ) : (
+                <span class="inline-flex min-h-11 items-center">{img}</span>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

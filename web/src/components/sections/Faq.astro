@@ -1,0 +1,90 @@
+---
+import type {Locale} from '../../i18n/locales'
+import Icon from '../icons/Icon.astro'
+import PortableText from '../sanity/PortableText.astro'
+import {resolveLocaleString} from '../../lib/sanity/locale'
+import type {LocaleString, LocaleText, PortableTextBlock} from '../../lib/sanity/types'
+
+interface Props {
+  locale: Locale
+  localized?: boolean
+  section: {
+    heading?: string | LocaleString
+    intro?: string | LocaleText
+    items?: Array<{
+      question?: string | LocaleString
+      answer?: PortableTextBlock[] | Record<string, {value?: PortableTextBlock[]; reviewed?: boolean}>
+    }>
+  }
+}
+
+const {locale, section} = Astro.props
+const str = (v: string | LocaleString | undefined) =>
+  typeof v === 'string' ? v : resolveLocaleString(v, locale)
+
+function resolveAnswer(
+  answer:
+    | PortableTextBlock[]
+    | Record<string, {value?: PortableTextBlock[]; reviewed?: boolean}>
+    | undefined,
+): PortableTextBlock[] | undefined {
+  if (!answer) return undefined
+  if (Array.isArray(answer)) return answer
+  const field = answer
+  const pick = (loc: Locale) => {
+    const entry = field[loc]
+    if (!entry?.reviewed || !entry.value?.length) return undefined
+    return entry.value
+  }
+  return pick(locale) ?? pick('en')
+}
+
+const heading = str(section.heading)
+const intro = str(section.intro)
+const items = (section.items || [])
+  .map((item) => ({
+    question: str(item.question),
+    answer: resolveAnswer(item.answer),
+  }))
+  .filter((i) => i.question)
+---
+
+{
+  (heading || items.length > 0) && (
+    <section class="section-pad section-defer" data-reveal>
+      <div class="container-site mx-auto max-w-3xl space-y-8">
+        {(heading || intro) && (
+          <div class="space-y-3">
+            {heading && <h2 class="display-md text-fg">{heading}</h2>}
+            {intro && <p class="prose-measure text-fg-muted">{intro}</p>}
+          </div>
+        )}
+        <div class="space-y-3" role="list">
+          {items.map((item) => (
+            <details
+              class="group card overflow-hidden px-5 transition-[border-color] open:border-primary/40"
+              role="listitem"
+            >
+              <summary class="min-h-12 cursor-pointer list-none py-4 font-semibold text-fg marker:content-none [&::-webkit-details-marker]:hidden">
+                <span class="flex items-start justify-between gap-4">
+                  <span class="text-left">{item.question}</span>
+                  <span
+                    class="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center text-primary transition-transform duration-200 group-open:rotate-180"
+                    aria-hidden="true"
+                  >
+                    <Icon name="chevron" class="size-5" />
+                  </span>
+                </span>
+              </summary>
+              {item.answer && (
+                <div class="border-t border-border pb-4 pt-3 text-fg-muted">
+                  <PortableText value={item.answer} />
+                </div>
+              )}
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

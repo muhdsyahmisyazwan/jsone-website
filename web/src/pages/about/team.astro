@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import FallbackTeam from '../../components/FallbackTeam.astro'
+import Sections from '../../components/sections/Sections.astro'
+import {loadAboutRoute} from '../../lib/pages/loadPage'
+
+const data = await loadAboutRoute('en', 'about-team', {
+  titleKey: 'aboutTeam.metaTitle',
+  descriptionKey: 'aboutTeam.metaDescription',
+})
+---
+
+<BaseLayout
+  locale={data.locale}
+  title={data.title}
+  description={data.description}
+  ogImage={data.page?.seo?.ogImage}
+  settings={data.settings}
+  navigation={data.navigation}
+  footer={data.footer}
+>
+  {
+    data.page ? (
+      <Sections locale={data.locale} sections={data.page.sections} />
+    ) : (
+      <FallbackTeam locale={data.locale} />
+    )
+  }
+</BaseLayout>

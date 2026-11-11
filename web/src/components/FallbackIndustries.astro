@@ -1,0 +1,55 @@
+---
+import type {Locale} from '../i18n/locales'
+import {localePath} from '../i18n/paths'
+import {t} from '../i18n/utils'
+import Icon from './icons/Icon.astro'
+
+interface Props {
+  locale: Locale
+}
+
+const {locale} = Astro.props
+
+const industries = [
+  'home.indOil',
+  'home.indGov',
+  'home.indFinance',
+  'home.indTelco',
+  'home.indHealthcare',
+  'home.indManufacturing',
+] as const
+---
+
+<section class="relative overflow-hidden">
+  <div class="pointer-events-none absolute inset-0 surface-grid opacity-50" aria-hidden="true"></div>
+  <div class="container-site space-y-4 py-20 lg:py-24">
+    <p class="eyebrow">{t(locale, 'nav.industries')}</p>
+    <h1 class="display-xl max-w-3xl text-fg">{t(locale, 'industries.heroTitle')}</h1>
+    <p class="prose-measure text-base text-fg-muted sm:text-lg">
+      {t(locale, 'industries.heroSubtitle')}
+    </p>
+  </div>
+</section>
+
+<section class="section-pad section-defer" data-reveal>
+  <div class="container-site space-y-8">
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
+      {
+        industries.map((key) => (
+          <li
+            class="card flex items-center gap-4 p-5 sm:p-6"
+            data-reveal-child
+          >
+            <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-fg">
+              <Icon name="chart" class="size-5" />
+            </span>
+            <h2 class="text-lg font-semibold text-fg">{t(locale, key)}</h2>
+          </li>
+        ))
+      }
+    </ul>
+    <a href={localePath(locale, '/contact/')} class="btn btn-primary">
+      {t(locale, 'nav.getInTouch')}
+    </a>
+  </div>
+</section>

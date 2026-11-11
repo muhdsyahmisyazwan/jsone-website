@@ -1,0 +1,29 @@
+---
+/**
+ * Privacy-friendly analytics - Cloudflare Web Analytics beacon only.
+ * No cookies; set PUBLIC_CF_WEB_ANALYTICS_TOKEN in env to enable.
+ * Alternative: Plausible via PUBLIC_PLAUSIBLE_DOMAIN.
+ */
+const cfToken = import.meta.env.PUBLIC_CF_WEB_ANALYTICS_TOKEN as string | undefined
+const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN as string | undefined
+---
+
+{
+  cfToken && (
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon={JSON.stringify({token: cfToken})}
+    />
+  )
+}
+
+{
+  !cfToken && plausibleDomain && (
+    <script
+      defer
+      data-domain={plausibleDomain}
+      src="https://plausible.io/js/script.js"
+    />
+  )
+}

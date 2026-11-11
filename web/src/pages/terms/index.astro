@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import {loadChrome} from '../../lib/pages/loadPage'
+import {t} from '../../i18n/utils'
+
+const locale = 'en'
+const {settings, navigation, footer} = await loadChrome()
+const title = `${t(locale, 'legal.termsTitle')} - ${t(locale, 'site.name')}`
+const description = t(locale, 'legal.termsMeta')
+
+const sections = [
+  {heading: 'legal.termsUseHeading', body: 'legal.termsUseBody'},
+  {heading: 'legal.termsIPHeading', body: 'legal.termsIPBody'},
+  {heading: 'legal.termsAccuracyHeading', body: 'legal.termsAccuracyBody'},
+  {heading: 'legal.termsLiabilityHeading', body: 'legal.termsLiabilityBody'},
+  {heading: 'legal.termsLawHeading', body: 'legal.termsLawBody'},
+  {heading: 'legal.termsContactHeading', body: 'legal.termsContactBody'},
+] as const
+---
+
+<BaseLayout
+  locale={locale}
+  title={title}
+  description={description}
+  settings={settings}
+  navigation={navigation}
+  footer={footer}
+>
+  <section class="section-pad">
+    <div class="container-site mx-auto max-w-3xl space-y-8">
+      <header class="space-y-3">
+        <h1 class="display-md text-fg">{t(locale, 'legal.termsTitle')}</h1>
+        <p class="text-sm text-fg-subtle">{t(locale, 'legal.termsUpdated')}</p>
+        <p class="prose-measure text-fg-muted">{t(locale, 'legal.termsIntro')}</p>
+      </header>
+      {
+        sections.map((section) => (
+          <section class="space-y-2">
+            <h2 class="text-xl font-semibold text-fg">{t(locale, section.heading)}</h2>
+            <p class="prose-measure text-fg-muted">{t(locale, section.body)}</p>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,110 @@
+---
+import type {Locale} from '../i18n/locales'
+import {t} from '../i18n/utils'
+
+interface Props {
+  locale: Locale
+  class?: string
+}
+
+const {locale, class: className = ''} = Astro.props
+const label = t(locale, 'theme.label')
+const toLight = t(locale, 'theme.toLight')
+const toDark = t(locale, 'theme.toDark')
+---
+
+<button
+  type="button"
+  class:list={[
+    'inline-flex size-11 items-center justify-center rounded-full border border-border bg-bg-elevated text-fg transition-[border-color,background-color,transform] duration-150 [@media(hover:hover)_and_(pointer:fine)]:hover:border-primary active:bg-bg-muted',
+    className,
+  ]}
+  data-theme-toggle
+  aria-label={label}
+  aria-pressed="false"
+  title={label}
+>
+  <span class="relative size-5" aria-hidden="true">
+    <svg data-icon-sun class="absolute inset-0 size-5 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+    </svg>
+    <svg data-icon-moon class="absolute inset-0 size-5 opacity-0 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+      <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z"></path>
+    </svg>
+  </span>
+</button>
+
+<script define:vars={{toLight, toDark, label}}>
+  function resolveTheme(pref) {
+    if (pref === 'light' || pref === 'dark') return pref
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
+  function applyTheme(pref) {
+    const resolved = resolveTheme(pref)
+    document.documentElement.setAttribute('data-theme', resolved)
+    document.documentElement.setAttribute('data-theme-pref', pref)
+    const meta = document.querySelector('meta[name="theme-color"]')
+    if (meta) {
+      meta.setAttribute('content', resolved === 'dark' ? '#000c28' : '#f4f7fb')
+    }
+    try {
+      localStorage.setItem('jsone-theme', pref)
+    } catch {}
+    return resolved
+  }
+
+  function syncToggle(btn) {
+    const resolved = document.documentElement.getAttribute('data-theme') || 'light'
+    const sun = btn.querySelector('[data-icon-sun]')
+    const moon = btn.querySelector('[data-icon-moon]')
+    // Show the action icon: moon means "switch to dark", sun means "switch to light"
+    const showMoon = resolved === 'light'
+    sun?.classList.toggle('opacity-0', showMoon)
+    moon?.classList.toggle('opacity-0', !showMoon)
+    const nextLabel = resolved === 'light' ? toDark : toLight
+    btn.setAttribute('aria-label', nextLabel)
+    btn.setAttribute('title', nextLabel)
+    btn.setAttribute('aria-pressed', String(resolved === 'dark'))
+  }
+
+  function bindThemeToggle() {
+    document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+      if (!(btn instanceof HTMLElement) || btn.dataset.bound === 'true') return
+      btn.dataset.bound = 'true'
+      syncToggle(btn)
+      btn.addEventListener('click', () => {
+        const resolved = document.documentElement.getAttribute('data-theme') || 'light'
+        applyTheme(resolved === 'light' ? 'dark' : 'light')
+        document.querySelectorAll('[data-theme-toggle]').forEach((b) => {
+          if (b instanceof HTMLElement) syncToggle(b)
+        })
+      })
+    })
+  }
+
+  function syncAllToggles() {
+    document.querySelectorAll('[data-theme-toggle]').forEach((b) => {
+      if (b instanceof HTMLElement) syncToggle(b)
+    })
+  }
+
+  bindThemeToggle()
+
+  if (!window.__jsoneThemeBound) {
+    window.__jsoneThemeBound = true
+    document.addEventListener('astro:page-load', () => {
+      bindThemeToggle()
+      syncAllToggles()
+    })
+    document.addEventListener('astro:after-swap', syncAllToggles)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      const pref = document.documentElement.getAttribute('data-theme-pref') || 'system'
+      if (pref === 'system') {
+        applyTheme('system')
+        syncAllToggles()
+      }
+    })
+  }
+</script>

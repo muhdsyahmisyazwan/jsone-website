@@ -1,0 +1,119 @@
+---
+description: JS One corporate website - stack, i18n, CMS, a11y, and delivery rules
+alwaysApply: true
+---
+
+# JS One Website - Project Rules
+
+## Company identity
+
+- Legal name: **J. S. One Sdn Bhd** · Brand: **JS One**
+- Tagline: We care for your content growth of tomorrow.
+- IT services & consulting · OpenText ECM & SAP specialist · Founded October 2006 · MD: Jess Tham
+- Registration: 200601030140 (749898-T)
+- Contact: info@jsone.com.my · +603 2242 3986 · B-07-08 Tower B, Bangsar South, Kuala Lumpur
+- Hours: Mon-Fri 9:00 AM - 6:00 PM (email anytime) · Site: `https://www.jsone.com.my` / `https://jsone.com.my/`
+- Source brief: `docs/content-brief.md` (from company profile PDF + revamp mockups)
+- Logo: `web/public/images/logo.png` (cyan `#00B8E0` + lime `#C0C820`)
+
+## Stack
+
+- Monorepo: `/web` (Astro static site) + `/studio` (Sanity Studio)
+- Astro with `output: 'static'` + TypeScript + Tailwind CSS v4 (`@tailwindcss/vite`)
+- Sanity as headless CMS; Studio lives in `/studio`
+- Primary deploy: Ubuntu VM - Nginx + Node (`/server`) serving `web/dist` + `/api/*`
+- Optional: Cloudflare Pages + `web/functions/` (legacy)
+
+## Languages & i18n
+
+- English (default, no URL prefix), Malay (`/ms`), Simplified Chinese (`/zh`)
+- Astro built-in i18n: `prefixDefaultLocale: false`
+- Locale codes in routing: `en` | `ms` | `zh`
+- `<html lang>` / hreflang: `en` | `ms` | `zh-Hans`
+- UI strings only in `/web/src/i18n/{en,ms,zh}.json` - use `t(locale, key)` with English fallback
+- **No hardcoded visible text** in components; everything from Sanity or i18n JSON
+- Language switcher must keep the user on the equivalent page (`switchLocalePath`)
+- Always emit hreflang alternates (including `x-default` → English) and correct `<html lang>`
+- Localized sitemap (Phase 4)
+
+### Translation model (Sanity)
+
+- **Document-level** translations for pages/posts via `@sanity/document-internationalization`
+- **Field-level** translations (EN / MS / ZH side by side) for navigation, footer, site settings, homepage chrome
+- Each translation has a **reviewed** checkbox; unreviewed content must not be published
+
+## Information architecture (from revamp)
+
+Home · About (Company Overview, Our Team) · Solutions · Industries · Clients · Contact
+
+## Content & page builder (Sanity `/studio`)
+
+Singletons (field-level EN/MS/ZH + reviewed flags): `siteSettings`, `navigation`, `footer`, `homePage`
+
+Documents (document-level via `@sanity/document-internationalization` + `reviewed`): `page`, `news`
+
+Reusable section blocks:
+
+- Document pages: `hero`, `textImage`, `servicesGrid`, `team`, `testimonials`, `cta`, `faq`, `contactForm`, `logoStrip`
+- Homepage: same set as `home*` with `localeString` / `localeText` / `localizedImage`
+
+SEO fields per page per language: meta title, description, OG image.
+
+Roles: administrator vs editor - see `studio/src/roles.ts` and Studio README.
+
+Seed CMS content from `docs/content-brief.md` (mission, vision, timeline, OpenText services, team).
+
+## Images
+
+- Every image requires alt text **per language**
+- Serve via Sanity image CDN: WebP/AVIF, responsive `srcset`, lazy-load below the fold
+
+## Design
+
+- Brand tokens in `web/src/styles/global.css`: cyan primary `#00B8E0`, lime accent `#C0C820`, navy `#001F5C`
+- Flexible layouts - Malay text ~20-30% longer; Chinese shorter. No fixed-width buttons or tight headings
+- Self-hosted Latin font (Plus Jakarta Sans Variable) + CJK-safe system stack:
+  `PingFang SC`, `Microsoft YaHei`, `Noto Sans SC` - **do not** load full CJK web fonts
+- Avoid purple-on-white, cream+terracotta+serif, and broadsheet newspaper layouts
+
+## Preview, forms, SEO (Phase 4)
+
+- API: Node Hono server in `/server` (contact, preview, draft, webhook). Ubuntu: `docs/DEPLOY-UBUNTU.md`
+- Sanity webhook → `/api/sanity-webhook` → `REBUILD_COMMAND` (and optional `CF_DEPLOY_HOOK_URL`)
+- Contact: `/api/contact` + Turnstile + Resend
+- Draft preview: `/api/preview`, `/api/exit-preview`, `/api/draft`; Studio `presentationTool`
+- Localized sitemap via `@astrojs/sitemap`; SEO in `BaseLayout`
+- Admin ops: `docs/ADMIN.md`
+
+## Access & quality
+
+- Sanity roles: admin vs editor
+- WCAG 2.1 AA; Lighthouse 90+
+- Prefer semantic HTML, visible focus, skip link, sufficient contrast
+
+## Phase discipline
+
+Phases 1-5 are complete. Prefer incremental changes; keep a11y/perf targets.
+
+Historical phases:
+
+1. Scaffold, Tailwind, tokens, i18n routing, base layout, header/footer
+2. Sanity schemas
+3. Connect Astro ↔ Sanity, render section blocks in all locales
+4. Preview, webhook, contact form, SEO, sitemap
+5. Accessibility, performance, README / admin guide (`docs/ADMIN.md`)
+
+## Astro ↔ Sanity (Phase 3)
+
+- Client: `web/src/lib/sanity/{client,api,queries,locale,image,links}.ts`
+- Field-level: `resolveLocaleValue` skips unreviewed; falls back to reviewed English
+- Document-level: GROQ filters `reviewed == true`; missing locale falls back to EN doc
+- Sections: `web/src/components/sections/*` + `Sections.astro` router
+- Images: Sanity CDN via `@sanity/image-url` - `auto('format')`, responsive `srcset`, lazy below fold
+- Without `PUBLIC_SANITY_PROJECT_ID`, site builds with i18n fallback chrome/homepage
+
+## Conventions
+
+- Prefer small, focused components under `web/src/components`
+- Shared i18n helpers: `web/src/i18n/{locales,utils,paths}.ts`
+- Site URL: `astro.config.mjs` → `https://www.jsone.com.my`
