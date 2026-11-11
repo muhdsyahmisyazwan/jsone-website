@@ -118,7 +118,7 @@ function isActive(href: string, external?: boolean) {
           />
         ) : (
           <img
-            src="/images/logo.png"
+            src={`${import.meta.env.BASE_URL}images/logo.png`}
             alt={logoAlt}
             width="148"
             height="40"

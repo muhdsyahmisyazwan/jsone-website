@@ -160,10 +160,10 @@ const webPageJsonLd = {
     <meta name="twitter:description" content={description} />
     {ogUrl && <meta name="twitter:image" content={ogUrl} />}
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" href="/images/logo.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.ico`} />
+    <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}images/logo.png`} />
+    <link rel="manifest" href={`${import.meta.env.BASE_URL}site.webmanifest`} />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -178,7 +178,7 @@ const webPageJsonLd = {
       hreflang="x-default"
       href={new URL(alternates.find((a) => a.locale === 'en')?.href ?? '/', Astro.site)}
     />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="sitemap" href={`${import.meta.env.BASE_URL}sitemap-index.xml`} />
     <title>{title}</title>
     <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />

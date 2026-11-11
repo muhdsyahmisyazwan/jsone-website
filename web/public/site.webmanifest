@@ -2,20 +2,20 @@
   "name": "JS One",
   "short_name": "JS One",
   "description": "We care for your content growth of tomorrow.",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#f4f7fb",
   "theme_color": "#f4f7fb",
   "lang": "en",
   "icons": [
     {
-      "src": "/images/logo.png",
+      "src": "images/logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/favicon.svg",
+      "src": "favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"

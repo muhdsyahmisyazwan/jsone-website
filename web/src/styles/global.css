@@ -122,7 +122,8 @@
   --grid-line: rgb(255 255 255 / 0.06);
   --noise-opacity: 0.05;
   --theme-color: #000c28;
-  --logo-filter: brightness(0) invert(1);
+  /* Keep brand logo colors in both themes */
+  --logo-filter: none;
 }
 
 @layer base {
