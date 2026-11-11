@@ -43,10 +43,13 @@ jobs:
 
       - name: Build with Astro
         working-directory: web
-        run: >
-          npx astro build
-          --site "${{ steps.pages.outputs.origin }}"
-          --base "${{ steps.pages.outputs.base_path }}"
+        env:
+          PAGES_ORIGIN: ${{ steps.pages.outputs.origin }}
+          PAGES_BASE: ${{ steps.pages.outputs.base_path }}
+        run: |
+          # Astro expects base without a trailing slash; assetUrl() still guards BASE_URL.
+          BASE="${PAGES_BASE%/}"
+          npx astro build --site "$PAGES_ORIGIN" --base "$BASE"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
