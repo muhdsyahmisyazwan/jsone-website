@@ -108,4 +108,8 @@ export const reservedSlugs = new Set([
   'images',
   'favicon.ico',
   'favicon.svg',
+  'favicon-32.png',
+  'favicon-48.png',
+  'favicon-512.png',
+  'apple-touch-icon.png',
 ])

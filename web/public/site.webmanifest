@@ -4,12 +4,30 @@
   "description": "We care for your content growth of tomorrow.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#f4f7fb",
-  "theme_color": "#f4f7fb",
+  "background_color": "#ffffff",
+  "theme_color": "#00B8E0",
   "lang": "en",
   "icons": [
     {
-      "src": "images/logo.png",
+      "src": "favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon-48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

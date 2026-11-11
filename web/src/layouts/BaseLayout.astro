@@ -162,8 +162,10 @@ const webPageJsonLd = {
     {ogUrl && <meta name="twitter:image" content={ogUrl} />}
 
     <link rel="icon" type="image/svg+xml" href={assetUrl('favicon.svg')} />
-    <link rel="icon" href={assetUrl('favicon.ico')} />
-    <link rel="apple-touch-icon" href={assetUrl('images/logo.png')} />
+    <link rel="icon" type="image/png" sizes="32x32" href={assetUrl('favicon-32.png')} />
+    <link rel="icon" type="image/png" sizes="48x48" href={assetUrl('favicon-48.png')} />
+    <link rel="icon" href={assetUrl('favicon.ico')} sizes="any" />
+    <link rel="apple-touch-icon" href={assetUrl('apple-touch-icon.png')} />
     <link rel="manifest" href={assetUrl('site.webmanifest')} />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
