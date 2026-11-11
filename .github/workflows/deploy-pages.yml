@@ -32,6 +32,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # npm/cli#4828: Windows-generated lockfiles can omit other-platform optional
+      # native bindings; force the Linux Tailwind oxide package used by @tailwindcss/vite.
+      - name: Install Tailwind Linux native binding
+        run: npm install --no-save --no-package-lock -w web @tailwindcss/oxide-linux-x64-gnu@4.3.3
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
