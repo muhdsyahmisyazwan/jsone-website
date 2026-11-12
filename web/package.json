@@ -20,6 +20,7 @@
     "@sanity/preview-url-secret": "^3.0.0",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.4.2",
+    "cookie": "^2.0.1",
     "groq": "^4.22.1",
     "tailwindcss": "^4.3.3"
   },

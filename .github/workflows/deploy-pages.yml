@@ -42,8 +42,9 @@ jobs:
 
       # npm/cli#4828: Windows-generated lockfiles can omit other-platform optional
       # native bindings; force the Linux Tailwind oxide package used by @tailwindcss/vite.
+      # --no-package-lock can re-hoist cookie@0.7 over Astro's cookie@2; pin cookie with the install.
       - name: Install Tailwind Linux native binding
-        run: npm install --no-save --no-package-lock -w web @tailwindcss/oxide-linux-x64-gnu@4.3.3
+        run: npm install --no-save --no-package-lock -w web @tailwindcss/oxide-linux-x64-gnu@4.3.3 cookie@^2.0.1
 
       - name: Require Sanity project id (or explicit fallback)
         env:
