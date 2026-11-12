@@ -561,10 +561,10 @@ html[data-font-scale='lg'] {
 
   @media (hover: hover) and (pointer: fine) {
     .btn-primary:hover {
-      filter: brightness(1.06);
+      background: color-mix(in oklab, var(--accent) 88%, white);
     }
     .btn-brand:hover {
-      filter: brightness(1.08);
+      background: color-mix(in oklab, var(--primary) 88%, black);
     }
     .btn-ghost:hover {
       border-color: var(--primary);

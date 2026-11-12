@@ -12,6 +12,8 @@ export default defineConfig({
   reporter: process.env.CI ? [['github'], ['html', {open: 'never'}]] : 'list',
   use: {
     baseURL,
+    // Keep a11y checks deterministic — CI runners may prefer dark scheme.
+    colorScheme: 'light',
     trace: 'on-first-retry',
   },
   projects: [
