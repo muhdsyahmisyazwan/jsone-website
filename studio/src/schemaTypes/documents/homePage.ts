@@ -64,7 +64,7 @@ export const homePage = defineType({
     select: {reviewed: 'reviewed'},
     prepare: ({reviewed}) => ({
       title: 'Homepage',
-      subtitle: reviewed ? 'Reviewed' : 'Not reviewed — will not replace fallback on live site',
+      subtitle: reviewed ? 'Reviewed' : 'Not reviewed - will not replace fallback on live site',
     }),
   },
 })

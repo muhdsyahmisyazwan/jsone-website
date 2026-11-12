@@ -5,7 +5,7 @@
  *
  * 1. Open https://www.sanity.io/manage → your project → **API** → **Roles**
  * 2. Create custom roles matching the matrix below (or map existing viewers/editors).
- * 3. Invite users with **Administrator** or **Editor** only — avoid granting project
+ * 3. Invite users with **Administrator** or **Editor** only - avoid granting project
  *    owner rights to content editors.
  *
  * This file is the source of truth for intended permissions. Sanity’s hosted ACL UI
@@ -13,13 +13,13 @@
  * (`src/actions/requireReviewed.ts`).
  *
  * Intended roles:
- * - administrator — full access (schemas, content, project settings)
- * - editor — create/update/publish content; cannot manage members or delete singletons
+ * - administrator - full access (schemas, content, project settings)
+ * - editor - create/update/publish content; cannot manage members or delete singletons
  *
  * Content rules:
  * - Document-level `reviewed` (page, news, homePage) must be true before Publish.
  * - Field-level locale `reviewed` flags gate EN/MS/ZH strings on the live site.
- * - Homepage: `coalesce(reviewed, true)` in GROQ — set `reviewed` explicitly after seeding.
+ * - Homepage: `coalesce(reviewed, true)` in GROQ - set `reviewed` explicitly after seeding.
  */
 
 export const ROLE_ADMIN = 'administrator'

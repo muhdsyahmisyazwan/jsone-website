@@ -61,7 +61,7 @@ TURNSTILE_SECRET_KEY=...
 RESEND_API_KEY=...
 CONTACT_TO_EMAIL=info@jsone.com.my
 
-# Rebuild from Sanity (header auth — never put secret in the webhook URL)
+# Rebuild from Sanity (header auth - never put secret in the webhook URL)
 SANITY_WEBHOOK_SECRET=long-random-string
 REBUILD_COMMAND=/var/www/jsone/scripts/rebuild.sh
 REBUILD_LOG_PATH=/var/log/jsone/rebuild.log
@@ -195,7 +195,7 @@ npm run dev:server     # :8787 API (see server/.env.development)
 | Permission denied on rebuild | `chown jsone:jsone /var/www/jsone`; do not rely on sudo under NoNewPrivileges |
 | Contact `server_misconfigured` | Set Turnstile + Resend; unset `TURNSTILE_SKIP` in production |
 | Contact turnstile_failed | Keys / domain allowlist in Turnstile dashboard |
-| Contact 429 | Rate limit — wait and retry |
+| Contact 429 | Rate limit - wait and retry |
 
 ## Retired paths
 

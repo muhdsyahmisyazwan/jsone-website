@@ -122,8 +122,8 @@ const labels = {
       }
       if (statusEl) {
         statusEl.textContent = reviewed
-          ? `${labels.reviewed} · updated ${summary.updatedAt || '—'}`
-          : `${labels.unreviewed} · updated ${summary.updatedAt || '—'}`
+          ? `${labels.reviewed} · updated ${summary.updatedAt || '-'}`
+          : `${labels.unreviewed} · updated ${summary.updatedAt || '-'}`
       }
       if (listEl) {
         listEl.innerHTML = ''

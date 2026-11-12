@@ -1,4 +1,4 @@
-# Quality gates — not a production deploy. Production is Ubuntu (docs/DEPLOY-UBUNTU.md).
+# Quality gates - not a production deploy. Production is Ubuntu (docs/DEPLOY-UBUNTU.md).
 name: CI
 
 on:

@@ -1,7 +1,7 @@
-# Static preview mirror on GitHub Pages — NOT production.
+# Static preview mirror on GitHub Pages - NOT production.
 # Production: Ubuntu + Nginx + Node (docs/DEPLOY-UBUNTU.md, docs/PRODUCT-DECISIONS.md).
 # This workflow has no /api/* (contact, preview, webhook will not work).
-name: Preview — GitHub Pages (NOT production)
+name: Preview - GitHub Pages (NOT production)
 
 on:
   workflow_dispatch:
@@ -50,7 +50,7 @@ jobs:
           ALLOW_FALLBACK: ${{ inputs.allow_fallback_only }}
         run: |
           if [ -n "$PROJECT_ID" ]; then
-            echo "Sanity project id present — CMS-backed preview build."
+            echo "Sanity project id present - CMS-backed preview build."
             exit 0
           fi
           if [ "$ALLOW_FALLBACK" = "true" ]; then

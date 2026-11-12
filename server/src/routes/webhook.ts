@@ -43,7 +43,7 @@ async function handleWebhook(c: Context<{Variables: Variables}>) {
         {
           ok: false,
           error: 'secret_in_query_rejected',
-          hint: 'Pass the secret via header x-sanity-webhook-secret, Authorization: Bearer, or Sanity signature — not ?secret=',
+          hint: 'Pass the secret via header x-sanity-webhook-secret, Authorization: Bearer, or Sanity signature - not ?secret=',
         },
         401,
       )

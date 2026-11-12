@@ -6,7 +6,7 @@ Source materials (local only, gitignored):
 
 ## Identity
 
-- Legal name: **J. S. One Sdn Bhd**
+- Legal name: **J.S. One Sdn Bhd**
 - Brand: **JS One** / JSOne / JSONE (prefer **JS One** in UI)
 - Tagline: We care for your content growth of tomorrow.
 - Founded: October 2006
@@ -92,7 +92,7 @@ Transform how your organization manages information and drives business outcomes
 ### Overview
 
 **IT services & consulting for enterprise content**  
-Established October 2006, J. S. One Sdn Bhd is a Malaysia-based IT services and consulting company specializing in OpenText ECM and SAP solutions.
+Established October 2006, J.S. One Sdn Bhd is a Malaysia-based IT services and consulting company specializing in OpenText ECM and SAP solutions.
 
 As an authorized OpenText reseller and certified implementation partner, we deliver consultancy, implementation, AMS, and system development.
 

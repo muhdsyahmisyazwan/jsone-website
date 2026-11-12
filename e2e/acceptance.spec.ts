@@ -72,7 +72,7 @@ test.describe('contact validation', () => {
   test('empty submit marks required fields invalid', async ({page}) => {
     await page.goto('/contact/')
     const form = page.locator('[data-contact-form]')
-    // Submit may be disabled without Turnstile site key — fire the bound submit handler.
+    // Submit may be disabled without Turnstile site key - fire the bound submit handler.
     await form.evaluate((el) => {
       el.dispatchEvent(new Event('submit', {bubbles: true, cancelable: true}))
     })

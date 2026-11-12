@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 # Prefer a deploy user that owns /var/www/jsone (git pull, npm ci, write dist).
-# www-data + sudo will fail under NoNewPrivileges — do not rely on sudo in rebuild.sh.
+# www-data + sudo will fail under NoNewPrivileges - do not rely on sudo in rebuild.sh.
 User=jsone
 Group=jsone
 WorkingDirectory=/var/www/jsone/server
@@ -22,7 +22,7 @@ ExecStart=/usr/bin/node /var/www/jsone/server/dist/index.js
 Restart=on-failure
 RestartSec=5
 
-# Hardening — rebuild must not need elevated privileges
+# Hardening - rebuild must not need elevated privileges
 NoNewPrivileges=true
 PrivateTmp=true
 

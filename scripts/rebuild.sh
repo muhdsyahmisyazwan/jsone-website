@@ -3,7 +3,7 @@
 # Set REBUILD_COMMAND to the absolute path of this script (no shell metacharacters).
 #
 # Run as the same user that owns /var/www/jsone (see deploy/jsone-web.service).
-# Do not use sudo here — Node runs with NoNewPrivileges.
+# Do not use sudo here - Node runs with NoNewPrivileges.
 set -euo pipefail
 
 ROOT="${JSONE_ROOT:-/var/www/jsone}"
@@ -32,7 +32,7 @@ npm run build -w server
 # Option A (Nginx serves web/dist): no process restart required for HTML/CSS/JS.
 # Optional restart if you proxy everything through Node or changed server code:
 # Set JSONE_RESTART_CMD to a root-owned helper, e.g. /usr/local/bin/jsone-restart
-# (see deploy/jsone-restart.example) — never sudo from this script under NoNewPrivileges.
+# (see deploy/jsone-restart.example) - never sudo from this script under NoNewPrivileges.
 if [[ -n "${JSONE_RESTART_CMD:-}" ]]; then
   echo "restart via JSONE_RESTART_CMD"
   # Intentional: command path must be a single absolute executable configured by ops.

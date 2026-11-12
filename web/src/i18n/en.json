@@ -1,7 +1,7 @@
 {
   "site": {
     "name": "JS One",
-    "legalName": "J. S. One Sdn Bhd",
+    "legalName": "J.S. One Sdn Bhd",
     "registration": "200601030140 (749898-T)",
     "tagline": "We care for your content growth of tomorrow.",
     "email": "info@jsone.com.my",
@@ -29,7 +29,7 @@
     "mainNavigation": "Main navigation",
     "language": "Language",
     "skipToContent": "Skip to content",
-    "logoAlt": "JS One Sdn Bhd logo"
+    "logoAlt": "J.S. One Sdn Bhd logo"
   },
   "theme": {
     "label": "Color theme",
@@ -67,12 +67,12 @@
     "contactCtaBody": "Enter your work email and continue to our contact form.",
     "contactCtaPlaceholder": "Work email",
     "contactCtaSubmit": "Contact us",
-    "contactCtaNote": "This opens the contact page — it is not a mailing-list signup.",
+    "contactCtaNote": "This opens the contact page - it is not a mailing-list signup.",
     "socialHeading": "Connect",
     "wordmarkAria": "JS One"
   },
   "home": {
-    "metaTitle": "JS One — OpenText ECM & SAP specialists",
+    "metaTitle": "J.S. One Sdn Bhd",
     "metaDescription": "Malaysia-based OpenText implementation partner helping organizations structure, control, and transform enterprise information since 2006.",
     "title": "Enterprise Information. Structured. Controlled. Transformed.",
     "titleHighlight": "Enterprise Information",
@@ -147,11 +147,11 @@
   },
   "about": {
     "metaTitle": "Company Overview",
-    "metaDescription": "J. S. One Sdn Bhd (200601030140/749898-T) - OpenText ECM and SAP specialists, AMS, and system development since October 2006.",
+    "metaDescription": "J.S. One Sdn Bhd (200601030140/749898-T) - OpenText ECM and SAP specialists, AMS, and system development since October 2006.",
     "heroTitle": "Company Overview",
     "heroSubtitle": "Building Solutions that Power the Data and Technology of Tomorrow",
     "overviewHeading": "IT services & consulting for enterprise content",
-    "overviewBody1": "Established October 2006, J. S. One Sdn Bhd is a Malaysia-based IT services and consulting company specializing in OpenText ECM and SAP solutions.",
+    "overviewBody1": "Established October 2006, J.S. One Sdn Bhd is a Malaysia-based IT services and consulting company specializing in OpenText ECM and SAP solutions.",
     "overviewBody2": "As an authorized OpenText reseller and certified implementation partner, we deliver consultancy, implementation, AMS, and system development.",
     "imageCallout": "Make A Better Tomorrow",
     "missionHeading": "Our mission",
@@ -195,7 +195,7 @@
   },
   "aboutTeam": {
     "metaTitle": "Our Team",
-    "metaDescription": "Meet the JS One team — Project Management, Project Delivery, and Business Operation — ready to help you build the solution you need.",
+    "metaDescription": "Meet the JS One team - Project Management, Project Delivery, and Business Operation - ready to help you build the solution you need.",
     "heroTitle": "Our Team",
     "heroSubtitle": "We Are Here Ready To Help You Build The Solution You Need",
     "founderTag": "Meet Our Founder",
@@ -228,15 +228,15 @@
     }
   },
   "solutions": {
-    "metaTitle": "Solutions — OpenText ECM, SAP & AMS",
+    "metaTitle": "Solutions - OpenText ECM, SAP & AMS",
     "metaDescription": "OpenText ECM, SAP integrations (VIM, ICC), Application Management Services, and system development from JS One in Malaysia.",
     "heroTitle": "Solutions that structure, control, and transform enterprise information",
-    "heroSubtitle": "Authorized OpenText reseller and certified implementation partner — consultancy, delivery, AMS, and system development for OpenText ECM and SAP landscapes.",
+    "heroSubtitle": "Authorized OpenText reseller and certified implementation partner - consultancy, delivery, AMS, and system development for OpenText ECM and SAP landscapes.",
     "offersHeading": "Core solutions",
     "offersBody": "Four primary offers we deliver for enterprise content, SAP-connected processes, and long-term operations.",
     "offerEcmTitle": "OpenText ECM",
     "offerEcmFor": "For organizations that need governed enterprise content across SAP and beyond.",
-    "offerEcmBody": "Content Suite, Extended ECM, data archiving, and Document Access for SAP Solutions — consultancy through implementation.",
+    "offerEcmBody": "Content Suite, Extended ECM, data archiving, and Document Access for SAP Solutions - consultancy through implementation.",
     "offerSapTitle": "SAP & OpenText integrations",
     "offerSapFor": "For finance and operations teams automating invoices and content-driven SAP processes.",
     "offerSapBody": "Vendor Invoice Management (VIM), Invoice Capture Center (ICC), and Process Suite (BPM).",
@@ -259,9 +259,9 @@
     "catDam": "DAM",
     "catArchiving": "SAP Data & Document Archiving",
     "catRpa": "RPA / ROC / COE",
-    "catSharedFa": "Shared services — F&A",
-    "catSharedHr": "Shared services — HR",
-    "catSharedCase": "Shared services — Case Management",
+    "catSharedFa": "Shared services - F&A",
+    "catSharedHr": "Shared services - HR",
+    "catSharedCase": "Shared services - Case Management",
     "catProcessOpt": "Process optimization",
     "catAnalytics": "Big data & analytics",
     "catFiori": "SAP Fiori / web & mobile",
@@ -270,7 +270,7 @@
     "adjProcessTitle": "Process Optimization",
     "adjProcessBody": "Review the current IT environment, clarify the desired transformation, and recommend the required technology, people, and processes.",
     "adjDevTitle": "Enhanced System Development",
-    "adjDevBody": "Design and build customized systems with a strong first experience for end users — critical to adoption and long-term success.",
+    "adjDevBody": "Design and build customized systems with a strong first experience for end users - critical to adoption and long-term success.",
     "adjDataTitle": "Big Data And Analysis",
     "adjDataBody": "Bring technology and people together through BD&A so decision-makers can move faster with self-serviceable analytics.",
     "adjManagedTitle": "Managed Services",
@@ -278,10 +278,10 @@
     "methodHeading": "How we work",
     "methodBody": "Our OpenText implementation methodology covers concept, installation, implementation, and production rollout.",
     "ctaHeading": "Talk to a solutions consultant",
-    "ctaBody": "Tell us about assessment, implementation, AMS, or system development — we will respond during business hours."
+    "ctaBody": "Tell us about assessment, implementation, AMS, or system development - we will respond during business hours."
   },
   "industries": {
-    "metaTitle": "Industries — OpenText & SAP by sector",
+    "metaTitle": "Industries - OpenText & SAP by sector",
     "metaDescription": "JS One delivers OpenText ECM and SAP solutions across oil & gas, government, finance, telecommunications, healthcare, and manufacturing.",
     "heroTitle": "Industries where information governance and uptime matter",
     "heroSubtitle": "We help regulated and mission-critical organizations structure, control, and sustain enterprise content with OpenText ECM, SAP integrations, and Malaysia-based AMS.",
@@ -300,7 +300,7 @@
     "govChallenge": "Agencies must govern large information estates across many locations while meeting transparency and retention expectations.",
     "govHelp": "We deliver enterprise content platforms, archiving, and analytics programmes that bring distributed data under control.",
     "govSolutions": "OpenText ECM · Big data & analytics · Process optimization · AMS",
-    "govOutcome": "Big-data project for a government agency — 25TB from 36 locations.",
+    "govOutcome": "Big-data project for a government agency - 25TB from 36 locations.",
     "financeTitle": "Financial services",
     "financeChallenge": "Invoice, case, and customer documents must move quickly without losing auditability or control.",
     "financeHelp": "We automate accounts-payable and content processes with OpenText VIM/ICC and sustain them with AMS after go-live.",
@@ -314,11 +314,11 @@
     "healthHelp": "We help healthcare organizations structure content repositories, improve retrieval, and operate platforms with local AMS support.",
     "healthSolutions": "OpenText ECM · Document Access · Shared services · AMS",
     "mfgTitle": "Manufacturing",
-    "mfgChallenge": "Plant, quality, and supplier documents sit across systems — slowing decisions when people cannot trust the record.",
+    "mfgChallenge": "Plant, quality, and supplier documents sit across systems - slowing decisions when people cannot trust the record.",
     "mfgHelp": "We connect content to SAP-driven processes, streamline shared services, and keep platforms healthy after go-live.",
     "mfgSolutions": "OpenText ECM · SAP integrations · Shared services · System development · AMS",
     "ctaHeading": "Discuss your industry context",
-    "ctaBody": "Share your landscape and priorities — assessment, implementation, or AMS — and our consultants will respond during business hours."
+    "ctaBody": "Share your landscape and priorities - assessment, implementation, or AMS - and our consultants will respond during business hours."
   },
   "clients": {
     "metaTitle": "Clients & partnerships",
@@ -330,9 +330,9 @@
     "partnersBody": "OpenText and SAP content solutions we implement and support for enterprise clients.",
     "casesHeading": "Selected programme highlights",
     "casesBody": "Anonymized highlights from our company journey across enterprise programmes.",
-    "case1Title": "Oil & Gas — SAP BW/4 HANA",
+    "case1Title": "Oil & Gas - SAP BW/4 HANA",
     "case1Body": "First major migration and upgrade for a major O&G customer on BW/4 HANA.",
-    "case2Title": "Government — big data at scale",
+    "case2Title": "Government - big data at scale",
     "case2Body": "Completed a big-data programme for a government agency: 25TB from 36 locations.",
     "case3Title": "Regional delivery",
     "case3Body": "First project completion outside Malaysia, expanding delivery beyond the home market.",
@@ -340,16 +340,16 @@
     "recognitionBody": "Selected milestones from our OpenText and SAP partnership journey.",
     "recogOpentext": "OpenText Silver Partner",
     "recogSapCompetence": "OpenText SAP Competence Partner",
-    "recogSapAward": "SAP Award for Customer Excellence — Best SAP Technology Platform Project (Commercial Sector)",
-    "recogMsc": "MSC Status — Bangsar South Vertical Office",
+    "recogSapAward": "SAP Award for Customer Excellence - Best SAP Technology Platform Project (Commercial Sector)",
+    "recogMsc": "MSC Status - Bangsar South Vertical Office",
     "trustHeading": "Built for long-term partnership",
     "trustBody": "From first assessment through go-live and AMS, we stay accountable for outcomes in complex OpenText and SAP landscapes.",
     "ctaHeading": "Become a long-term partner",
     "ctaBody": "Talk to us about assessment, implementation, or AMS support for your OpenText and SAP landscape."
   },
   "contact": {
-    "metaTitle": "Contact JS One — Bangsar South, Kuala Lumpur",
-    "metaDescription": "Contact J. S. One Sdn Bhd in Bangsar South, Kuala Lumpur for OpenText ECM, SAP integration, and AMS enquiries.",
+    "metaTitle": "Contact JS One - Bangsar South, Kuala Lumpur",
+    "metaDescription": "Contact J.S. One Sdn Bhd in Bangsar South, Kuala Lumpur for OpenText ECM, SAP integration, and AMS enquiries.",
     "heroTitle": "Get in touch",
     "heroSubtitle": "Talk to our consultants about assessment, implementation, AMS, or partnership enquiries.",
     "detailsHeading": "Office",
@@ -363,7 +363,7 @@
     "topicPartnership": "Partnership & reseller questions",
     "topicOther": "General information",
     "responseHeading": "Response expectation",
-    "responseBody": "We reply during Monday–Friday business hours. Email is monitored outside those hours; urgent matters should use phone during office hours.",
+    "responseBody": "We reply during Monday-Friday business hours. Email is monitored outside those hours; urgent matters should use phone during office hours.",
     "formIntro": "Send a message with your company context and enquiry type. We will get back to you during business hours."
   },
   "news": {
@@ -423,7 +423,7 @@
     "switcherLabel": "Choose language"
   },
   "preview": {
-    "active": "Preview mode — loading live draft from Sanity…",
+    "active": "Preview mode - loading live draft from Sanity…",
     "exit": "Exit preview",
     "draftLoading": "Fetching draft document…",
     "draftLabel": "Draft document (live from Content Lake)",
@@ -436,9 +436,9 @@
   },
   "legal": {
     "privacyTitle": "Privacy Policy",
-    "privacyMeta": "How J. S. One Sdn Bhd collects, uses, and protects personal information.",
+    "privacyMeta": "How J.S. One Sdn Bhd collects, uses, and protects personal information.",
     "privacyUpdated": "Last updated: November 2026",
-    "privacyIntro": "J. S. One Sdn Bhd (\"JS One\", \"we\", \"us\") respects your privacy. This policy explains how we handle personal information when you use jsone.com.my or contact us.",
+    "privacyIntro": "J.S. One Sdn Bhd (\"JS One\", \"we\", \"us\") respects your privacy. This policy explains how we handle personal information when you use jsone.com.my or contact us.",
     "privacyCollectHeading": "Information we collect",
     "privacyCollectBody": "When you submit a contact form, we may collect your name, email address, phone number, company name, and message. We also receive basic technical data such as IP address and browser type from standard server logs.",
     "privacyUseHeading": "How we use information",
@@ -454,7 +454,7 @@
     "privacyCookiesHeading": "Cookies and analytics",
     "privacyCookiesBody": "Essential cookies may be used for security (for example captcha) and basic site operation. Optional analytics tooling is not enabled until a tracking decision is confirmed.",
     "privacyContactHeading": "Contact",
-    "privacyContactBody": "J. S. One Sdn Bhd (200601030140 (749898-T)), B-07-08 Tower B, Bangsar South, Kuala Lumpur. Email: info@jsone.com.my. Phone: +603 2242 3986.",
+    "privacyContactBody": "J.S. One Sdn Bhd (200601030140 (749898-T)), B-07-08 Tower B, Bangsar South, Kuala Lumpur. Email: info@jsone.com.my. Phone: +603 2242 3986.",
     "termsTitle": "Terms of Use",
     "termsMeta": "Terms governing use of the JS One website.",
     "termsUpdated": "Last updated: November 2026",
@@ -462,7 +462,7 @@
     "termsUseHeading": "Use of the site",
     "termsUseBody": "Content on this site is for general information about JS One services. It does not create a contract unless we expressly agree in writing.",
     "termsIPHeading": "Intellectual property",
-    "termsIPBody": "Text, branding, and design on this site belong to J. S. One Sdn Bhd or its licensors. You may not copy or reuse them without permission, except for fair personal viewing.",
+    "termsIPBody": "Text, branding, and design on this site belong to J.S. One Sdn Bhd or its licensors. You may not copy or reuse them without permission, except for fair personal viewing.",
     "termsAccuracyHeading": "Accuracy",
     "termsAccuracyBody": "We aim to keep information current but do not warrant that all content is complete or error-free. Service descriptions may change.",
     "termsLiabilityHeading": "Limitation of liability",

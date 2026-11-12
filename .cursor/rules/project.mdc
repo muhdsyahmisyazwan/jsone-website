@@ -7,7 +7,7 @@ alwaysApply: true
 
 ## Company identity
 
-- Legal name: **J. S. One Sdn Bhd** · Brand: **JS One**
+- Legal name: **J.S. One Sdn Bhd** · Brand: **JS One**
 - Tagline: We care for your content growth of tomorrow.
 - IT services & consulting · OpenText ECM & SAP specialist · Founded October 2006 · MD: Jess Tham
 - Registration: 200601030140 (749898-T)
@@ -28,7 +28,7 @@ alwaysApply: true
 
 ## Languages & i18n
 
-- **Public site (current):** English only — see `docs/PRODUCT-DECISIONS.md`
+- **Public site (current):** English only - see `docs/PRODUCT-DECISIONS.md`
 - Astro / public routing: `locales = ['en']`, `prefixDefaultLocale: false` (`web/astro.config.mjs`, `web/src/i18n/locales.ts`)
 - CMS + string files still support `en` | `ms` | `zh` for future go-live; do not add public `/ms` or `/zh` routes until Improvements Phase 7
 - `<html lang>` / hreflang today: English (+ `x-default` → EN). Full `en` | `ms` | `zh-Hans` when multi-locale ships

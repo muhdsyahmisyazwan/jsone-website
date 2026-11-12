@@ -1,6 +1,6 @@
 # Product decisions (Phase 0)
 
-Locked decisions so docs, Studio guidance, and code stay aligned. Change these deliberately — then update this file and related docs together.
+Locked decisions so docs, Studio guidance, and code stay aligned. Change these deliberately - then update this file and related docs together.
 
 ## Public languages
 
@@ -21,7 +21,7 @@ Locked decisions so docs, Studio guidance, and code stay aligned. Change these d
 | Editor priority | **Ship reviewed English first.** MS/ZH may be drafted in Studio but **do not appear** on the live site until Phase 7 (improvements roadmap) |
 | Fallback | Missing/unreviewed non-EN still falls back to reviewed English in code paths that resolve locales |
 
-**Revisit:** Improvements Phase 7 — restore public `ms` / `zh` routes, switcher, localized sitemap, and hreflang. Until then, do not document Malay/Chinese URLs as live.
+**Revisit:** Improvements Phase 7 - restore public `ms` / `zh` routes, switcher, localized sitemap, and hreflang. Until then, do not document Malay/Chinese URLs as live.
 
 ## Hosting & deploy
 
@@ -31,7 +31,7 @@ Locked decisions so docs, Studio guidance, and code stay aligned. Change these d
 | Cloudflare Pages Functions | **Retired** | Former `web/functions/` removed (Phase 8). Do not redeploy Pages as production API. |
 | GitHub Pages (`.github/workflows/deploy-pages.yml`) | **Not production** | Manual `workflow_dispatch` only; requires Sanity secret or explicit `allow_fallback_only`. Static-only; no `/api/*` |
 
-**API surface:** **`server/` only** (contact, preview, draft, webhook, health). Contact CAPTCHA still uses Cloudflare **Turnstile** (CAPTCHA service — Pages not required).
+**API surface:** **`server/` only** (contact, preview, draft, webhook, health). Contact CAPTCHA still uses Cloudflare **Turnstile** (CAPTCHA service - Pages not required).
 
 Optional `CF_DEPLOY_HOOK_URL` on the Node webhook remains an emergency mirror hook only; production rebuilds use `REBUILD_COMMAND`.
 

@@ -78,7 +78,7 @@ Static HTML reflects the **last rebuild** until the Sanity webhook runs. Present
 - URL: `https://www.jsone.com.my/api/sanity-webhook` (**do not** append `?secret=`)
 - Header: `x-sanity-webhook-secret: <SANITY_WEBHOOK_SECRET>` (or Bearer / Sanity signature)
 - Trigger on create/update/delete for content types you care about
-- On the VM, set `REBUILD_COMMAND` to the absolute path of `scripts/rebuild.sh` — see [DEPLOY-UBUNTU.md](../docs/DEPLOY-UBUNTU.md)
+- On the VM, set `REBUILD_COMMAND` to the absolute path of `scripts/rebuild.sh` - see [DEPLOY-UBUNTU.md](../docs/DEPLOY-UBUNTU.md)
 
 Production go-live checklist: [docs/GO-LIVE.md](../docs/GO-LIVE.md).
 

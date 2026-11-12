@@ -162,7 +162,7 @@ app.notFound(async (c) => {
 
 if (env.isProduction) {
   if (env.TURNSTILE_SKIP === 'true') {
-    console.error('[server] WARNING: TURNSTILE_SKIP=true in production — contact will fail closed')
+    console.error('[server] WARNING: TURNSTILE_SKIP=true in production - contact will fail closed')
   }
   if (!env.TURNSTILE_SECRET_KEY || !env.RESEND_API_KEY) {
     console.error(
@@ -171,7 +171,7 @@ if (env.isProduction) {
   }
   if (env.HOST !== '127.0.0.1' && env.HOST !== 'localhost') {
     console.warn(
-      `[server] HOST=${env.HOST} — prefer 127.0.0.1 behind Nginx so client IPs stay trusted`,
+      `[server] HOST=${env.HOST} - prefer 127.0.0.1 behind Nginx so client IPs stay trusted`,
     )
   }
 }

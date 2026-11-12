@@ -49,7 +49,7 @@ export function SiteStatusTool() {
         if (!cancelled) {
           setError(
             e instanceof Error
-              ? `${e.message} — is the site up and CORS allowing Studio?`
+              ? `${e.message} - is the site up and CORS allowing Studio?`
               : 'Failed to load health',
           )
           setData(null)
@@ -99,7 +99,7 @@ export function SiteStatusTool() {
               <Stack space={2}>
                 <Text weight="semibold">Static site</Text>
                 <Text size={1}>
-                  Ready: {String(Boolean(data.staticReady))} · env: {data.env || '—'}
+                  Ready: {String(Boolean(data.staticReady))} · env: {data.env || '-'}
                 </Text>
               </Stack>
             </Card>
@@ -124,12 +124,12 @@ export function SiteStatusTool() {
               <Stack space={2}>
                 <Text weight="semibold">Last rebuild</Text>
                 <Text size={1}>Configured: {String(Boolean(rebuild?.configured))}</Text>
-                <Text size={1}>Last started: {rebuild?.lastStartedAt || '—'}</Text>
-                <Text size={1}>Result: {rebuild?.lastResult || '—'}</Text>
-                <Text size={1}>Log mtime: {rebuild?.logMtime || '—'}</Text>
+                <Text size={1}>Last started: {rebuild?.lastStartedAt || '-'}</Text>
+                <Text size={1}>Result: {rebuild?.lastResult || '-'}</Text>
+                <Text size={1}>Log mtime: {rebuild?.logMtime || '-'}</Text>
                 <Text size={1}>
                   Log age:{' '}
-                  {typeof rebuild?.logAgeSec === 'number' ? `${rebuild.logAgeSec}s` : '—'}
+                  {typeof rebuild?.logAgeSec === 'number' ? `${rebuild.logAgeSec}s` : '-'}
                 </Text>
                 {rebuild?.lastError && (
                   <Text size={1} style={{color: 'var(--card-badge-fg-color)'}}>

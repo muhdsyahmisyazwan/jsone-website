@@ -1,7 +1,7 @@
 {
   "site": {
     "name": "JS One",
-    "legalName": "J. S. One Sdn Bhd",
+    "legalName": "J.S. One Sdn Bhd",
     "registration": "200601030140 (749898-T)",
     "tagline": "Kami prihatin terhadap pertumbuhan kandungan anda untuk hari esok.",
     "email": "info@jsone.com.my",
@@ -29,7 +29,7 @@
     "mainNavigation": "Navigasi utama",
     "language": "Bahasa",
     "skipToContent": "Langkau ke kandungan",
-    "logoAlt": "Logo JS One Sdn Bhd"
+    "logoAlt": "Logo J.S. One Sdn Bhd"
   },
   "theme": {
     "label": "Tema warna",
@@ -67,12 +67,12 @@
     "contactCtaBody": "Masukkan e-mel kerja anda dan terus ke borang hubungan.",
     "contactCtaPlaceholder": "E-mel kerja",
     "contactCtaSubmit": "Hubungi kami",
-    "contactCtaNote": "Ini membuka halaman hubungan — bukan langganan surat berita.",
+    "contactCtaNote": "Ini membuka halaman hubungan - bukan langganan surat berita.",
     "socialHeading": "Hubungan",
     "wordmarkAria": "JS One"
   },
   "home": {
-    "metaTitle": "JS One — pakar OpenText ECM & SAP",
+    "metaTitle": "JS One - pakar OpenText ECM & SAP",
     "metaDescription": "Rakan pelaksanaan OpenText berpangkalan di Malaysia yang membantu organisasi menyusun, mengawal dan mentransformasi maklumat perusahaan sejak 2006.",
     "title": "Maklumat Perusahaan. Tersusun. Terkawal. Ditransformasi.",
     "titleHighlight": "Maklumat Perusahaan",
@@ -133,11 +133,11 @@
   },
   "about": {
     "metaTitle": "Gambaran Syarikat",
-    "metaDescription": "J. S. One Sdn Bhd (200601030140/749898-T) - pakar OpenText ECM dan SAP, AMS dan pembangunan sistem sejak Oktober 2006.",
+    "metaDescription": "J.S. One Sdn Bhd (200601030140/749898-T) - pakar OpenText ECM dan SAP, AMS dan pembangunan sistem sejak Oktober 2006.",
     "heroTitle": "Gambaran Syarikat",
     "heroSubtitle": "Membina Penyelesaian yang Memacu Data dan Teknologi Esok",
     "overviewHeading": "Perkhidmatan IT & perundingan untuk kandungan perusahaan",
-    "overviewBody1": "Ditubuhkan Oktober 2006, J. S. One Sdn Bhd ialah syarikat perkhidmatan IT dan perundingan berpangkalan di Malaysia yang mengkhusus dalam OpenText ECM dan penyelesaian SAP.",
+    "overviewBody1": "Ditubuhkan Oktober 2006, J.S. One Sdn Bhd ialah syarikat perkhidmatan IT dan perundingan berpangkalan di Malaysia yang mengkhusus dalam OpenText ECM dan penyelesaian SAP.",
     "overviewBody2": "Sebagai penjual semula OpenText yang dibenarkan dan rakan pelaksanaan bertauliah, kami menyampaikan perundingan, pelaksanaan, AMS dan pembangunan sistem.",
     "imageCallout": "Wujudkan Esok yang Lebih Baik",
     "missionHeading": "Misi kami",
@@ -181,7 +181,7 @@
   },
   "aboutTeam": {
     "metaTitle": "Pasukan Kami",
-    "metaDescription": "Kenali pasukan JS One — Pengurusan Projek, Penyampaian Projek, dan Operasi Perniagaan — sedia membantu anda membina penyelesaian yang diperlukan.",
+    "metaDescription": "Kenali pasukan JS One - Pengurusan Projek, Penyampaian Projek, dan Operasi Perniagaan - sedia membantu anda membina penyelesaian yang diperlukan.",
     "heroTitle": "Pasukan Kami",
     "heroSubtitle": "Kami Sedia Membantu Anda Membina Penyelesaian yang Anda Perlukan",
     "founderTag": "Kenali Pengasas Kami",
@@ -214,15 +214,15 @@
     }
   },
   "solutions": {
-    "metaTitle": "Penyelesaian — OpenText ECM, SAP & AMS",
+    "metaTitle": "Penyelesaian - OpenText ECM, SAP & AMS",
     "metaDescription": "OpenText ECM, integrasi SAP (VIM, ICC), Application Management Services dan pembangunan sistem daripada JS One di Malaysia.",
     "heroTitle": "Penyelesaian yang menyusun, mengawal dan mentransformasi maklumat perusahaan",
-    "heroSubtitle": "Penjual semula OpenText dibenarkan dan rakan pelaksanaan bertauliah — perundingan, penyampaian, AMS dan pembangunan sistem untuk OpenText ECM serta landskap SAP.",
+    "heroSubtitle": "Penjual semula OpenText dibenarkan dan rakan pelaksanaan bertauliah - perundingan, penyampaian, AMS dan pembangunan sistem untuk OpenText ECM serta landskap SAP.",
     "offersHeading": "Penyelesaian teras",
     "offersBody": "Empat tawaran utama untuk kandungan perusahaan, proses bersambung SAP dan operasi jangka panjang.",
     "offerEcmTitle": "OpenText ECM",
     "offerEcmFor": "Untuk organisasi yang memerlukan kandungan perusahaan tertadbir merentas SAP dan seterusnya.",
-    "offerEcmBody": "Content Suite, Extended ECM, pengarkiban data dan Document Access for SAP Solutions — dari perundingan hingga pelaksanaan.",
+    "offerEcmBody": "Content Suite, Extended ECM, pengarkiban data dan Document Access for SAP Solutions - dari perundingan hingga pelaksanaan.",
     "offerSapTitle": "Integrasi SAP & OpenText",
     "offerSapFor": "Untuk pasukan kewangan dan operasi yang mengautomasikan invois serta proses SAP berasaskan kandungan.",
     "offerSapBody": "Vendor Invoice Management (VIM), Invoice Capture Center (ICC) dan Process Suite (BPM).",
@@ -245,9 +245,9 @@
     "catDam": "DAM",
     "catArchiving": "Pengarkiban Data & Dokumen SAP",
     "catRpa": "RPA / ROC / COE",
-    "catSharedFa": "Shared services — F&A",
-    "catSharedHr": "Shared services — HR",
-    "catSharedCase": "Shared services — Pengurusan Kes",
+    "catSharedFa": "Shared services - F&A",
+    "catSharedHr": "Shared services - HR",
+    "catSharedCase": "Shared services - Pengurusan Kes",
     "catProcessOpt": "Pengoptimuman proses",
     "catAnalytics": "Data raya & analitik",
     "catFiori": "SAP Fiori / web & mudah alih",
@@ -256,7 +256,7 @@
     "adjProcessTitle": "Pengoptimuman Proses",
     "adjProcessBody": "Semak persekitaran IT semasa, jelaskan transformasi yang diinginkan, dan cadangkan teknologi, orang serta proses yang diperlukan.",
     "adjDevTitle": "Pembangunan Sistem Dipertingkat",
-    "adjDevBody": "Reka dan bina sistem tersuai dengan pengalaman pertama yang kuat untuk pengguna akhir — penting untuk penerimaan dan kejayaan jangka panjang.",
+    "adjDevBody": "Reka dan bina sistem tersuai dengan pengalaman pertama yang kuat untuk pengguna akhir - penting untuk penerimaan dan kejayaan jangka panjang.",
     "adjDataTitle": "Data Raya dan Analisis",
     "adjDataBody": "Satukan teknologi dan orang melalui BD&A supaya pembuat keputusan bergerak lebih pantas dengan analitik yang boleh dilayan sendiri.",
     "adjManagedTitle": "Perkhidmatan Diurus",
@@ -264,10 +264,10 @@
     "methodHeading": "Cara kami bekerja",
     "methodBody": "Metodologi pelaksanaan OpenText kami merangkumi konsep, pemasangan, pelaksanaan dan pelancaran produksi.",
     "ctaHeading": "Bercakap dengan perunding penyelesaian",
-    "ctaBody": "Beritahu kami tentang penilaian, pelaksanaan, AMS atau pembangunan sistem — kami akan membalas dalam waktu pejabat."
+    "ctaBody": "Beritahu kami tentang penilaian, pelaksanaan, AMS atau pembangunan sistem - kami akan membalas dalam waktu pejabat."
   },
   "industries": {
-    "metaTitle": "Industri — OpenText & SAP mengikut sektor",
+    "metaTitle": "Industri - OpenText & SAP mengikut sektor",
     "metaDescription": "JS One menyampaikan penyelesaian OpenText ECM dan SAP merentasi minyak & gas, kerajaan, kewangan, telekomunikasi, penjagaan kesihatan dan pembuatan.",
     "heroTitle": "Industri di mana tadbir urus maklumat dan masa operasi penting",
     "heroSubtitle": "Kami membantu organisasi terkawal dan kritikal menyusun, mengawal dan mengekalkan kandungan perusahaan dengan OpenText ECM, integrasi SAP dan AMS berpangkalan di Malaysia.",
@@ -286,7 +286,7 @@
     "govChallenge": "Agensi perlu mentadbir harta maklumat besar merentas banyak lokasi sambil memenuhi jangkaan ketelusan dan pengekalan.",
     "govHelp": "Kami menyampaikan platform kandungan perusahaan, pengarkiban dan program analitik yang membawa data teragih di bawah kawalan.",
     "govSolutions": "OpenText ECM · Data raya & analitik · Pengoptimuman proses · AMS",
-    "govOutcome": "Projek data raya untuk agensi kerajaan — 25TB dari 36 lokasi.",
+    "govOutcome": "Projek data raya untuk agensi kerajaan - 25TB dari 36 lokasi.",
     "financeTitle": "Perkhidmatan kewangan",
     "financeChallenge": "Dokumen invois, kes dan pelanggan mesti bergerak pantas tanpa kehilangan kebolehauditan atau kawalan.",
     "financeHelp": "Kami mengautomasikan proses akaun belum bayar dan kandungan dengan OpenText VIM/ICC serta mengekalkannya dengan AMS selepas go-live.",
@@ -300,11 +300,11 @@
     "healthHelp": "Kami membantu organisasi penjagaan kesihatan menyusun repositori kandungan, menambah baik capaian dan mengendalikan platform dengan sokongan AMS tempatan.",
     "healthSolutions": "OpenText ECM · Document Access · Shared services · AMS",
     "mfgTitle": "Pembuatan",
-    "mfgChallenge": "Dokumen kilang, kualiti dan pembekal berada merentas sistem — melambatkan keputusan apabila rekod tidak boleh dipercayai.",
+    "mfgChallenge": "Dokumen kilang, kualiti dan pembekal berada merentas sistem - melambatkan keputusan apabila rekod tidak boleh dipercayai.",
     "mfgHelp": "Kami menghubungkan kandungan kepada proses berasaskan SAP, memperkemas shared services dan mengekalkan kesihatan platform selepas go-live.",
     "mfgSolutions": "OpenText ECM · Integrasi SAP · Shared services · Pembangunan sistem · AMS",
     "ctaHeading": "Bincangkan konteks industri anda",
-    "ctaBody": "Kongsi landskap dan keutamaan anda — penilaian, pelaksanaan atau AMS — dan perunding kami akan membalas dalam waktu pejabat."
+    "ctaBody": "Kongsi landskap dan keutamaan anda - penilaian, pelaksanaan atau AMS - dan perunding kami akan membalas dalam waktu pejabat."
   },
   "clients": {
     "metaTitle": "Pelanggan & perkongsian",
@@ -316,9 +316,9 @@
     "partnersBody": "Penyelesaian kandungan OpenText dan SAP yang kami laksanakan serta sokong untuk pelanggan perusahaan.",
     "casesHeading": "Sorotan program terpilih",
     "casesBody": "Sorotan tanpa nama daripada perjalanan syarikat merentasi program perusahaan.",
-    "case1Title": "Minyak & Gas — SAP BW/4 HANA",
+    "case1Title": "Minyak & Gas - SAP BW/4 HANA",
     "case1Body": "Migrasi dan naik taraf besar pertama untuk pelanggan O&G utama pada BW/4 HANA.",
-    "case2Title": "Kerajaan — data raya berskala",
+    "case2Title": "Kerajaan - data raya berskala",
     "case2Body": "Menyiapkan program data raya untuk agensi kerajaan: 25TB dari 36 lokasi.",
     "case3Title": "Penyampaian serantau",
     "case3Body": "Penyiapan projek pertama di luar Malaysia, meluaskan penyampaian di luar pasaran tempatan.",
@@ -326,16 +326,16 @@
     "recognitionBody": "Pencapaian terpilih daripada perjalanan perkongsian OpenText dan SAP kami.",
     "recogOpentext": "OpenText Silver Partner",
     "recogSapCompetence": "OpenText SAP Competence Partner",
-    "recogSapAward": "Anugerah SAP untuk Kecemerlangan Pelanggan — Projek Platform Teknologi SAP Terbaik (Sektor Komersial)",
-    "recogMsc": "Status MSC — Bangsar South Vertical Office",
+    "recogSapAward": "Anugerah SAP untuk Kecemerlangan Pelanggan - Projek Platform Teknologi SAP Terbaik (Sektor Komersial)",
+    "recogMsc": "Status MSC - Bangsar South Vertical Office",
     "trustHeading": "Dibina untuk perkongsian jangka panjang",
     "trustBody": "Dari penilaian awal hingga go-live dan AMS, kami kekal bertanggungjawab terhadap hasil dalam landskap OpenText dan SAP yang kompleks.",
     "ctaHeading": "Jadi rakan jangka panjang",
     "ctaBody": "Bercakap dengan kami tentang penilaian, pelaksanaan atau sokongan AMS untuk landskap OpenText dan SAP anda."
   },
   "contact": {
-    "metaTitle": "Hubungi JS One — Bangsar South, Kuala Lumpur",
-    "metaDescription": "Hubungi J. S. One Sdn Bhd di Bangsar South, Kuala Lumpur untuk pertanyaan OpenText ECM, integrasi SAP dan AMS.",
+    "metaTitle": "Hubungi JS One - Bangsar South, Kuala Lumpur",
+    "metaDescription": "Hubungi J.S. One Sdn Bhd di Bangsar South, Kuala Lumpur untuk pertanyaan OpenText ECM, integrasi SAP dan AMS.",
     "heroTitle": "Hubungi kami",
     "heroSubtitle": "Bercakap dengan perunding kami tentang penilaian, pelaksanaan, AMS atau pertanyaan perkongsian.",
     "detailsHeading": "Pejabat",
@@ -349,7 +349,7 @@
     "topicPartnership": "Perkongsian & penjual semula",
     "topicOther": "Maklumat am",
     "responseHeading": "Jangkaan respons",
-    "responseBody": "Kami membalas dalam waktu pejabat Isnin–Jumaat. E-mel dipantau di luar waktu tersebut; perkara penting hendaklah menggunakan telefon semasa waktu pejabat.",
+    "responseBody": "Kami membalas dalam waktu pejabat Isnin-Jumaat. E-mel dipantau di luar waktu tersebut; perkara penting hendaklah menggunakan telefon semasa waktu pejabat.",
     "formIntro": "Hantar mesej dengan konteks syarikat dan jenis pertanyaan. Kami akan membalas dalam waktu pejabat."
   },
   "news": {
@@ -409,7 +409,7 @@
     "switcherLabel": "Pilih bahasa"
   },
   "preview": {
-    "active": "Mod pratonton — memuatkan draf langsung dari Sanity…",
+    "active": "Mod pratonton - memuatkan draf langsung dari Sanity…",
     "exit": "Keluar pratonton",
     "draftLoading": "Mengambil dokumen draf…",
     "draftLabel": "Dokumen draf (langsung dari Content Lake)",
@@ -425,6 +425,6 @@
     "privacyPdpaBody": "Kami memproses data peribadi selaras dengan Akta Perlindungan Data Peribadi 2010 (PDPA) Malaysia bagi tujuan yang dinyatakan di atas.",
     "privacyCookiesHeading": "Cookie dan analitik",
     "privacyCookiesBody": "Cookie penting mungkin digunakan untuk keselamatan (contohnya captcha) dan operasi asas tapak. Alat analitik pilihan belum diaktifkan sehingga keputusan penjejakan disahkan.",
-    "privacyContactBody": "J. S. One Sdn Bhd (200601030140 (749898-T)), B-07-08 Tower B, Bangsar South, Kuala Lumpur. E-mel: info@jsone.com.my. Telefon: +603 2242 3986."
+    "privacyContactBody": "J.S. One Sdn Bhd (200601030140 (749898-T)), B-07-08 Tower B, Bangsar South, Kuala Lumpur. E-mel: info@jsone.com.my. Telefon: +603 2242 3986."
   }
 }

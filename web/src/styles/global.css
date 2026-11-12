@@ -63,7 +63,7 @@
 }
 
 /*
-  Text scale only — keep rem root fixed so padding/frames/controls stay put.
+  Text scale only - keep rem root fixed so padding/frames/controls stay put.
   @theme inline inlines calc(... * var(--font-scale)) into text-* utilities
   (including responsive variants), so the toggle actually changes type size.
 */

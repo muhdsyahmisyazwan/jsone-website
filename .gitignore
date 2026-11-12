@@ -63,7 +63,7 @@ studio/dist/
 studio/.sanity/
 studio/schema.json
 
-# Local reference materials (PDF / zip extracts — not for the repo)
+# Local reference materials (PDF / zip extracts - not for the repo)
 _refs/
 
 # Local / internal docs (not for remote)

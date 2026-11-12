@@ -39,12 +39,12 @@ English is the fallback when another language is missing or unreviewed.
 
 | Language | Public URL | CMS code | HTML `lang` (when public) |
 | -------- | ---------- | -------- | ------------------------- |
-| English | `/…` (no prefix) — **live** | `en` | `en` |
-| Malay | `/ms/…` — **not public yet** | `ms` | `ms` |
-| Chinese (Simplified) | `/zh/…` — **not public yet** | `zh` | `zh-Hans` |
+| English | `/…` (no prefix) - **live** | `en` | `en` |
+| Malay | `/ms/…` - **not public yet** | `ms` | `ms` |
+| Chinese (Simplified) | `/zh/…` - **not public yet** | `zh` | `zh-Hans` |
 
 - **Pages / news**: document internationalization controls exist for future MS/ZH; for now publish reviewed **English** documents.
-- **Homepage, navigation, footer, site settings**: EN / MS / ZH fields side by side — fill and review **EN** for go-live; MS/ZH optional prep only.
+- **Homepage, navigation, footer, site settings**: EN / MS / ZH fields side by side - fill and review **EN** for go-live; MS/ZH optional prep only.
 - Multi-locale public go-live is tracked as **Phase 7** in [IMPROVEMENTS.md](IMPROVEMENTS.md).
 
 ### Homepage vs pages
@@ -92,7 +92,7 @@ Required env (on the Node server / `web/.env`):
 
 - `PUBLIC_TURNSTILE_SITE_KEY` (build-time / public)
 - `TURNSTILE_SECRET_KEY` (**required in production**)
-- `RESEND_API_KEY` (**required in production** — no “log only” success)
+- `RESEND_API_KEY` (**required in production** - no “log only” success)
 - `CONTACT_TO_EMAIL` (e.g. `info@jsone.com.my`)
 - optional `CONTACT_FROM_EMAIL`
 - local only: `TURNSTILE_SKIP=true` (rejected when `NODE_ENV=production`)
@@ -103,7 +103,7 @@ Rate limit: about **5 requests / 15 minutes / IP** (Node + Nginx). Excess return
 
 Sanity Manage → API → Webhooks:
 
-- **URL:** `https://www.jsone.com.my/api/sanity-webhook` (**no** `?secret=` — query secrets are rejected)
+- **URL:** `https://www.jsone.com.my/api/sanity-webhook` (**no** `?secret=` - query secrets are rejected)
 - **Auth (pick one):**
   - HTTP header `x-sanity-webhook-secret: <SANITY_WEBHOOK_SECRET>`, or
   - `Authorization: Bearer <SANITY_WEBHOOK_SECRET>`, or
@@ -126,7 +126,7 @@ On Ubuntu, set `REBUILD_COMMAND` to the **absolute** path of `scripts/rebuild.sh
 
 ## Hosting
 
-**Production — Ubuntu VM:** start with [GO-LIVE.md](GO-LIVE.md); install detail in [DEPLOY-UBUNTU.md](DEPLOY-UBUNTU.md) (Nginx + Node `server/`).
+**Production - Ubuntu VM:** start with [GO-LIVE.md](GO-LIVE.md); install detail in [DEPLOY-UBUNTU.md](DEPLOY-UBUNTU.md) (Nginx + Node `server/`).
 
 **API:** Node `server/` only (contact, preview, draft, webhook, health). Former Cloudflare Pages Functions were removed.
 

@@ -1,17 +1,17 @@
 # JS One Website
 
-Corporate website for **[J. S. One Sdn Bhd](https://www.jsone.com.my)** (JS One) — OpenText ECM & SAP specialist.
+Corporate website for **[J.S. One Sdn Bhd](https://www.jsone.com.my)** (JS One) - OpenText ECM & SAP specialist.
 
 Monorepo: **Astro** static site (`/web`) + **Sanity** Studio (`/studio`) + **Node** API (`/server`), deployed primarily on **Ubuntu / Nginx**.
 
-**Public language:** English only. Malay and Simplified Chinese remain in the CMS / i18n files for a future go-live — they are **not** routed on the live site yet. See [docs/PRODUCT-DECISIONS.md](docs/PRODUCT-DECISIONS.md).
+**Public language:** English only. Malay and Simplified Chinese remain in the CMS / i18n files for a future go-live - they are **not** routed on the live site yet. See [docs/PRODUCT-DECISIONS.md](docs/PRODUCT-DECISIONS.md).
 
 ## Repository layout
 
 ```
 ├── web/          Astro site (static output → dist)
 ├── studio/       Sanity CMS Studio
-├── server/       Node (Hono) API — contact, preview, webhooks
+├── server/       Node (Hono) API - contact, preview, webhooks
 ├── deploy/       Nginx + systemd unit examples
 ├── scripts/      Rebuild helper for the VM
 └── docs/         Admin, deploy, and content brief
@@ -63,9 +63,9 @@ Without Sanity env vars, the site still builds using i18n fallback chrome/homepa
 ## Stack
 
 - **Web:** Astro (`output: 'static'`) + TypeScript + Tailwind CSS v4 + i18n routing
-- **CMS:** Sanity — document-level + field-level EN/MS/ZH, reviewed flags before publish
-- **API:** Node / Hono — contact form, draft preview, Sanity rebuild webhook
-- **Deploy (production):** Ubuntu VM — Nginx + Node `server/` ([docs/GO-LIVE.md](docs/GO-LIVE.md))
+- **CMS:** Sanity - document-level + field-level EN/MS/ZH, reviewed flags before publish
+- **API:** Node / Hono - contact form, draft preview, Sanity rebuild webhook
+- **Deploy (production):** Ubuntu VM - Nginx + Node `server/` ([docs/GO-LIVE.md](docs/GO-LIVE.md))
 - **Not production:** GitHub Pages workflow (static only; no `/api`)
 - **Forms:** Cloudflare Turnstile + Resend
 - **Analytics:** Cloudflare Web Analytics or Plausible (optional)
@@ -92,8 +92,8 @@ Environment variables: see [`web/.env.example`](web/.env.example) and [`studio/.
 
 | Target | Guide |
 | ------ | ----- |
-| **Ubuntu VM (Nginx + Node) — production** | [docs/GO-LIVE.md](docs/GO-LIVE.md) → [docs/DEPLOY-UBUNTU.md](docs/DEPLOY-UBUNTU.md) |
-| GitHub Pages | Preview only — [docs/CI.md](docs/CI.md) |
+| **Ubuntu VM (Nginx + Node) - production** | [docs/GO-LIVE.md](docs/GO-LIVE.md) → [docs/DEPLOY-UBUNTU.md](docs/DEPLOY-UBUNTU.md) |
+| GitHub Pages | Preview only - [docs/CI.md](docs/CI.md) |
 
 ## Quality targets
 

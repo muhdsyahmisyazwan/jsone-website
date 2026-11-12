@@ -1,7 +1,7 @@
 {
   "site": {
     "name": "JS One",
-    "legalName": "J. S. One Sdn Bhd",
+    "legalName": "J.S. One Sdn Bhd",
     "registration": "200601030140 (749898-T)",
     "tagline": "我们关注您明日的内容增长。",
     "email": "info@jsone.com.my",
@@ -29,7 +29,7 @@
     "mainNavigation": "主导航",
     "language": "语言",
     "skipToContent": "跳到主要内容",
-    "logoAlt": "JS One Sdn Bhd 标志"
+    "logoAlt": "J.S. One Sdn Bhd 标志"
   },
   "theme": {
     "label": "颜色主题",
@@ -67,12 +67,12 @@
     "contactCtaBody": "输入工作邮箱，继续填写联系表单。",
     "contactCtaPlaceholder": "工作邮箱",
     "contactCtaSubmit": "联系我们",
-    "contactCtaNote": "将打开联系页面——这不是邮件订阅。",
+    "contactCtaNote": "将打开联系页面--这不是邮件订阅。",
     "socialHeading": "关注我们",
     "wordmarkAria": "JS One"
   },
   "home": {
-    "metaTitle": "JS One — OpenText ECM 与 SAP 专家",
+    "metaTitle": "JS One - OpenText ECM 与 SAP 专家",
     "metaDescription": "立足马来西亚的 OpenText 实施合作伙伴，自 2006 年起帮助组织结构化、管控并转型企业信息。",
     "title": "企业信息。结构化。受控。已转型。",
     "titleHighlight": "企业信息",
@@ -133,11 +133,11 @@
   },
   "about": {
     "metaTitle": "公司概览",
-    "metaDescription": "J. S. One Sdn Bhd（200601030140/749898-T）- 自 2006 年 10 月起专注 OpenText ECM 与 SAP、AMS 与系统开发。",
+    "metaDescription": "J.S. One Sdn Bhd（200601030140/749898-T）- 自 2006 年 10 月起专注 OpenText ECM 与 SAP、AMS 与系统开发。",
     "heroTitle": "公司概览",
     "heroSubtitle": "打造驱动明日数据与技术的解决方案",
     "overviewHeading": "面向企业内容的 IT 服务与咨询",
-    "overviewBody1": "J. S. One Sdn Bhd 成立于 2006 年 10 月，是一家立足马来西亚、专注 OpenText ECM 与 SAP 解决方案的 IT 服务与咨询公司。",
+    "overviewBody1": "J.S. One Sdn Bhd 成立于 2006 年 10 月，是一家立足马来西亚、专注 OpenText ECM 与 SAP 解决方案的 IT 服务与咨询公司。",
     "overviewBody2": "作为获授权的 OpenText 经销商与认证实施合作伙伴，我们提供咨询、实施、AMS 与系统开发。",
     "imageCallout": "共创更美好的明天",
     "missionHeading": "我们的使命",
@@ -181,7 +181,7 @@
   },
   "aboutTeam": {
     "metaTitle": "我们的团队",
-    "metaDescription": "认识 JS One 团队——项目管理、项目交付与业务运营——随时准备帮助您打造所需解决方案。",
+    "metaDescription": "认识 JS One 团队--项目管理、项目交付与业务运营--随时准备帮助您打造所需解决方案。",
     "heroTitle": "我们的团队",
     "heroSubtitle": "我们随时准备协助您构建所需的解决方案",
     "founderTag": "认识我们的创始人",
@@ -214,15 +214,15 @@
     }
   },
   "solutions": {
-    "metaTitle": "解决方案 — OpenText ECM、SAP 与 AMS",
+    "metaTitle": "解决方案 - OpenText ECM、SAP 与 AMS",
     "metaDescription": "JS One 在马来西亚提供 OpenText ECM、SAP 集成（VIM、ICC）、应用管理服务（AMS）与系统开发。",
     "heroTitle": "结构化、管控并转型企业信息的解决方案",
-    "heroSubtitle": "获授权 OpenText 经销商与认证实施合作伙伴——为 OpenText ECM 与 SAP 环境提供咨询、交付、AMS 与系统开发。",
+    "heroSubtitle": "获授权 OpenText 经销商与认证实施合作伙伴--为 OpenText ECM 与 SAP 环境提供咨询、交付、AMS 与系统开发。",
     "offersHeading": "核心解决方案",
     "offersBody": "面向企业内容、SAP 连接流程与长期运营的四项主要服务。",
     "offerEcmTitle": "OpenText ECM",
     "offerEcmFor": "适用于需要在 SAP 及其他系统中治理企业内容的组织。",
-    "offerEcmBody": "Content Suite、Extended ECM、数据归档以及面向 SAP 的 Document Access——从咨询到实施。",
+    "offerEcmBody": "Content Suite、Extended ECM、数据归档以及面向 SAP 的 Document Access--从咨询到实施。",
     "offerSapTitle": "SAP 与 OpenText 集成",
     "offerSapFor": "适用于自动化发票与内容驱动 SAP 流程的财务与运营团队。",
     "offerSapBody": "Vendor Invoice Management（VIM）、Invoice Capture Center（ICC）以及 Process Suite（BPM）。",
@@ -245,9 +245,9 @@
     "catDam": "DAM",
     "catArchiving": "SAP 数据与文档归档",
     "catRpa": "RPA / ROC / COE",
-    "catSharedFa": "共享服务 — 财务会计",
-    "catSharedHr": "共享服务 — 人力资源",
-    "catSharedCase": "共享服务 — 案例管理",
+    "catSharedFa": "共享服务 - 财务会计",
+    "catSharedHr": "共享服务 - 人力资源",
+    "catSharedCase": "共享服务 - 案例管理",
     "catProcessOpt": "流程优化",
     "catAnalytics": "大数据与分析",
     "catFiori": "SAP Fiori / Web 与移动",
@@ -256,7 +256,7 @@
     "adjProcessTitle": "流程优化",
     "adjProcessBody": "审视现有 IT 环境，明确目标转型，并建议所需的技术、人员与流程。",
     "adjDevTitle": "增强型系统开发",
-    "adjDevBody": "为最终用户打造出色的首次体验来设计并构建定制系统——这对采用与长期成功至关重要。",
+    "adjDevBody": "为最终用户打造出色的首次体验来设计并构建定制系统--这对采用与长期成功至关重要。",
     "adjDataTitle": "大数据与分析",
     "adjDataBody": "通过 BD&A 将技术与人员协同起来，使决策者借助自助式分析更快行动。",
     "adjManagedTitle": "托管服务",
@@ -264,10 +264,10 @@
     "methodHeading": "我们如何工作",
     "methodBody": "我们的 OpenText 实施方法论覆盖概念、安装、实施与生产上线。",
     "ctaHeading": "与解决方案顾问沟通",
-    "ctaBody": "告诉我们您的评估、实施、AMS 或系统开发需求——我们将在工作时间内回复。"
+    "ctaBody": "告诉我们您的评估、实施、AMS 或系统开发需求--我们将在工作时间内回复。"
   },
   "industries": {
-    "metaTitle": "行业 — 按领域的 OpenText 与 SAP",
+    "metaTitle": "行业 - 按领域的 OpenText 与 SAP",
     "metaDescription": "JS One 为石油天然气、政府、金融、电信、医疗与制造业提供 OpenText ECM 与 SAP 解决方案。",
     "heroTitle": "信息治理与可用性至关重要的行业",
     "heroSubtitle": "我们帮助受监管与关键任务型组织，通过 OpenText ECM、SAP 集成以及立足马来西亚的 AMS，结构化、管控并持续运维企业内容。",
@@ -286,7 +286,7 @@
     "govChallenge": "机构必须在多地点治理大规模信息资产，同时满足透明与留存要求。",
     "govHelp": "我们交付企业内容平台、归档与分析项目，使分散数据纳入可控管理。",
     "govSolutions": "OpenText ECM · 大数据与分析 · 流程优化 · AMS",
-    "govOutcome": "为政府机构完成大数据项目——来自 36 个地点的 25TB 数据。",
+    "govOutcome": "为政府机构完成大数据项目--来自 36 个地点的 25TB 数据。",
     "financeTitle": "金融服务",
     "financeChallenge": "发票、案例与客户文档必须快速流转，同时不失去可审计性与控制。",
     "financeHelp": "我们通过 OpenText VIM/ICC 自动化应付账款与内容流程，并在上线后以 AMS 持续运维。",
@@ -300,11 +300,11 @@
     "healthHelp": "我们帮助医疗机构结构化内容库、改善检索，并以本地 AMS 支持平台运行。",
     "healthSolutions": "OpenText ECM · Document Access · 共享服务 · AMS",
     "mfgTitle": "制造",
-    "mfgChallenge": "工厂、质量与供应商文档分散在多系统中——当记录不可信时决策就会变慢。",
+    "mfgChallenge": "工厂、质量与供应商文档分散在多系统中--当记录不可信时决策就会变慢。",
     "mfgHelp": "我们将内容连接到 SAP 驱动流程，精简共享服务，并在上线后保持平台健康。",
     "mfgSolutions": "OpenText ECM · SAP 集成 · 共享服务 · 系统开发 · AMS",
     "ctaHeading": "讨论您的行业场景",
-    "ctaBody": "分享您的系统环境与优先级——评估、实施或 AMS——我们的顾问将在工作时间内回复。"
+    "ctaBody": "分享您的系统环境与优先级--评估、实施或 AMS--我们的顾问将在工作时间内回复。"
   },
   "clients": {
     "metaTitle": "客户与合作伙伴",
@@ -316,9 +316,9 @@
     "partnersBody": "我们为企业客户实施并支持的 OpenText 与 SAP 内容解决方案。",
     "casesHeading": "精选项目亮点",
     "casesBody": "来自公司历程的匿名企业项目亮点。",
-    "case1Title": "石油与天然气 — SAP BW/4 HANA",
+    "case1Title": "石油与天然气 - SAP BW/4 HANA",
     "case1Body": "为主要 O&G 客户完成 BW/4 HANA 首次重大迁移与升级。",
-    "case2Title": "政府 — 规模化大数据",
+    "case2Title": "政府 - 规模化大数据",
     "case2Body": "为政府机构完成大数据项目：来自 36 个地点的 25TB 数据。",
     "case3Title": "区域交付",
     "case3Body": "完成首个马来西亚境外项目，将交付能力扩展到本土市场之外。",
@@ -326,16 +326,16 @@
     "recognitionBody": "精选自我们 OpenText 与 SAP 合作历程的里程碑。",
     "recogOpentext": "OpenText 银牌合作伙伴",
     "recogSapCompetence": "OpenText SAP 能力合作伙伴",
-    "recogSapAward": "SAP 客户卓越奖 — 最佳 SAP 技术平台项目（商业领域）",
-    "recogMsc": "MSC 地位 — Bangsar South Vertical Office",
+    "recogSapAward": "SAP 客户卓越奖 - 最佳 SAP 技术平台项目（商业领域）",
+    "recogMsc": "MSC 地位 - Bangsar South Vertical Office",
     "trustHeading": "为长期合作而建",
     "trustBody": "从首次评估到上线与 AMS，我们在复杂的 OpenText 与 SAP 环境中对结果负责。",
     "ctaHeading": "成为长期合作伙伴",
     "ctaBody": "与我们讨论您的 OpenText 与 SAP 环境的评估、实施或 AMS 支持。"
   },
   "contact": {
-    "metaTitle": "联系 JS One — Bangsar South, 吉隆坡",
-    "metaDescription": "联系位于吉隆坡 Bangsar South 的 J. S. One Sdn Bhd，咨询 OpenText ECM、SAP 集成与 AMS。",
+    "metaTitle": "联系 JS One - Bangsar South, 吉隆坡",
+    "metaDescription": "联系位于吉隆坡 Bangsar South 的 J.S. One Sdn Bhd，咨询 OpenText ECM、SAP 集成与 AMS。",
     "heroTitle": "联系我们",
     "heroSubtitle": "与我们的顾问讨论评估、实施、AMS 或合作伙伴事宜。",
     "detailsHeading": "办公地址",
@@ -409,7 +409,7 @@
     "switcherLabel": "选择语言"
   },
   "preview": {
-    "active": "预览模式 — 正在从 Sanity 加载实时草稿…",
+    "active": "预览模式 - 正在从 Sanity 加载实时草稿…",
     "exit": "退出预览",
     "draftLoading": "正在获取草稿文档…",
     "draftLabel": "草稿文档（来自 Content Lake 实时数据）",
@@ -425,6 +425,6 @@
     "privacyPdpaBody": "我们依据马来西亚《2010 年个人数据保护法》（PDPA），按上述目的处理个人数据。",
     "privacyCookiesHeading": "Cookie 与分析",
     "privacyCookiesBody": "可能会使用必要 Cookie 以保障安全（例如验证码）并支持基本站点运行。在确认跟踪决策之前，不会启用可选分析工具。",
-    "privacyContactBody": "J. S. One Sdn Bhd（200601030140 (749898-T)），吉隆坡 Bangsar South Tower B B-07-08。邮箱：info@jsone.com.my。电话：+603 2242 3986。"
+    "privacyContactBody": "J.S. One Sdn Bhd（200601030140 (749898-T)），吉隆坡 Bangsar South Tower B B-07-08。邮箱：info@jsone.com.my。电话：+603 2242 3986。"
   }
 }

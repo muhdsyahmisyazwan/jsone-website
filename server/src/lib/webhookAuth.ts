@@ -39,7 +39,7 @@ export function verifySanitySignature(
   const expectedHex = createHmac('sha256', secret).update(`${t}.${rawBody}`).digest('hex')
   if (safeEqualHexOrUtf8(expectedHex, v1)) return true
 
-  // Some Sanity tooling historically used base64 digests — accept either.
+  // Some Sanity tooling historically used base64 digests - accept either.
   const expectedB64 = createHmac('sha256', secret).update(`${t}.${rawBody}`).digest('base64')
   return safeEqualHexOrUtf8(expectedB64, v1)
 }

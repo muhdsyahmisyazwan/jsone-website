@@ -25,7 +25,7 @@ export const siteSettings = defineType({
       title: 'Legal name',
       type: 'string',
       group: 'brand',
-      description: 'e.g. J. S. One Sdn Bhd',
+      description: 'e.g. J.S. One Sdn Bhd',
       validation: (rule) => rule.required(),
     }),
     defineField({
