@@ -24,6 +24,7 @@ export const homePage = defineType({
   groups: [
     {name: 'content', title: 'Content', default: true},
     {name: 'seo', title: 'SEO'},
+    {name: 'meta', title: 'Publishing'},
   ],
   fields: [
     defineField({
@@ -48,8 +49,22 @@ export const homePage = defineType({
       type: 'localeSeo',
       group: 'seo',
     }),
+    defineField({
+      name: 'reviewed',
+      title: 'Reviewed for publish',
+      type: 'boolean',
+      group: 'meta',
+      description:
+        'Ship gate for the homepage. Unreviewed or missing flag falls back to the built-in homepage until checked. Also required before Publish.',
+      initialValue: false,
+      validation: (rule) => rule.required(),
+    }),
   ],
   preview: {
-    prepare: () => ({title: 'Homepage'}),
+    select: {reviewed: 'reviewed'},
+    prepare: ({reviewed}) => ({
+      title: 'Homepage',
+      subtitle: reviewed ? 'Reviewed' : 'Not reviewed — will not replace fallback on live site',
+    }),
   },
 })

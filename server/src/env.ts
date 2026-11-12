@@ -1,4 +1,5 @@
 import {existsSync, readFileSync} from 'node:fs'
+import os from 'node:os'
 import path from 'node:path'
 import {fileURLToPath} from 'node:url'
 
@@ -29,11 +30,21 @@ function loadEnvFile(filePath: string) {
   }
 }
 
+function intEnv(name: string, fallback: number): number {
+  const raw = process.env[name]
+  if (raw === undefined || raw === '') return fallback
+  const n = Number(raw)
+  return Number.isFinite(n) && n > 0 ? n : fallback
+}
+
 export type AppEnv = {
+  NODE_ENV: string
+  isProduction: boolean
   PORT: number
   HOST: string
   STATIC_DIR: string
   SITE_ORIGIN: string
+  TRUST_PROXY: boolean
 
   PUBLIC_SANITY_PROJECT_ID?: string
   PUBLIC_SANITY_DATASET: string
@@ -48,6 +59,16 @@ export type AppEnv = {
   SANITY_WEBHOOK_SECRET?: string
   CF_DEPLOY_HOOK_URL?: string
   REBUILD_COMMAND?: string
+  REBUILD_DEBOUNCE_MS: number
+  REBUILD_LOCK_PATH: string
+  REBUILD_LOG_PATH: string
+
+  CONTACT_RATE_LIMIT: number
+  CONTACT_RATE_WINDOW_MS: number
+  WEBHOOK_RATE_LIMIT: number
+  WEBHOOK_RATE_WINDOW_MS: number
+
+  CONTENT_SECURITY_POLICY?: string
 
   SANITY_PREVIEW_SECRET?: string
 }
@@ -62,11 +83,17 @@ export function loadEnv(): AppEnv {
     ? path.resolve(process.env.STATIC_DIR)
     : defaultStaticDir
 
+  const nodeEnv = process.env.NODE_ENV || 'development'
+  const isProduction = nodeEnv === 'production'
+
   return {
+    NODE_ENV: nodeEnv,
+    isProduction,
     PORT: Number.isFinite(port) ? port : 4321,
     HOST: process.env.HOST || '0.0.0.0',
     STATIC_DIR: staticDir,
     SITE_ORIGIN: process.env.SITE_ORIGIN || process.env.PUBLIC_SITE_URL || 'http://localhost:4321',
+    TRUST_PROXY: process.env.TRUST_PROXY === 'true' || isProduction,
 
     PUBLIC_SANITY_PROJECT_ID: process.env.PUBLIC_SANITY_PROJECT_ID,
     PUBLIC_SANITY_DATASET: process.env.PUBLIC_SANITY_DATASET || 'production',
@@ -82,6 +109,22 @@ export function loadEnv(): AppEnv {
     SANITY_WEBHOOK_SECRET: process.env.SANITY_WEBHOOK_SECRET,
     CF_DEPLOY_HOOK_URL: process.env.CF_DEPLOY_HOOK_URL,
     REBUILD_COMMAND: process.env.REBUILD_COMMAND,
+    REBUILD_DEBOUNCE_MS: intEnv('REBUILD_DEBOUNCE_MS', 60_000),
+    REBUILD_LOCK_PATH:
+      process.env.REBUILD_LOCK_PATH ||
+      (isProduction
+        ? '/var/log/jsone/rebuild.node.lock'
+        : path.join(os.tmpdir(), 'jsone-rebuild.node.lock')),
+    REBUILD_LOG_PATH:
+      process.env.REBUILD_LOG_PATH ||
+      (isProduction ? '/var/log/jsone/rebuild.log' : path.join(os.tmpdir(), 'jsone-rebuild.log')),
+
+    CONTACT_RATE_LIMIT: intEnv('CONTACT_RATE_LIMIT', 5),
+    CONTACT_RATE_WINDOW_MS: intEnv('CONTACT_RATE_WINDOW_MS', 15 * 60_000),
+    WEBHOOK_RATE_LIMIT: intEnv('WEBHOOK_RATE_LIMIT', 60),
+    WEBHOOK_RATE_WINDOW_MS: intEnv('WEBHOOK_RATE_WINDOW_MS', 60 * 60_000),
+
+    CONTENT_SECURITY_POLICY: process.env.CONTENT_SECURITY_POLICY,
 
     SANITY_PREVIEW_SECRET: process.env.SANITY_PREVIEW_SECRET,
   }

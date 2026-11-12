@@ -4,20 +4,25 @@ After=network.target
 
 [Service]
 Type=simple
-User=www-data
-Group=www-data
+# Prefer a deploy user that owns /var/www/jsone (git pull, npm ci, write dist).
+# www-data + sudo will fail under NoNewPrivileges — do not rely on sudo in rebuild.sh.
+User=jsone
+Group=jsone
 WorkingDirectory=/var/www/jsone/server
 Environment=NODE_ENV=production
 Environment=HOST=127.0.0.1
 Environment=PORT=4321
 Environment=STATIC_DIR=/var/www/jsone/web/dist
-# Load secrets (create this file; chmod 600)
+Environment=TRUST_PROXY=true
+Environment=REBUILD_LOG_PATH=/var/log/jsone/rebuild.log
+Environment=REBUILD_LOCK_PATH=/var/log/jsone/rebuild.node.lock
+# Load secrets (create this file; chmod 600; owned by User=)
 EnvironmentFile=-/var/www/jsone/web/.env
 ExecStart=/usr/bin/node /var/www/jsone/server/dist/index.js
 Restart=on-failure
 RestartSec=5
 
-# Hardening
+# Hardening — rebuild must not need elevated privileges
 NoNewPrivileges=true
 PrivateTmp=true
 

@@ -1,5 +1,6 @@
 ---
 import {ClientRouter} from 'astro:transitions'
+import latinFontUrl from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url'
 import Analytics from '../components/Analytics.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
@@ -9,6 +10,7 @@ import {getLocaleAlternates} from '../i18n/paths'
 import {getLocaleFromPath, htmlLang, type Locale} from '../i18n/locales'
 import {t} from '../i18n/utils'
 import {assetUrl} from '../lib/assetUrl'
+import type {PreloadImage} from '../lib/preload'
 import {getResponsiveImage, hasImage} from '../lib/sanity/image'
 import {resolveLocaleString} from '../lib/sanity/locale'
 import type {Footer as FooterDoc, Navigation, SanityImage, SiteSettings} from '../lib/sanity/types'
@@ -23,6 +25,8 @@ interface Props {
   navigation?: Navigation | null
   footer?: FooterDoc | null
   noindex?: boolean
+  /** LCP image preload (hero / news main image). */
+  preloadImage?: PreloadImage | null
 }
 
 const currentPath = Astro.url.pathname
@@ -31,6 +35,7 @@ const settings = Astro.props.settings ?? null
 const navigation = Astro.props.navigation ?? null
 const footer = Astro.props.footer ?? null
 const noindex = Astro.props.noindex ?? false
+const preloadImage = Astro.props.preloadImage ?? null
 
 const siteName =
   resolveLocaleString(settings?.siteName, locale) || t(locale, 'site.name')
@@ -54,6 +59,15 @@ const alternates = getLocaleAlternates(currentPath)
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 const siteOrigin = Astro.site?.origin || 'https://www.jsone.com.my'
 
+const cmsAddress = resolveLocaleString(settings?.address, locale)
+const logoUrl =
+  settings?.logo && hasImage(settings.logo)
+    ? getResponsiveImage(settings.logo, {maxWidth: 512})?.src
+    : undefined
+const sameAs = (settings?.socialLinks || [])
+  .map((link) => link.url)
+  .filter((url): url is string => Boolean(url?.trim()))
+
 const orgJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -62,9 +76,12 @@ const orgJsonLd = {
   url: siteOrigin,
   email: settings?.email || t(locale, 'site.email'),
   telephone: settings?.phone || t(locale, 'site.phone'),
+  ...(logoUrl ? {logo: logoUrl} : {}),
+  ...(sameAs.length ? {sameAs} : {}),
   address: {
     '@type': 'PostalAddress',
     streetAddress:
+      cmsAddress ||
       'B-07-08, Tower B, Vertical Business Suite, Avenue 3, Bangsar South, No. 8, Jalan Kerinchi',
     addressLocality: 'Kuala Lumpur',
     postalCode: '59200',
@@ -182,6 +199,24 @@ const webPageJsonLd = {
       href={new URL(alternates.find((a) => a.locale === 'en')?.href ?? '/', Astro.site)}
     />
     <link rel="sitemap" href={assetUrl('sitemap-index.xml')} />
+    <link
+      rel="preload"
+      href={latinFontUrl}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    {
+      preloadImage && (
+        <link
+          rel="preload"
+          as="image"
+          href={preloadImage.src}
+          imagesrcset={preloadImage.srcSet}
+          imagesizes={preloadImage.sizes}
+        />
+      )
+    }
     <title>{title}</title>
     <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />
@@ -305,6 +340,22 @@ const webPageJsonLd = {
             {rootMargin: '10% 0px', threshold: 0.05},
           )
           io.observe(el)
+        })
+
+        document.querySelectorAll('[data-marquee-toggle]').forEach((btn) => {
+          if (!(btn instanceof HTMLElement) || btn.dataset.bound === 'true') return
+          btn.dataset.bound = 'true'
+          const targetId = btn.getAttribute('aria-controls')
+          const marquee = targetId ? document.getElementById(targetId) : btn.closest('section')?.querySelector('.marquee')
+          if (!(marquee instanceof HTMLElement)) return
+          btn.addEventListener('click', () => {
+            const paused = marquee.classList.toggle('is-paused')
+            const play = btn.getAttribute('data-label-play') || 'Play'
+            const pause = btn.getAttribute('data-label-pause') || 'Pause'
+            btn.setAttribute('aria-pressed', String(paused))
+            btn.textContent = paused ? play : pause
+            btn.setAttribute('aria-label', paused ? play : pause)
+          })
         })
       }
 

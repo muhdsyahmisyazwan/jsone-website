@@ -2,10 +2,48 @@ import {createClient} from '@sanity/client'
 import {Hono} from 'hono'
 import type {AppEnv} from '../env.js'
 import {hasPreviewCookie} from '../lib/cookies.js'
+import {
+  draftHomePageQuery,
+  draftNewsBySlugQuery,
+  draftPageBySlugQuery,
+  resolveDraftRoute,
+} from '../lib/draftQueries.js'
 
 type Variables = {env: AppEnv}
 
 export const draftRoutes = new Hono<{Variables: Variables}>()
+
+function summarizeDocument(doc: Record<string, unknown> | null) {
+  if (!doc) return null
+  const sections = Array.isArray(doc.sections) ? doc.sections : []
+  const firstHero = sections.find(
+    (s) =>
+      s &&
+      typeof s === 'object' &&
+      ('_type' in s) &&
+      (s._type === 'hero' || s._type === 'homeHero'),
+  ) as Record<string, unknown> | undefined
+
+  let heroHeading: unknown = firstHero?.heading
+  if (heroHeading && typeof heroHeading === 'object') {
+    const loc = heroHeading as {en?: {value?: string}}
+    heroHeading = loc.en?.value
+  }
+
+  return {
+    id: doc._id,
+    title: doc.title,
+    reviewed: doc.reviewed,
+    updatedAt: doc._updatedAt,
+    sectionCount: sections.length,
+    sectionTypes: sections
+      .map((s) => (s && typeof s === 'object' && '_type' in s ? String(s._type) : null))
+      .filter(Boolean),
+    heroHeading: typeof heroHeading === 'string' ? heroHeading : null,
+    slug: doc.slug,
+    language: doc.language,
+  }
+}
 
 draftRoutes.get('/draft', async (c) => {
   const env = c.get('env')
@@ -23,7 +61,8 @@ draftRoutes.get('/draft', async (c) => {
     return c.json({ok: false, error: 'sanity_not_configured'}, 500)
   }
 
-  const type = url.searchParams.get('type') || 'page'
+  const pathParam = url.searchParams.get('path')
+  const typeParam = url.searchParams.get('type')
   const slug = url.searchParams.get('slug') || ''
   const locale = url.searchParams.get('locale') || 'en'
 
@@ -37,32 +76,72 @@ draftRoutes.get('/draft', async (c) => {
   })
 
   try {
+    let type = typeParam || 'page'
+    let params: Record<string, string> = {locale, slug}
     let query: string
-    let params: Record<string, string> = {}
+
+    if (pathParam) {
+      const route = resolveDraftRoute(pathParam)
+      if (route.type === 'unknown') {
+        return c.json({ok: true, document: null, summary: null, route, perspective: 'previewDrafts'})
+      }
+      if (route.type === 'homePage') {
+        type = 'homePage'
+        query = draftHomePageQuery
+        params = {}
+      } else if (route.type === 'news') {
+        type = 'news'
+        query = draftNewsBySlugQuery
+        params = {locale: route.locale, slug: route.slug}
+      } else {
+        type = 'page'
+        query = draftPageBySlugQuery
+        params = {locale: route.locale, slug: route.slug}
+      }
+
+      const document = await client.fetch(query, params)
+      return c.json({
+        ok: true,
+        type,
+        route,
+        document,
+        summary: summarizeDocument(document),
+        perspective: 'previewDrafts',
+        note: 'Static HTML is last build; summary/document are live drafts from Sanity.',
+      })
+    }
 
     switch (type) {
       case 'homePage':
-        query = `*[_type == "homePage" && _id == "homePage"][0]`
+        query = draftHomePageQuery
+        params = {}
         break
       case 'siteSettings':
         query = `*[_type == "siteSettings" && _id == "siteSettings"][0]`
+        params = {}
         break
       case 'navigation':
         query = `*[_type == "navigation" && _id == "navigation"][0]`
+        params = {}
         break
       case 'news':
-        query = `*[_type == "news" && language == $locale && slug.current == $slug][0]`
-        params = {locale, slug}
+        query = draftNewsBySlugQuery
         break
       case 'page':
       default:
-        query = `*[_type == "page" && language == $locale && slug.current == $slug][0]`
-        params = {locale, slug}
+        query = draftPageBySlugQuery
         break
     }
 
     const document = await client.fetch(query, params)
-    return c.json({ok: true, document, perspective: 'previewDrafts'})
+    return c.json({
+      ok: true,
+      type,
+      document,
+      summary: summarizeDocument(document),
+      perspective: 'previewDrafts',
+      note: 'Static HTML is last build; summary/document are live drafts from Sanity.',
+    })
   } catch (error) {
     console.error('[draft]', error)
     return c.json({ok: false, error: 'fetch_failed'}, 500)

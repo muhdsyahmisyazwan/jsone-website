@@ -4,6 +4,7 @@ import SanityImage from '../../components/sanity/SanityImage.astro'
 import PortableText from '../../components/sanity/PortableText.astro'
 import {localePath} from '../../i18n/paths'
 import {t} from '../../i18n/utils'
+import {preloadFromImage} from '../../lib/preload'
 import {loadNewsArticle, newsStaticPaths} from '../../lib/pages/loadPage'
 
 export async function getStaticPaths() {
@@ -17,6 +18,10 @@ if (!data) {
   throw new Error(`News article not found: ${slug}`)
 }
 const {article} = data
+const preloadImage = preloadFromImage(article.mainImage, {
+  maxWidth: 1200,
+  sizes: '(max-width: 768px) 100vw, 48rem',
+})
 ---
 
 <BaseLayout
@@ -27,6 +32,7 @@ const {article} = data
   settings={data.settings}
   navigation={data.navigation}
   footer={data.footer}
+  preloadImage={preloadImage}
 >
   <article class="section-pad">
     <div class="container-site mx-auto max-w-3xl space-y-8">
@@ -58,7 +64,7 @@ const {article} = data
           />
         )
       }
-      <PortableText value={article.body} />
+      <PortableText value={article.body} locale={locale} />
     </div>
   </article>
 </BaseLayout>

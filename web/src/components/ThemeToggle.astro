@@ -11,6 +11,7 @@ const {locale, class: className = ''} = Astro.props
 const label = t(locale, 'theme.label')
 const toLight = t(locale, 'theme.toLight')
 const toDark = t(locale, 'theme.toDark')
+const toSystem = t(locale, 'theme.toSystem')
 ---
 
 <button
@@ -21,21 +22,24 @@ const toDark = t(locale, 'theme.toDark')
   ]}
   data-theme-toggle
   aria-label={label}
-  aria-pressed="false"
   title={label}
 >
   <span class="relative size-5" aria-hidden="true">
-    <svg data-icon-sun class="absolute inset-0 size-5 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+    <svg data-icon-sun class="absolute inset-0 size-5 opacity-0 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
       <circle cx="12" cy="12" r="4"></circle>
       <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
     </svg>
     <svg data-icon-moon class="absolute inset-0 size-5 opacity-0 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
       <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z"></path>
     </svg>
+    <svg data-icon-system class="absolute inset-0 size-5 opacity-0 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+      <rect x="3" y="4" width="18" height="12" rx="2"></rect>
+      <path d="M8 20h8M12 16v4"></path>
+    </svg>
   </span>
 </button>
 
-<script define:vars={{toLight, toDark, label}}>
+<script define:vars={{toLight, toDark, toSystem, label}}>
   function resolveTheme(pref) {
     if (pref === 'light' || pref === 'dark') return pref
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
@@ -55,18 +59,37 @@ const toDark = t(locale, 'theme.toDark')
     return resolved
   }
 
+  /**
+   * Three prefs (system / light / dark), but skip steps that would not change
+   * the resolved appearance (e.g. system→light when the OS is already light).
+   */
+  function nextPref(current) {
+    const pref = current === 'light' || current === 'dark' || current === 'system' ? current : 'system'
+    const resolved = resolveTheme(pref)
+    const os = resolveTheme('system')
+
+    if (pref === 'system') {
+      // Leave system by locking the opposite of what the user currently sees.
+      return resolved === 'dark' ? 'light' : 'dark'
+    }
+    if (pref === 'light') return 'dark'
+    // dark → system when that looks different; otherwise flip to light
+    return os === 'dark' ? 'light' : 'system'
+  }
+
   function syncToggle(btn) {
-    const resolved = document.documentElement.getAttribute('data-theme') || 'light'
+    const pref = document.documentElement.getAttribute('data-theme-pref') || 'system'
     const sun = btn.querySelector('[data-icon-sun]')
     const moon = btn.querySelector('[data-icon-moon]')
-    // Show the action icon: moon means "switch to dark", sun means "switch to light"
-    const showMoon = resolved === 'light'
-    sun?.classList.toggle('opacity-0', showMoon)
-    moon?.classList.toggle('opacity-0', !showMoon)
-    const nextLabel = resolved === 'light' ? toDark : toLight
-    btn.setAttribute('aria-label', nextLabel)
+    const system = btn.querySelector('[data-icon-system]')
+    sun?.classList.toggle('opacity-0', pref !== 'light')
+    moon?.classList.toggle('opacity-0', pref !== 'dark')
+    system?.classList.toggle('opacity-0', pref !== 'system')
+
+    const next = nextPref(pref)
+    const nextLabel = next === 'light' ? toLight : next === 'dark' ? toDark : toSystem
+    btn.setAttribute('aria-label', `${label}: ${nextLabel}`)
     btn.setAttribute('title', nextLabel)
-    btn.setAttribute('aria-pressed', String(resolved === 'dark'))
   }
 
   function bindThemeToggle() {
@@ -75,8 +98,8 @@ const toDark = t(locale, 'theme.toDark')
       btn.dataset.bound = 'true'
       syncToggle(btn)
       btn.addEventListener('click', () => {
-        const resolved = document.documentElement.getAttribute('data-theme') || 'light'
-        applyTheme(resolved === 'light' ? 'dark' : 'light')
+        const pref = document.documentElement.getAttribute('data-theme-pref') || 'system'
+        applyTheme(nextPref(pref))
         document.querySelectorAll('[data-theme-toggle]').forEach((b) => {
           if (b instanceof HTMLElement) syncToggle(b)
         })

@@ -1,12 +1,16 @@
 ---
+import type {Locale} from '../../i18n/locales'
+import {t} from '../../i18n/utils'
 import type {PortableTextBlock} from '../../lib/sanity/types'
 
 interface Props {
   value?: PortableTextBlock[] | null
   class?: string
+  locale?: Locale
 }
 
-const {value = [], class: className = ''} = Astro.props
+const {value = [], class: className = '', locale = 'en'} = Astro.props
+const opensNewTab = t(locale, 'common.opensNewTab')
 
 function renderChildren(block: PortableTextBlock): string {
   const markDefs = new Map((block.markDefs || []).map((m) => [m._key, m]))
@@ -23,7 +27,10 @@ function renderChildren(block: PortableTextBlock): string {
           const def = markDefs.get(mark)
           if (def?.href) {
             const blank = def.blank ? ' target="_blank" rel="noopener noreferrer"' : ''
-            text = `<a href="${def.href}"${blank}>${text}</a>`
+            const hint = def.blank
+              ? ` <span class="sr-only"> (${opensNewTab})</span>`
+              : ''
+            text = `<a href="${def.href}"${blank}>${text}${hint}</a>`
           }
         }
       }

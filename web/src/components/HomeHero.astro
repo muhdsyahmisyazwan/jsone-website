@@ -56,16 +56,16 @@ const whyItems = [
   {key: 'home.whyPartnership', icon: 'spark'},
 ] as const
 
-const partnerLabels = [
-  'OpenText',
-  'SAP',
-  'Extended ECM',
-  'Data Archiving',
-  'Document Access',
-  'VIM',
-  'Accounts Payable',
-  'AMS',
-]
+const partnerKeys = [
+  'home.partnerOpenText',
+  'home.partnerSap',
+  'home.partnerExtendedEcm',
+  'home.partnerArchiving',
+  'home.partnerDocAccess',
+  'home.partnerVim',
+  'home.partnerAp',
+  'home.partnerAms',
+] as const
 ---
 
 <section class="hero-stage relative overflow-hidden">
@@ -79,8 +79,8 @@ const partnerLabels = [
 
   <div class="container-site relative grid min-h-[calc(100svh-var(--header-height)-1rem)] items-center gap-8 py-12 sm:gap-10 sm:py-16 lg:min-h-[calc(100dvh-var(--header-height)-1rem)] lg:grid-cols-[1.15fr_0.85fr] lg:py-20">
     <div class="space-y-6 sm:space-y-7">
-      <p class="eyebrow">{t(locale, 'site.name')} · OpenText</p>
-      <h1 class="display-xl max-w-3xl text-fg" set:html={titleHtml} />
+      <p class="eyebrow">{t(locale, 'site.name')} · {t(locale, 'home.eyebrowBrand')}</p>
+      <h1 class="display-xl max-w-3xl text-fg" data-preview-field="hero-heading" set:html={titleHtml} />
       <p class="prose-measure text-base leading-relaxed text-fg-muted sm:text-lg">
         {t(locale, 'home.description')}
       </p>
@@ -92,7 +92,8 @@ const partnerLabels = [
           {t(locale, 'home.ctaSecondary')}
         </a>
       </div>
-      <div class="grid max-w-xl grid-cols-3 gap-2 border-t border-border pt-6 sm:gap-4">
+      {/* Stats stay below the first mobile viewport (hero budget) */}
+      <div class="mt-4 hidden max-w-xl grid-cols-3 gap-2 border-t border-border pt-6 sm:mt-0 sm:grid sm:gap-4">
         {
           stats.map((stat) => (
             <div class="min-w-0">
@@ -131,16 +132,43 @@ const partnerLabels = [
   </div>
 </section>
 
-<section class="border-y border-border bg-bg-elevated/70 py-8" aria-label={t(locale, 'home.partnersHeading')}>
-  <div class="container-site mb-4">
-    <p class="eyebrow text-center">{t(locale, 'home.partnersHeading')}</p>
+<section class="border-y border-border bg-bg-elevated/70 py-8 sm:hidden" aria-label={t(locale, 'home.statsExperienceLabel')}>
+  <div class="container-site grid grid-cols-3 gap-2">
+    {
+      stats.map((stat) => (
+        <div class="min-w-0 text-center">
+          <p class="metric text-xl font-semibold text-fg" data-count={t(locale, stat.valueKey)}>
+            {t(locale, stat.valueKey)}
+          </p>
+          <p class="mt-1 text-[0.7rem] leading-snug text-fg-subtle">{t(locale, stat.labelKey)}</p>
+        </div>
+      ))
+    }
   </div>
-  <div class="marquee is-inview">
+</section>
+
+<section class="border-y border-border bg-bg-elevated/70 py-8" aria-label={t(locale, 'home.partnersHeading')}>
+  <div class="container-site mb-4 flex flex-wrap items-center justify-between gap-3">
+    <p class="eyebrow text-center sm:text-left">{t(locale, 'home.partnersHeading')}</p>
+    <button
+      type="button"
+      class="btn btn-ghost btn-sm"
+      data-marquee-toggle
+      aria-pressed="false"
+      aria-controls="home-partners-marquee"
+      data-label-pause={t(locale, 'common.pause')}
+      data-label-play={t(locale, 'common.play')}
+      aria-label={t(locale, 'common.pauseMarquee')}
+    >
+      {t(locale, 'common.pause')}
+    </button>
+  </div>
+  <div class="marquee is-inview" id="home-partners-marquee">
     <div class="marquee-track px-4">
       {
-        [...partnerLabels, ...partnerLabels].map((label) => (
+        [...partnerKeys, ...partnerKeys].map((key) => (
           <span class="inline-flex min-h-11 items-center rounded-full border border-border bg-bg px-5 font-mono text-sm text-fg-muted">
-            {label}
+            {t(locale, key)}
           </span>
         ))
       }
@@ -151,7 +179,7 @@ const partnerLabels = [
 <section class="section-pad section-defer" data-reveal>
   <div class="container-site grid items-end gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
     <div class="space-y-4" data-reveal-child>
-      <p class="eyebrow">01 - EIM</p>
+      <p class="eyebrow">{t(locale, 'home.sectionEim')}</p>
       <h2 class="display-md text-fg">{t(locale, 'home.aboutHeading')}</h2>
     </div>
     <p class="prose-measure text-base leading-relaxed text-fg-muted sm:text-lg" data-reveal-child>
@@ -163,7 +191,7 @@ const partnerLabels = [
 <section class="section-pad section-defer bg-bg-muted/40" data-reveal>
   <div class="container-site space-y-10">
     <div class="max-w-2xl space-y-3">
-      <p class="eyebrow">02 - {t(locale, 'home.howHeading')}</p>
+      <p class="eyebrow">{t(locale, 'home.sectionHow')}</p>
       <h2 class="display-md text-fg">{t(locale, 'home.howHeading')}</h2>
       <p class="prose-measure text-fg-muted">{t(locale, 'home.howBody')}</p>
     </div>
@@ -185,7 +213,7 @@ const partnerLabels = [
   <div class="container-site space-y-10">
     <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
       <div class="max-w-xl space-y-3">
-        <p class="eyebrow">03 - Capabilities</p>
+        <p class="eyebrow">{t(locale, 'home.sectionCapabilities')}</p>
         <h2 class="display-md text-fg">{t(locale, 'home.capabilitiesHeading')}</h2>
       </div>
       <a href={localePath(locale, '/solutions/')} class="btn btn-ghost">
@@ -228,7 +256,7 @@ const partnerLabels = [
 <section class="section-pad section-defer" data-reveal>
   <div class="container-site grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
     <div class="space-y-4">
-      <p class="eyebrow">04 - Industries</p>
+      <p class="eyebrow">{t(locale, 'home.sectionIndustries')}</p>
       <h2 class="display-md text-fg">{t(locale, 'home.industriesHeading')}</h2>
       <p class="prose-measure text-fg-muted">{t(locale, 'home.industriesBody')}</p>
     </div>
@@ -252,14 +280,14 @@ const partnerLabels = [
     <div class="panel-invert surface-grid p-6 sm:p-10 lg:p-14">
       <div class="relative z-[1] grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-center">
         <div>
-          <p class="eyebrow text-[#8CE0F2]">05 - Why</p>
+          <p class="eyebrow text-[color:var(--illust-primary-soft)]">{t(locale, 'home.sectionWhy')}</p>
           <h2 class="display-md mt-3 text-white">{t(locale, 'home.whyHeading')}</h2>
         </div>
         <ul class="grid gap-3 sm:grid-cols-2">
           {
             whyItems.map((item) => (
               <li class="flex gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
-                <span class="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#00B8E0]/20 text-[#8CE0F2]">
+                <span class="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-[color:var(--illust-primary-soft)]">
                   <Icon name={item.icon} class="size-4" />
                 </span>
                 <p class="text-sm font-medium leading-snug text-white/95 sm:text-base">

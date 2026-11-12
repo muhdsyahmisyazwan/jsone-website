@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+# API routes are not public content
+Disallow: /api/
+
 Sitemap: https://www.jsone.com.my/sitemap-index.xml

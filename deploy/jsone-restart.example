@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Optional helper: allow the deploy user to restart jsone-web without embedding sudo
+# in rebuild.sh (NoNewPrivileges on the Node unit).
+#
+# Install:
+#   sudo cp deploy/jsone-restart.example /usr/local/bin/jsone-restart
+#   sudo chmod 755 /usr/local/bin/jsone-restart
+#   # sudoers (visudo): jsone ALL=NOPASSWD: /bin/systemctl reload-or-restart jsone-web
+#
+# Then in the environment for rebuilds:
+#   JSONE_RESTART_CMD=/usr/local/bin/jsone-restart
+set -euo pipefail
+sudo -n /bin/systemctl reload-or-restart jsone-web

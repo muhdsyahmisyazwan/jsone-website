@@ -39,6 +39,7 @@ const fallbackNav = [
   {label: t(locale, 'nav.home'), href: localePath(locale, '/')},
   {label: t(locale, 'nav.about'), href: localePath(locale, '/about/')},
   {label: t(locale, 'nav.solutions'), href: localePath(locale, '/solutions/')},
+  {label: t(locale, 'nav.news'), href: localePath(locale, '/news/')},
   {label: t(locale, 'nav.contact'), href: localePath(locale, '/contact/')},
 ]
 
@@ -93,26 +94,26 @@ const showFallbackNav = columns.length === 0
       <p class="prose-measure text-sm leading-relaxed text-fg-muted">{tagline}</p>
 
       <div class="space-y-3">
-        <p class="eyebrow">{t(locale, 'footer.newsletterHeading')}</p>
-        <p class="text-sm text-fg-muted">{t(locale, 'footer.newsletterBody')}</p>
+        <p class="eyebrow">{t(locale, 'footer.contactCtaHeading')}</p>
+        <p class="text-sm text-fg-muted">{t(locale, 'footer.contactCtaBody')}</p>
         <form class="flex flex-col gap-2 sm:flex-row" action={localePath(locale, '/contact/')} method="get">
-          <label class="sr-only" for="footer-newsletter">{t(locale, 'footer.newsletterPlaceholder')}</label>
+          <label class="sr-only" for="footer-contact-email">{t(locale, 'footer.contactCtaPlaceholder')}</label>
           <input
-            id="footer-newsletter"
+            id="footer-contact-email"
             type="email"
             name="email"
             autocomplete="email"
             inputmode="email"
             enterkeyhint="go"
             required
-            placeholder={t(locale, 'footer.newsletterPlaceholder')}
+            placeholder={t(locale, 'footer.contactCtaPlaceholder')}
             class="min-h-11 w-full rounded-full border border-border bg-bg-elevated px-4 text-base text-fg"
           />
           <button type="submit" class="btn btn-brand w-full shrink-0 sm:w-auto">
-            {t(locale, 'footer.newsletterSubmit')}
+            {t(locale, 'footer.contactCtaSubmit')}
           </button>
         </form>
-        <p class="text-xs text-fg-subtle">{t(locale, 'footer.newsletterNote')}</p>
+        <p class="text-xs text-fg-subtle">{t(locale, 'footer.contactCtaNote')}</p>
       </div>
     </div>
 
@@ -171,6 +172,7 @@ const showFallbackNav = columns.length === 0
           rel="noopener noreferrer"
         >
           {address}
+          <span class="sr-only"> ({t(locale, 'common.opensNewTab')})</span>
         </a>
         <p>
           <a

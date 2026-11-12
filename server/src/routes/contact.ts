@@ -1,5 +1,7 @@
 import {Hono} from 'hono'
 import type {AppEnv} from '../env.js'
+import {getClientIp} from '../lib/clientIp.js'
+import {rateLimit} from '../lib/rateLimit.js'
 
 type Variables = {env: AppEnv}
 
@@ -44,6 +46,17 @@ contactRoutes.post('/contact', async (c) => {
   const env = c.get('env')
 
   try {
+    const ip = getClientIp(c, {trustProxy: env.TRUST_PROXY}) || 'unknown'
+    const limited = rateLimit(
+      `contact:${ip}`,
+      env.CONTACT_RATE_LIMIT,
+      env.CONTACT_RATE_WINDOW_MS,
+    )
+    if (!limited.ok) {
+      c.header('Retry-After', String(limited.retryAfterSec))
+      return c.json({ok: false, error: 'rate_limited'}, 429)
+    }
+
     const form = await c.req.formData()
     const name = String(form.get('name') || '').trim()
     const email = String(form.get('email') || '').trim()
@@ -74,16 +87,17 @@ contactRoutes.post('/contact', async (c) => {
     }
 
     const skipTurnstile = env.TURNSTILE_SKIP === 'true'
+    if (env.isProduction && skipTurnstile) {
+      console.error('[contact] TURNSTILE_SKIP is not allowed in production')
+      return c.json({ok: false, error: 'server_misconfigured'}, 500)
+    }
+
     if (!skipTurnstile) {
       if (!env.TURNSTILE_SECRET_KEY) {
         console.error('[contact] TURNSTILE_SECRET_KEY not configured')
         return c.json({ok: false, error: 'server_misconfigured'}, 500)
       }
-      const ip =
-        c.req.header('cf-connecting-ip') ||
-        c.req.header('x-forwarded-for')?.split(',')[0]?.trim() ||
-        undefined
-      const human = await verifyTurnstile(turnstileToken, env.TURNSTILE_SECRET_KEY, ip)
+      const human = await verifyTurnstile(turnstileToken, env.TURNSTILE_SECRET_KEY, ip === 'unknown' ? undefined : ip)
       if (!human) return c.json({ok: false, error: 'turnstile_failed'}, 403)
     }
 
@@ -101,7 +115,11 @@ contactRoutes.post('/contact', async (c) => {
       .join('\n')
 
     if (!env.RESEND_API_KEY) {
-      console.error('[contact] RESEND_API_KEY not set - logging only')
+      if (env.isProduction) {
+        console.error('[contact] RESEND_API_KEY required in production')
+        return c.json({ok: false, error: 'server_misconfigured'}, 500)
+      }
+      console.error('[contact] RESEND_API_KEY not set - logging only (non-production)')
       console.log(JSON.stringify({subject, text}))
       return c.json({ok: true, delivered: false})
     }

@@ -3,10 +3,13 @@ import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {presentationTool} from 'sanity/presentation'
 import {documentInternationalization} from '@sanity/document-internationalization'
+import {DashboardIcon} from '@sanity/icons'
 import {schemaTypes} from './src/schemaTypes'
 import {isSingletonType, singletonActions, structure} from './src/structure'
 import {supportedLanguages} from './src/lib/locales'
 import {locations, mainDocuments} from './src/presentation/resolve'
+import {withRequireReviewed} from './src/actions/requireReviewed'
+import {SiteStatusTool} from './src/tools/SiteStatus'
 
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'yourProjectId'
 const dataset = process.env.SANITY_STUDIO_DATASET || 'production'
@@ -55,9 +58,21 @@ export default defineConfig({
   },
 
   document: {
-    actions: (input, context) =>
-      isSingletonType(context.schemaType)
+    actions: (input, context) => {
+      const filtered = isSingletonType(context.schemaType)
         ? input.filter(({action}) => action && singletonActions.has(action))
-        : input,
+        : input
+      return withRequireReviewed(filtered, context.schemaType)
+    },
   },
+
+  tools: (prev) => [
+    ...prev,
+    {
+      name: 'site-status',
+      title: 'Site status',
+      icon: DashboardIcon,
+      component: SiteStatusTool,
+    },
+  ],
 })

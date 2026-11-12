@@ -8,25 +8,56 @@ interface Props {
 
 const {locale} = Astro.props
 const exitHref = `/api/exit-preview?redirect=${encodeURIComponent(Astro.url.pathname)}`
+const labels = {
+  active: t(locale, 'preview.active'),
+  exit: t(locale, 'preview.exit'),
+  loading: t(locale, 'preview.draftLoading'),
+  draft: t(locale, 'preview.draftLabel'),
+  reviewed: t(locale, 'preview.reviewed'),
+  unreviewed: t(locale, 'preview.unreviewed'),
+  sections: t(locale, 'preview.sections'),
+  noDoc: t(locale, 'preview.noDocument'),
+  staticNote: t(locale, 'preview.staticNote'),
+  rebuildNote: t(locale, 'preview.rebuildNote'),
+}
 ---
 
 <div
-  class="sticky top-0 z-50 hidden border-b border-accent bg-bg-invert px-4 py-2 text-center text-sm text-fg-invert"
+  class="sticky top-0 z-50 hidden border-b border-accent bg-bg-invert text-fg-invert"
   role="status"
   data-preview-banner
 >
-  <span class="mr-3">{t(locale, 'preview.active')}</span>
-  <a href={exitHref} class="font-semibold text-accent underline-offset-2 hover:underline">
-    {t(locale, 'preview.exit')}
-  </a>
+  <div class="container-site flex flex-col gap-2 px-4 py-2 sm:flex-row sm:items-center sm:justify-between">
+    <div class="min-w-0 text-left text-sm">
+      <p class="font-medium" data-preview-title>{labels.active}</p>
+      <p class="mt-0.5 text-xs text-fg-invert/80" data-preview-meta>{labels.staticNote}</p>
+    </div>
+    <div class="flex shrink-0 flex-wrap items-center gap-3 text-sm">
+      <span
+        class="hidden rounded-full bg-accent/20 px-2.5 py-0.5 text-xs font-semibold text-accent"
+        data-preview-badge
+      ></span>
+      <a href={exitHref} class="font-semibold text-accent underline-offset-2 hover:underline">
+        {labels.exit}
+      </a>
+    </div>
+  </div>
+  <details class="border-t border-white/10 bg-black/20 text-left text-xs">
+    <summary class="cursor-pointer px-4 py-2 text-fg-invert/90">{labels.draft}</summary>
+    <div class="container-site space-y-2 px-4 pb-3" data-preview-panel>
+      <p data-preview-panel-status>{labels.loading}</p>
+      <ul class="list-inside list-disc text-fg-invert/80" data-preview-sections></ul>
+      <p class="text-fg-invert/70">{labels.rebuildNote}</p>
+    </div>
+  </details>
 </div>
 
-<script>
-  function showPreviewBanner() {
-    const cookies = document.cookie.split(';').map((c) => c.trim())
-    if (!cookies.some((c) => c.startsWith('__sanity_preview_ui=1'))) return
-    const banner = document.querySelector('[data-preview-banner]')
-    banner?.classList.remove('hidden')
+<script define:vars={{labels}}>
+  function isPreviewUi() {
+    return document.cookie.split(';').some((c) => c.trim().startsWith('__sanity_preview_ui=1'))
+  }
+
+  function setRobotsNoIndex() {
     let robots = document.querySelector('meta[name="robots"]')
     if (!robots) {
       robots = document.createElement('meta')
@@ -36,6 +67,84 @@ const exitHref = `/api/exit-preview?redirect=${encodeURIComponent(Astro.url.path
     robots.setAttribute('content', 'noindex, nofollow')
   }
 
-  showPreviewBanner()
-  document.addEventListener('astro:page-load', showPreviewBanner)
+  function patchHeroFromDraft(summary) {
+    if (!summary?.heroHeading) return
+    const el = document.querySelector('[data-preview-field="hero-heading"]')
+    if (el) el.textContent = summary.heroHeading
+  }
+
+  async function loadDraftSummary() {
+    const banner = document.querySelector('[data-preview-banner]')
+    if (!banner || !isPreviewUi()) return
+
+    banner.classList.remove('hidden')
+    document.documentElement.dataset.previewMode = '1'
+    setRobotsNoIndex()
+
+    const titleEl = banner.querySelector('[data-preview-title]')
+    const metaEl = banner.querySelector('[data-preview-meta]')
+    const badge = banner.querySelector('[data-preview-badge]')
+    const statusEl = banner.querySelector('[data-preview-panel-status]')
+    const listEl = banner.querySelector('[data-preview-sections]')
+
+    try {
+      const path = window.location.pathname
+      const res = await fetch(`/api/draft?path=${encodeURIComponent(path)}`, {
+        credentials: 'same-origin',
+      })
+      const data = await res.json()
+      if (!res.ok || !data.ok) {
+        if (statusEl) statusEl.textContent = labels.noDoc
+        return
+      }
+
+      const summary = data.summary
+      if (!summary) {
+        if (statusEl) statusEl.textContent = labels.noDoc
+        if (metaEl) metaEl.textContent = labels.staticNote
+        return
+      }
+
+      const reviewed = summary.reviewed === true
+      if (titleEl) {
+        titleEl.textContent = `${labels.draft}: ${summary.title || path}`
+      }
+      if (metaEl) {
+        metaEl.textContent = `${labels.staticNote} · ${labels.sections}: ${summary.sectionCount ?? 0}`
+      }
+      if (badge) {
+        badge.textContent = reviewed ? labels.reviewed : labels.unreviewed
+        badge.classList.remove('hidden')
+        badge.classList.toggle('bg-accent/20', reviewed)
+        badge.classList.toggle('text-accent', reviewed)
+        badge.classList.toggle('bg-danger/30', !reviewed)
+        badge.classList.toggle('text-red-200', !reviewed)
+      }
+      if (statusEl) {
+        statusEl.textContent = reviewed
+          ? `${labels.reviewed} · updated ${summary.updatedAt || '—'}`
+          : `${labels.unreviewed} · updated ${summary.updatedAt || '—'}`
+      }
+      if (listEl) {
+        listEl.innerHTML = ''
+        for (const type of summary.sectionTypes || []) {
+          const li = document.createElement('li')
+          li.textContent = type
+          listEl.appendChild(li)
+        }
+      }
+
+      patchHeroFromDraft(summary)
+    } catch {
+      if (statusEl) statusEl.textContent = labels.noDoc
+    }
+  }
+
+  function boot() {
+    if (!isPreviewUi()) return
+    void loadDraftSummary()
+  }
+
+  boot()
+  document.addEventListener('astro:page-load', boot)
 </script>

@@ -78,7 +78,7 @@ const items = (section.items || [])
               </summary>
               {item.answer && (
                 <div class="border-t border-border pb-4 pt-3 text-fg-muted">
-                  <PortableText value={item.answer} />
+                  <PortableText value={item.answer} locale={locale} />
                 </div>
               )}
             </details>

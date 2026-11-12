@@ -21,26 +21,28 @@ alwaysApply: true
 - Monorepo: `/web` (Astro static site) + `/studio` (Sanity Studio)
 - Astro with `output: 'static'` + TypeScript + Tailwind CSS v4 (`@tailwindcss/vite`)
 - Sanity as headless CMS; Studio lives in `/studio`
-- Primary deploy: Ubuntu VM - Nginx + Node (`/server`) serving `web/dist` + `/api/*`
-- Optional: Cloudflare Pages + `web/functions/` (legacy)
+- Primary deploy (production): Ubuntu VM - Nginx + Node (`/server`) serving `web/dist` + `/api/*`
+- API surface: `server/` only (Cloudflare Pages Functions retired)
+- Not production: GitHub Pages workflow (static only, no `/api`)
+- Go-live: `docs/GO-LIVE.md` · acceptance: `docs/ACCEPTANCE.md` · decisions: `docs/PRODUCT-DECISIONS.md` · roadmap: `docs/IMPROVEMENTS.md`
 
 ## Languages & i18n
 
-- English (default, no URL prefix), Malay (`/ms`), Simplified Chinese (`/zh`)
-- Astro built-in i18n: `prefixDefaultLocale: false`
-- Locale codes in routing: `en` | `ms` | `zh`
-- `<html lang>` / hreflang: `en` | `ms` | `zh-Hans`
+- **Public site (current):** English only — see `docs/PRODUCT-DECISIONS.md`
+- Astro / public routing: `locales = ['en']`, `prefixDefaultLocale: false` (`web/astro.config.mjs`, `web/src/i18n/locales.ts`)
+- CMS + string files still support `en` | `ms` | `zh` for future go-live; do not add public `/ms` or `/zh` routes until Improvements Phase 7
+- `<html lang>` / hreflang today: English (+ `x-default` → EN). Full `en` | `ms` | `zh-Hans` when multi-locale ships
 - UI strings only in `/web/src/i18n/{en,ms,zh}.json` - use `t(locale, key)` with English fallback
 - **No hardcoded visible text** in components; everything from Sanity or i18n JSON
-- Language switcher must keep the user on the equivalent page (`switchLocalePath`)
-- Always emit hreflang alternates (including `x-default` → English) and correct `<html lang>`
-- Localized sitemap (Phase 4)
+- When a language switcher exists, it must keep the user on the equivalent page (`switchLocalePath`)
+- Localized sitemap for MS/ZH is deferred to Improvements Phase 7
 
 ### Translation model (Sanity)
 
 - **Document-level** translations for pages/posts via `@sanity/document-internationalization`
 - **Field-level** translations (EN / MS / ZH side by side) for navigation, footer, site settings, homepage chrome
 - Each translation has a **reviewed** checkbox; unreviewed content must not be published
+- Editors: prioritize reviewed **English** for the live site; MS/ZH are prep-only until Phase 7
 
 ## Information architecture (from revamp)
 
@@ -71,7 +73,7 @@ Seed CMS content from `docs/content-brief.md` (mission, vision, timeline, OpenTe
 ## Design
 
 - Brand tokens in `web/src/styles/global.css`: cyan primary `#00B8E0`, lime accent `#C0C820`, navy `#001F5C`
-- Flexible layouts - Malay text ~20-30% longer; Chinese shorter. No fixed-width buttons or tight headings
+- Flexible layouts (keep room for Malay ~20-30% longer / Chinese shorter when Phase 7 ships). No fixed-width buttons or tight headings
 - Self-hosted Latin font (Plus Jakarta Sans Variable) + CJK-safe system stack:
   `PingFang SC`, `Microsoft YaHei`, `Noto Sans SC` - **do not** load full CJK web fonts
 - Avoid purple-on-white, cream+terracotta+serif, and broadsheet newspaper layouts
@@ -79,7 +81,7 @@ Seed CMS content from `docs/content-brief.md` (mission, vision, timeline, OpenTe
 ## Preview, forms, SEO (Phase 4)
 
 - API: Node Hono server in `/server` (contact, preview, draft, webhook). Ubuntu: `docs/DEPLOY-UBUNTU.md`
-- Sanity webhook → `/api/sanity-webhook` → `REBUILD_COMMAND` (and optional `CF_DEPLOY_HOOK_URL`)
+- Sanity webhook → `/api/sanity-webhook` → `REBUILD_COMMAND`
 - Contact: `/api/contact` + Turnstile + Resend
 - Draft preview: `/api/preview`, `/api/exit-preview`, `/api/draft`; Studio `presentationTool`
 - Localized sitemap via `@astrojs/sitemap`; SEO in `BaseLayout`
@@ -93,9 +95,11 @@ Seed CMS content from `docs/content-brief.md` (mission, vision, timeline, OpenTe
 
 ## Phase discipline
 
-Phases 1-5 are complete. Prefer incremental changes; keep a11y/perf targets.
+Build phases 1-5 are complete. Prefer incremental changes; keep a11y/perf targets.
 
-Historical phases:
+Post-launch upgrades: follow `docs/IMPROVEMENTS.md` (Phase 0 product alignment done). Do not re-enable public MS/ZH without updating PRODUCT-DECISIONS.
+
+Historical build phases:
 
 1. Scaffold, Tailwind, tokens, i18n routing, base layout, header/footer
 2. Sanity schemas

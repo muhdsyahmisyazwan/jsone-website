@@ -1,4 +1,5 @@
 ---
+import PageHero from './ui/PageHero.astro'
 import type {Locale} from '../i18n/locales'
 import {localePath} from '../i18n/paths'
 import {t} from '../i18n/utils'
@@ -11,12 +12,57 @@ interface Props {
 
 const {locale} = Astro.props
 
-const capabilities: {title: string; body: string; icon: ServiceIconName}[] = [
-  {title: 'home.capEcmTitle', body: 'home.capEcmBody', icon: 'layers'},
-  {title: 'home.capProcessTitle', body: 'home.capProcessBody', icon: 'workflow'},
-  {title: 'home.capAmsTitle', body: 'home.capAmsBody', icon: 'support'},
-  {title: 'home.capIntegrationTitle', body: 'home.capIntegrationBody', icon: 'plug'},
+const offers: {title: string; forKey: string; body: string; icon: ServiceIconName}[] = [
+  {
+    title: 'solutions.offerEcmTitle',
+    forKey: 'solutions.offerEcmFor',
+    body: 'solutions.offerEcmBody',
+    icon: 'layers',
+  },
+  {
+    title: 'solutions.offerSapTitle',
+    forKey: 'solutions.offerSapFor',
+    body: 'solutions.offerSapBody',
+    icon: 'workflow',
+  },
+  {
+    title: 'solutions.offerAmsTitle',
+    forKey: 'solutions.offerAmsFor',
+    body: 'solutions.offerAmsBody',
+    icon: 'support',
+  },
+  {
+    title: 'solutions.offerDevTitle',
+    forKey: 'solutions.offerDevFor',
+    body: 'solutions.offerDevBody',
+    icon: 'plug',
+  },
 ]
+
+const catalogue = [
+  'solutions.catOcc',
+  'solutions.catVim',
+  'solutions.catIcc',
+  'solutions.catContentSuite',
+  'solutions.catProcessSuite',
+  'solutions.catBda',
+  'solutions.catDam',
+  'solutions.catArchiving',
+  'solutions.catRpa',
+  'solutions.catSharedFa',
+  'solutions.catSharedHr',
+  'solutions.catSharedCase',
+  'solutions.catProcessOpt',
+  'solutions.catAnalytics',
+  'solutions.catFiori',
+] as const
+
+const adjacent = [
+  {title: 'solutions.adjProcessTitle', body: 'solutions.adjProcessBody'},
+  {title: 'solutions.adjDevTitle', body: 'solutions.adjDevBody'},
+  {title: 'solutions.adjDataTitle', body: 'solutions.adjDataBody'},
+  {title: 'solutions.adjManagedTitle', body: 'solutions.adjManagedBody'},
+] as const
 
 const howSteps = [
   {title: 'home.howStep1Title', body: 'home.howStep1Body'},
@@ -26,31 +72,27 @@ const howSteps = [
 ] as const
 ---
 
-<section class="relative overflow-hidden">
-  <div class="pointer-events-none absolute inset-0 surface-grid opacity-50" aria-hidden="true"></div>
-  <div class="container-site space-y-4 py-20 lg:py-24">
-    <p class="eyebrow">{t(locale, 'nav.solutions')}</p>
-    <h1 class="display-xl max-w-3xl text-fg">{t(locale, 'solutions.heroTitle')}</h1>
-    <p class="prose-measure text-base text-fg-muted sm:text-lg">
-      {t(locale, 'solutions.heroSubtitle')}
-    </p>
-  </div>
-</section>
+<PageHero
+  eyebrow={t(locale, 'nav.solutions')}
+  title={t(locale, 'solutions.heroTitle')}
+  subtitle={t(locale, 'solutions.heroSubtitle')}
+/>
 
 <section class="section-pad section-defer" data-reveal>
   <div class="container-site space-y-10">
     <div class="space-y-3">
-      <h2 class="display-md text-fg">{t(locale, 'solutions.expertiseHeading')}</h2>
-      <p class="prose-measure text-fg-muted">{t(locale, 'solutions.expertiseBody')}</p>
+      <h2 class="display-md text-fg">{t(locale, 'solutions.offersHeading')}</h2>
+      <p class="prose-measure text-fg-muted">{t(locale, 'solutions.offersBody')}</p>
     </div>
     <ul class="grid gap-4 sm:grid-cols-2" data-reveal-stagger>
       {
-        capabilities.map((item) => (
-          <li class="card card-spotlight flex flex-col gap-4 p-5 sm:p-6" data-reveal-child>
+        offers.map((item) => (
+          <li class="card card-spotlight flex flex-col gap-3 p-5 sm:p-6" data-reveal-child>
             <span class="inline-flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
               <Icon name={item.icon} class="size-5" />
             </span>
             <h3 class="text-lg font-semibold text-fg">{t(locale, item.title)}</h3>
+            <p class="text-sm font-medium text-primary">{t(locale, item.forKey)}</p>
             <p class="text-sm leading-relaxed text-fg-muted">{t(locale, item.body)}</p>
           </li>
         ))
@@ -62,8 +104,49 @@ const howSteps = [
 <section class="section-pad section-defer border-t border-border" data-reveal>
   <div class="container-site space-y-8">
     <div class="space-y-3">
-      <h2 class="display-md text-fg">{t(locale, 'home.howHeading')}</h2>
-      <p class="prose-measure text-fg-muted">{t(locale, 'home.howBody')}</p>
+      <h2 class="display-md text-fg">{t(locale, 'solutions.catalogueHeading')}</h2>
+      <p class="prose-measure text-fg-muted">{t(locale, 'solutions.catalogueBody')}</p>
+      <p class="prose-measure text-sm text-fg-muted">{t(locale, 'solutions.expertiseBody')}</p>
+    </div>
+    <ul class="flex flex-wrap gap-3" data-reveal-stagger>
+      {
+        catalogue.map((key) => (
+          <li
+            class="inline-flex min-h-11 items-center rounded-full border border-border bg-bg-elevated px-5 font-mono text-sm text-fg-muted shadow-[var(--shadow-sm)]"
+            data-reveal-child
+          >
+            {t(locale, key)}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section-pad section-defer border-t border-border" data-reveal>
+  <div class="container-site space-y-10">
+    <div class="space-y-3">
+      <h2 class="display-md text-fg">{t(locale, 'solutions.adjacentHeading')}</h2>
+      <p class="prose-measure text-fg-muted">{t(locale, 'solutions.adjacentBody')}</p>
+    </div>
+    <ul class="grid gap-4 sm:grid-cols-2" data-reveal-stagger>
+      {
+        adjacent.map((item) => (
+          <li class="space-y-2 border-l-2 border-primary/40 pl-4" data-reveal-child>
+            <h3 class="font-semibold text-fg">{t(locale, item.title)}</h3>
+            <p class="text-sm leading-relaxed text-fg-muted">{t(locale, item.body)}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="section-pad section-defer border-t border-border" data-reveal>
+  <div class="container-site space-y-8">
+    <div class="space-y-3">
+      <h2 class="display-md text-fg">{t(locale, 'solutions.methodHeading')}</h2>
+      <p class="prose-measure text-fg-muted">{t(locale, 'solutions.methodBody')}</p>
     </div>
     <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
       {
@@ -76,6 +159,13 @@ const howSteps = [
         ))
       }
     </ol>
+  </div>
+</section>
+
+<section class="section-pad section-defer border-t border-border" data-reveal>
+  <div class="container-site space-y-4">
+    <h2 class="display-md text-fg">{t(locale, 'solutions.ctaHeading')}</h2>
+    <p class="prose-measure text-fg-muted">{t(locale, 'solutions.ctaBody')}</p>
     <a href={localePath(locale, '/contact/')} class="btn btn-primary">
       {t(locale, 'home.ctaPrimary')}
     </a>

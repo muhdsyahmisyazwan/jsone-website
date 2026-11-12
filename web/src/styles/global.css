@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/plus-jakarta-sans/wght.css';
+@import './fonts.css';
 
 /*
   JS One - Precision Engineering theme
@@ -44,10 +44,61 @@
   --radius-md: 0.75rem;
   --radius-lg: 1.25rem;
   --radius-xl: 1.75rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+  --space-10: 4rem;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --duration-fast: 160ms;
   --duration-base: 240ms;
   --duration-slow: 480ms;
+  /* Illustration accents (prefer these over raw brand hex in SVG) */
+  --illust-primary: var(--primary);
+  --illust-primary-soft: #8ce0f2;
+  --illust-accent: var(--accent);
+}
+
+/*
+  Text scale only — keep rem root fixed so padding/frames/controls stay put.
+  @theme inline inlines calc(... * var(--font-scale)) into text-* utilities
+  (including responsive variants), so the toggle actually changes type size.
+*/
+@theme inline {
+  --text-xs: calc(0.75rem * var(--font-scale));
+  --text-sm: calc(0.875rem * var(--font-scale));
+  --text-base: calc(1rem * var(--font-scale));
+  --text-lg: calc(1.125rem * var(--font-scale));
+  --text-xl: calc(1.25rem * var(--font-scale));
+  --text-2xl: calc(1.5rem * var(--font-scale));
+  --text-3xl: calc(1.875rem * var(--font-scale));
+  --text-4xl: calc(2.25rem * var(--font-scale));
+  --text-5xl: calc(3rem * var(--font-scale));
+  --text-6xl: calc(3.75rem * var(--font-scale));
+  --text-7xl: calc(4.5rem * var(--font-scale));
+  --text-8xl: calc(6rem * var(--font-scale));
+  --text-9xl: calc(8rem * var(--font-scale));
+}
+
+/* Unlayered on purpose: must beat @layer base, otherwise toggle never applies */
+html {
+  font-size: 100%;
+  --font-scale: 1; /* medium default = 16px body */
+}
+
+html[data-font-scale='sm'] {
+  --font-scale: 0.875; /* 14px body */
+}
+
+html[data-font-scale='md'] {
+  --font-scale: 1; /* 16px body */
+}
+
+html[data-font-scale='lg'] {
+  --font-scale: 1.125; /* 18px body */
 }
 
 /* -- Light theme -- */
@@ -60,12 +111,14 @@
   --bg-invert: #000c28;
   --fg: #0b1220;
   --fg-muted: #334155;
-  --fg-subtle: #64748b;
+  /* Slightly darker than slate-500 so small text clears WCAG AA on --bg */
+  --fg-subtle: #526278;
   --fg-invert: #f8fafc;
   --border: #d7e0ea;
   --border-strong: #b6c4d4;
-  --ring: #0096b8;
-  --primary: #0096b8;
+  --ring: #006989;
+  /* Darkened vs logo cyan so white button text meets WCAG AA (~4.5:1) */
+  --primary: #006989;
   --primary-fg: #ffffff;
   --primary-soft: color-mix(in oklab, #00b8e0 16%, white);
   --accent: #a8b016;
@@ -132,19 +185,6 @@
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
     overflow-x: clip;
-    font-size: 100%;
-  }
-
-  html[data-font-scale='sm'] {
-    font-size: 93.75%; /* 15px root */
-  }
-
-  html[data-font-scale='md'] {
-    font-size: 100%; /* 16px root */
-  }
-
-  html[data-font-scale='lg'] {
-    font-size: 112.5%; /* 18px root */
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -163,6 +203,7 @@
 
   body {
     @apply bg-bg font-sans text-fg antialiased;
+    font-size: calc(1rem * var(--font-scale));
     min-height: 100dvh;
     min-height: 100svh;
     overflow-x: clip;
@@ -250,12 +291,17 @@
   input,
   textarea,
   select {
-    font-size: 1rem;
+    font-size: calc(1rem * var(--font-scale));
   }
 
   img {
     max-width: 100%;
     height: auto;
+  }
+
+  /* LQIP blur-up while the full Sanity CDN image loads */
+  img.img-lqip {
+    background-color: var(--bg-muted);
   }
 
   #main-content,
@@ -321,21 +367,21 @@
 
   /* Fluid type - slightly looser tracking on small screens for MS wrap */
   .display-xl {
-    font-size: clamp(1.875rem, 1.15rem + 3.6vw, 4.5rem);
+    font-size: calc(var(--font-scale) * clamp(1.875rem, 1.15rem + 3.6vw, 4.5rem));
     line-height: 1.12;
     letter-spacing: -0.03em;
     font-weight: 700;
   }
 
   .display-lg {
-    font-size: clamp(1.65rem, 1.05rem + 2.4vw, 3.25rem);
+    font-size: calc(var(--font-scale) * clamp(1.65rem, 1.05rem + 2.4vw, 3.25rem));
     line-height: 1.15;
     letter-spacing: -0.028em;
     font-weight: 700;
   }
 
   .display-md {
-    font-size: clamp(1.375rem, 1.05rem + 1.4vw, 2.25rem);
+    font-size: calc(var(--font-scale) * clamp(1.375rem, 1.05rem + 1.4vw, 2.25rem));
     line-height: 1.2;
     letter-spacing: -0.025em;
     font-weight: 700;
@@ -358,7 +404,7 @@
 
   .eyebrow {
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: calc(0.75rem * var(--font-scale));
     font-weight: 500;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -446,7 +492,13 @@
     }
   }
 
-  /* Buttons */
+  /*
+    CTA hierarchy:
+    - .btn-primary (lime accent) = main conversion (Get in touch, hero primary)
+    - .btn-brand (cyan) = secondary brand actions (forms, alternate CTAs)
+    - .btn-ghost = tertiary / outline
+    See docs/DESIGN.md
+  */
   .btn {
     display: inline-flex;
     min-height: 2.75rem;
@@ -455,7 +507,7 @@
     gap: 0.5rem;
     border-radius: 9999px;
     padding: 0.7rem 1.35rem;
-    font-size: 0.9375rem;
+    font-size: calc(0.9375rem * var(--font-scale));
     font-weight: 600;
     line-height: 1.2;
     text-decoration: none;
@@ -465,6 +517,18 @@
       border-color var(--duration-fast) var(--ease-out),
       box-shadow var(--duration-fast) var(--ease-out),
       transform var(--duration-fast) var(--ease-out);
+  }
+
+  .btn-sm {
+    min-height: 2.25rem;
+    padding: 0.45rem 1rem;
+    font-size: calc(0.8125rem * var(--font-scale));
+  }
+
+  .btn-lg {
+    min-height: 3.25rem;
+    padding: 0.85rem 1.6rem;
+    font-size: calc(1rem * var(--font-scale));
   }
 
   .btn:active {
@@ -480,6 +544,7 @@
   .btn-brand {
     background: var(--primary);
     color: var(--primary-fg);
+    font-weight: 600;
   }
 
   .btn-ghost {
@@ -568,8 +633,87 @@
   }
 
   .marquee-track.is-paused,
+  .marquee.is-paused .marquee-track,
   .marquee:not(.is-inview) .marquee-track {
     animation-play-state: paused;
+  }
+
+  /* Form primitives */
+  .field {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    padding: 0.65rem 1rem;
+    font-size: calc(1rem * var(--font-scale));
+    color: var(--fg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .field[aria-invalid='true'] {
+    border-color: var(--danger);
+  }
+
+  .label {
+    display: block;
+    margin-bottom: var(--space-2);
+    font-size: calc(0.875rem * var(--font-scale));
+    font-weight: 500;
+    color: var(--fg-muted);
+  }
+
+  .field-error {
+    margin-top: var(--space-2);
+    font-size: calc(0.875rem * var(--font-scale));
+    color: var(--danger);
+  }
+
+  .alert {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    padding: var(--space-4);
+    font-size: calc(0.875rem * var(--font-scale));
+  }
+
+  .alert-success {
+    border-color: color-mix(in oklab, var(--success) 40%, var(--border));
+    background: color-mix(in oklab, var(--success) 10%, var(--bg-elevated));
+    color: var(--fg);
+  }
+
+  .alert-danger {
+    border-color: color-mix(in oklab, var(--danger) 40%, var(--border));
+    background: color-mix(in oklab, var(--danger) 8%, var(--bg-elevated));
+    color: var(--fg);
+  }
+
+  .alert-info {
+    border-color: color-mix(in oklab, var(--primary) 35%, var(--border));
+    background: var(--primary-soft);
+    color: var(--fg);
+  }
+
+  .empty-state {
+    border-radius: var(--radius-xl);
+    border: 1px dashed var(--border-strong);
+    background: var(--bg-muted);
+    padding: var(--space-8) var(--space-5);
+    text-align: center;
+  }
+
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: var(--duration-base);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    @view-transition {
+      navigation: none;
+    }
   }
 
   @keyframes marquee {

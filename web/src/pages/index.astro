@@ -2,10 +2,11 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import FallbackHome from '../components/FallbackHome.astro'
 import Sections from '../components/sections/Sections.astro'
+import {preloadFromSections} from '../lib/preload'
 import {loadHome} from '../lib/pages/loadHome'
 
 const data = await loadHome('en')
-const hasSections = Boolean(data.home?.sections?.length)
+const preloadImage = preloadFromSections(data.home?.sections)
 ---
 
 <BaseLayout
@@ -16,10 +17,11 @@ const hasSections = Boolean(data.home?.sections?.length)
   settings={data.settings}
   navigation={data.navigation}
   footer={data.footer}
+  preloadImage={preloadImage}
 >
   {
-    hasSections ? (
-      <Sections locale={data.locale} sections={data.home!.sections} localized />
+    data.home?.sections?.length ? (
+      <Sections locale={data.locale} sections={data.home.sections} localized />
     ) : (
       <FallbackHome locale={data.locale} />
     )

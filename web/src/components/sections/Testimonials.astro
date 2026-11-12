@@ -1,5 +1,6 @@
 ---
 import type {Locale} from '../../i18n/locales'
+import {t} from '../../i18n/utils'
 import Icon from '../icons/Icon.astro'
 import SanityImage from '../sanity/SanityImage.astro'
 import {resolveLocaleString} from '../../lib/sanity/locale'
@@ -32,22 +33,53 @@ const items = (section.items || [])
     avatar: item.avatar,
   }))
   .filter((i) => i.quote)
+
+const prevLabel = t(locale, 'common.previous')
+const nextLabel = t(locale, 'common.next')
+const swipeHint = t(locale, 'common.swipeHint')
 ---
 
 {
   (heading || items.length > 0) && (
     <section class="section-pad section-defer bg-bg-muted/40" data-reveal>
-      <div class="container-site space-y-8">
-        {heading && <h2 class="display-md text-fg">{heading}</h2>}
+      <div class="container-site space-y-6">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          {heading && <h2 class="display-md text-fg">{heading}</h2>}
+          {items.length > 1 && (
+            <div class="flex items-center gap-2">
+              <p class="text-xs text-fg-subtle sm:hidden">{swipeHint}</p>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-testimonial-prev
+                aria-label={prevLabel}
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                data-testimonial-next
+                aria-label={nextLabel}
+              >
+                →
+              </button>
+            </div>
+          )}
+        </div>
         <div
           class="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:thin] sm:-mx-1 sm:px-1"
           role="list"
+          data-testimonial-scroller
+          tabindex="0"
+          aria-label={heading || 'Testimonials'}
         >
-          {items.map((item) => (
+          {items.map((item, index) => (
             <article
               class="card card-spotlight flex w-[min(85%,20rem)] shrink-0 snap-center flex-col gap-5 p-5 sm:w-[26rem] sm:p-6"
               role="listitem"
               data-reveal-child
+              aria-label={`${index + 1} / ${items.length}`}
             >
               <span class="text-primary" aria-hidden="true">
                 <Icon name="quote" class="size-8" />
@@ -79,3 +111,26 @@ const items = (section.items || [])
     </section>
   )
 }
+
+<script>
+  function bindTestimonials() {
+    document.querySelectorAll('[data-testimonial-scroller]').forEach((scroller) => {
+      if (!(scroller instanceof HTMLElement) || scroller.dataset.bound === 'true') return
+      scroller.dataset.bound = 'true'
+      const section = scroller.closest('section')
+      const prev = section?.querySelector('[data-testimonial-prev]')
+      const next = section?.querySelector('[data-testimonial-next]')
+      const step = () => Math.min(scroller.clientWidth * 0.85, 420)
+
+      prev?.addEventListener('click', () => {
+        scroller.scrollBy({left: -step(), behavior: 'smooth'})
+      })
+      next?.addEventListener('click', () => {
+        scroller.scrollBy({left: step(), behavior: 'smooth'})
+      })
+    })
+  }
+
+  bindTestimonials()
+  document.addEventListener('astro:page-load', bindTestimonials)
+</script>

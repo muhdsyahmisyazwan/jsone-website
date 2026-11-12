@@ -1,5 +1,6 @@
 ---
 import type {Locale} from '../../i18n/locales'
+import {t} from '../../i18n/utils'
 import NetworkGraph from '../illustrations/NetworkGraph.astro'
 import SanityImage from '../sanity/SanityImage.astro'
 import {resolveLocaleLink, resolveLink} from '../../lib/sanity/links'
@@ -63,9 +64,16 @@ const stats = (section.stats || [])
         </div>
       )}
       <div class="container-site flex min-h-[min(78svh,40rem)] flex-col justify-center gap-6 py-12 sm:py-16 lg:min-h-[min(78dvh,40rem)] lg:py-20">
-        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-        <h1 class="display-xl max-w-3xl text-fg">{heading}</h1>
-        {body && <p class="prose-measure text-base leading-relaxed text-fg-muted sm:text-lg">{body}</p>}
+        {eyebrow && <p class="eyebrow" data-preview-field="hero-eyebrow">{eyebrow}</p>}
+        <h1 class="display-xl max-w-3xl text-fg" data-preview-field="hero-heading">{heading}</h1>
+        {body && (
+          <p
+            class="prose-measure text-base leading-relaxed text-fg-muted sm:text-lg"
+            data-preview-field="hero-body"
+          >
+            {body}
+          </p>
+        )}
         {(primary || secondary) && (
           <div class="flex flex-wrap items-center gap-3 pt-1">
             {primary && (
@@ -76,6 +84,9 @@ const stats = (section.stats || [])
                 rel={primary.openInNewTab ? 'noopener noreferrer' : undefined}
               >
                 {primary.label}
+                {primary.openInNewTab && (
+                  <span class="sr-only"> ({t(locale, 'common.opensNewTab')})</span>
+                )}
               </a>
             )}
             {secondary && (
@@ -86,6 +97,9 @@ const stats = (section.stats || [])
                 rel={secondary.openInNewTab ? 'noopener noreferrer' : undefined}
               >
                 {secondary.label}
+                {secondary.openInNewTab && (
+                  <span class="sr-only"> ({t(locale, 'common.opensNewTab')})</span>
+                )}
               </a>
             )}
           </div>

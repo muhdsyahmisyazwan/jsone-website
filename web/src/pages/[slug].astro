@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Sections from '../components/sections/Sections.astro'
+import {preloadFromSections} from '../lib/preload'
 import {loadContentPage, pageStaticPaths} from '../lib/pages/loadPage'
 
 export async function getStaticPaths() {
@@ -12,6 +13,7 @@ const data = await loadContentPage('en', slug!)
 if (!data) {
   throw new Error(`Page not found: ${slug}`)
 }
+const preloadImage = preloadFromSections(data.page.sections)
 ---
 
 <BaseLayout
@@ -22,6 +24,7 @@ if (!data) {
   settings={data.settings}
   navigation={data.navigation}
   footer={data.footer}
+  preloadImage={preloadImage}
 >
   <Sections locale="en" sections={data.page.sections} />
 </BaseLayout>

@@ -1,0 +1,13 @@
+# Optional Phase 1: keep npm dependencies patched.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      production-deps:
+        dependency-type: production
+      dev-deps:
+        dependency-type: development

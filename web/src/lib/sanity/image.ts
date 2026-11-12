@@ -22,12 +22,24 @@ export type ImageSrcSet = {
   src: string
   srcSet: string
   sizes: string
+  /** Display / request width used for the primary `src`. */
   width: number
-  height?: number
+  /** Derived from Sanity aspect ratio for CLS-stable layout. */
+  height: number
+  aspectRatio?: number
+  lqip?: string
+}
+
+function getAspectRatio(image: SanityImage): number | undefined {
+  const dims = image.asset?.metadata?.dimensions
+  if (dims?.aspectRatio && dims.aspectRatio > 0) return dims.aspectRatio
+  if (dims?.width && dims?.height && dims.height > 0) return dims.width / dims.height
+  return undefined
 }
 
 /**
  * Responsive Sanity CDN URLs with auto format (WebP/AVIF when supported by the browser).
+ * Sets width/height from asset metadata when available to reduce CLS.
  */
 export function getResponsiveImage(
   image: SanityImage,
@@ -50,7 +62,11 @@ export function getResponsiveImage(
     .map((w) => `${base.width(w).url()} ${w}w`)
     .join(', ')
 
-  const src = base.width(Math.min(1200, maxWidth)).url()
+  const width = Math.min(1200, maxWidth)
+  const src = base.width(width).url()
+  const aspectRatio = getAspectRatio(image)
+  const height = aspectRatio ? Math.round(width / aspectRatio) : Math.round(width * 0.625)
+  const lqip = image.asset?.metadata?.lqip
 
-  return {src, srcSet, sizes, width: Math.min(1200, maxWidth)}
+  return {src, srcSet, sizes, width, height, aspectRatio, lqip}
 }

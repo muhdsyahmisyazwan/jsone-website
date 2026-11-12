@@ -1,11 +1,19 @@
-# Build Astro (`web/`) and deploy to GitHub Pages.
-# Repo Settings → Pages → Source must be "GitHub Actions" (not "Deploy from a branch").
-name: Deploy Astro to GitHub Pages
+# Static preview mirror on GitHub Pages — NOT production.
+# Production: Ubuntu + Nginx + Node (docs/DEPLOY-UBUNTU.md, docs/PRODUCT-DECISIONS.md).
+# This workflow has no /api/* (contact, preview, webhook will not work).
+name: Preview — GitHub Pages (NOT production)
 
 on:
-  push:
-    branches: [master]
   workflow_dispatch:
+    inputs:
+      allow_fallback_only:
+        description: 'Allow deploy without Sanity secrets (i18n fallback content only)'
+        type: boolean
+        default: false
+  # Automatic push deploys are disabled so Pages is never mistaken for production.
+  # Re-enable only for intentional preview mirrors, and keep the Sanity secret gate below.
+  # push:
+  #   branches: [master]
 
 permissions:
   contents: read
@@ -13,7 +21,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-preview
   cancel-in-progress: false
 
 jobs:
@@ -37,6 +45,22 @@ jobs:
       - name: Install Tailwind Linux native binding
         run: npm install --no-save --no-package-lock -w web @tailwindcss/oxide-linux-x64-gnu@4.3.3
 
+      - name: Require Sanity project id (or explicit fallback)
+        env:
+          PROJECT_ID: ${{ secrets.PUBLIC_SANITY_PROJECT_ID }}
+          ALLOW_FALLBACK: ${{ inputs.allow_fallback_only }}
+        run: |
+          if [ -n "$PROJECT_ID" ]; then
+            echo "Sanity project id present — CMS-backed preview build."
+            exit 0
+          fi
+          if [ "$ALLOW_FALLBACK" = "true" ]; then
+            echo "::warning::Deploying fallback-only content (no PUBLIC_SANITY_PROJECT_ID). Not production."
+            exit 0
+          fi
+          echo "::error::GitHub Pages is not production. Set repository secret PUBLIC_SANITY_PROJECT_ID, or re-run with allow_fallback_only=true."
+          exit 1
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
@@ -46,9 +70,15 @@ jobs:
         env:
           PAGES_ORIGIN: ${{ steps.pages.outputs.origin }}
           PAGES_BASE: ${{ steps.pages.outputs.base_path }}
+          PUBLIC_SANITY_PROJECT_ID: ${{ secrets.PUBLIC_SANITY_PROJECT_ID }}
+          PUBLIC_SANITY_DATASET: ${{ secrets.PUBLIC_SANITY_DATASET }}
+          SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
+          # Mark preview hosts so ops don't confuse with www.jsone.com.my
+          PUBLIC_SITE_URL: ${{ steps.pages.outputs.origin }}
         run: |
           # Astro expects base without a trailing slash; assetUrl() still guards BASE_URL.
           BASE="${PAGES_BASE%/}"
+          export PUBLIC_SANITY_DATASET="${PUBLIC_SANITY_DATASET:-production}"
           npx astro build --site "$PAGES_ORIGIN" --base "$BASE"
 
       - name: Upload artifact
@@ -59,10 +89,12 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    # GitHub requires the `github-pages` environment name for this action.
+    # This is still NOT the corporate production site (Ubuntu is).
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages (preview only)
         id: deployment
         uses: actions/deploy-pages@v5

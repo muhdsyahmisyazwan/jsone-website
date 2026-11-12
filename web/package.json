@@ -25,11 +25,10 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
-    "@cloudflare/workers-types": "^5.20261027.1",
-    "typescript": "^5.9.3",
-    "wrangler": "^4.153.0"
+    "typescript": "^5.9.3"
   },
   "optionalDependencies": {
+    "@rolldown/binding-win32-x64-msvc": "^1.2.15",
     "@tailwindcss/oxide-linux-x64-gnu": "^4.3.3"
   }
 }

@@ -31,6 +31,7 @@ const fallbackLinks = [
   {label: t(locale, 'nav.solutions'), href: localePath(locale, '/solutions/')},
   {label: t(locale, 'nav.industries'), href: localePath(locale, '/industries/')},
   {label: t(locale, 'nav.clients'), href: localePath(locale, '/clients/')},
+  {label: t(locale, 'nav.news'), href: localePath(locale, '/news/')},
   {label: t(locale, 'nav.contact'), href: localePath(locale, '/contact/')},
 ]
 
@@ -137,19 +138,35 @@ function isActive(href: string, external?: boolean) {
           const active = isActive(link.href, link.external)
           if (link.children?.length) {
             return (
-              <div class="relative group/nav">
-                <a
-                  href={link.href}
+              <div class="relative" data-nav-disclosure>
+                <button
+                  type="button"
                   class:list={[
-                    'rounded-full px-3 py-2 text-sm font-medium transition-colors',
+                    'inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors',
                     active ? 'text-primary' : 'text-fg-muted hover:text-fg',
                   ]}
-                  aria-current={active ? 'page' : undefined}
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  data-nav-disclosure-trigger
                 >
                   {link.label}
-                </a>
-                <div class="invisible absolute left-0 top-full z-50 min-w-[13rem] pt-2 opacity-0 transition group-hover/nav:visible group-hover/nav:opacity-100 group-focus-within/nav:visible group-focus-within/nav:opacity-100">
+                  <svg class="size-3.5 opacity-70" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                  </svg>
+                </button>
+                <div
+                  class="invisible absolute left-0 top-full z-50 min-w-[13rem] pt-2 opacity-0 transition data-[open=true]:visible data-[open=true]:opacity-100"
+                  data-nav-disclosure-panel
+                  hidden
+                >
                   <div class="rounded-2xl border border-border bg-bg-elevated p-2 shadow-[var(--shadow-lg)]">
+                    <a
+                      href={link.href}
+                      class="block rounded-xl px-3 py-2.5 text-sm font-medium text-fg transition-colors hover:bg-bg-muted"
+                      aria-current={active ? 'page' : undefined}
+                    >
+                      {link.label}
+                    </a>
                     {link.children.map((child) => (
                       <a
                         href={child.href}
@@ -331,6 +348,42 @@ function isActive(href: string, external?: boolean) {
         event.preventDefault()
         first.focus()
       }
+    })
+
+    document.querySelectorAll('[data-nav-disclosure]').forEach((wrap) => {
+      if (!(wrap instanceof HTMLElement) || wrap.dataset.bound === 'true') return
+      wrap.dataset.bound = 'true'
+      const trigger = wrap.querySelector('[data-nav-disclosure-trigger]')
+      const panel = wrap.querySelector('[data-nav-disclosure-panel]')
+      if (!(trigger instanceof HTMLElement) || !(panel instanceof HTMLElement)) return
+
+      function setOpen(next) {
+        trigger.setAttribute('aria-expanded', String(next))
+        panel.hidden = !next
+        panel.dataset.open = String(next)
+      }
+
+      trigger.addEventListener('click', () => {
+        const open = trigger.getAttribute('aria-expanded') === 'true'
+        document.querySelectorAll('[data-nav-disclosure-trigger]').forEach((other) => {
+          if (other === trigger) return
+          const otherWrap = other.closest('[data-nav-disclosure]')
+          const otherPanel = otherWrap?.querySelector('[data-nav-disclosure-panel]')
+          other.setAttribute('aria-expanded', 'false')
+          if (otherPanel instanceof HTMLElement) {
+            otherPanel.hidden = true
+            otherPanel.dataset.open = 'false'
+          }
+        })
+        setOpen(!open)
+      })
+
+      document.addEventListener('click', (event) => {
+        if (!wrap.contains(event.target)) setOpen(false)
+      })
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') setOpen(false)
+      })
     })
 
     if (header instanceof HTMLElement && inner instanceof HTMLElement) {

@@ -25,6 +25,13 @@ coverage/
 credentials.json
 service-account*.json
 
+# Playwright / Lighthouse
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+.lighthouseci/
+
 # Logs
 *.log
 npm-debug.log*
@@ -58,3 +65,11 @@ studio/schema.json
 
 # Local reference materials (PDF / zip extracts — not for the repo)
 _refs/
+
+# Local / internal docs (not for remote)
+docs/CONTENT-PHASES-0-4.md
+docs/IMPROVEMENTS.md
+docs/DESIGN.md
+docs/ACCEPTANCE.md
+docs/SEED.md
+docs/CI.md

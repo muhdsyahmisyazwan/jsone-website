@@ -1,4 +1,5 @@
 ---
+import PageHero from './ui/PageHero.astro'
 import type {Locale} from '../i18n/locales'
 import {t} from '../i18n/utils'
 import {fallbackTeamGroups} from '../data/fallbackTeam'
@@ -14,20 +15,21 @@ const groups = fallbackTeamGroups.map((group) => ({
   members: group.members.map((member) => ({
     name: member.name,
     role: t(locale, member.roleKey),
+    initials: member.name
+      .split(/\s+/)
+      .map((p) => p[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase(),
   })),
 }))
 ---
 
-<section class="relative overflow-hidden">
-  <div class="pointer-events-none absolute inset-0 surface-grid opacity-50" aria-hidden="true"></div>
-  <div class="container-site space-y-4 py-20 text-center sm:py-24">
-    <p class="eyebrow">{t(locale, 'nav.aboutTeam')}</p>
-    <h1 class="display-xl text-fg">{t(locale, 'aboutTeam.heroTitle')}</h1>
-    <p class="prose-measure mx-auto text-fg-muted sm:text-lg">
-      {t(locale, 'aboutTeam.heroSubtitle')}
-    </p>
-  </div>
-</section>
+<PageHero
+  eyebrow={t(locale, 'nav.aboutTeam')}
+  title={t(locale, 'aboutTeam.heroTitle')}
+  subtitle={t(locale, 'aboutTeam.heroSubtitle')}
+/>
 
 <section class="section-pad section-defer bg-bg-muted/40" data-reveal>
   <div class="container-site max-w-3xl space-y-5">
@@ -52,9 +54,17 @@ const groups = fallbackTeamGroups.map((group) => ({
           <p class="eyebrow">{group.title}</p>
           <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {group.members.map((member) => (
-              <li class="card card-spotlight p-5" data-reveal-child>
-                <p class="font-semibold text-fg">{member.name}</p>
-                <p class="mt-1 text-sm text-fg-muted">{member.role}</p>
+              <li class="card card-spotlight flex gap-4 p-5" data-reveal-child>
+                <span
+                  class="inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-primary-soft font-semibold text-primary ring-2 ring-primary/30"
+                  aria-hidden="true"
+                >
+                  {member.initials}
+                </span>
+                <div class="min-w-0">
+                  <p class="font-semibold text-fg">{member.name}</p>
+                  <p class="mt-1 text-sm text-fg-muted">{member.role}</p>
+                </div>
               </li>
             ))}
           </ul>

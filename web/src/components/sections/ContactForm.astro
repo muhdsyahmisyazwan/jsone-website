@@ -25,17 +25,28 @@ const intro = str(section.intro)
 const showPhone = section.showPhone !== false
 const showCompany = section.showCompany !== false
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined
+const turnstileConfigured = Boolean(turnstileSiteKey)
+const allowSubmitWithoutTurnstile = import.meta.env.DEV && !turnstileConfigured
 const sendingLabel = t(locale, 'common.sending')
 const submitLabel = t(locale, 'common.submit')
+const requiredLabel = t(locale, 'common.required')
 const errorGeneric = t(locale, 'form.error')
 const errorMissing = t(locale, 'form.errorMissing')
 const errorEmail = t(locale, 'form.errorEmail')
 const errorTooLong = t(locale, 'form.errorTooLong')
+const errorRateLimited = t(locale, 'form.errorRateLimited')
+const errorMisconfigured = t(locale, 'form.errorMisconfigured')
+const errorTurnstile = t(locale, 'form.errorTurnstile')
+const errorFieldRequired = t(locale, 'form.fieldRequired')
+const successTitle = t(locale, 'form.successTitle')
+const successMessage = str(section.successMessage) || t(locale, 'form.success')
+const sendAnotherLabel = t(locale, 'form.sendAnother')
 
 const fieldClass =
-  'peer w-full rounded-2xl border border-border bg-bg-elevated px-4 pb-2.5 pt-6 text-base text-fg shadow-[var(--shadow-sm)] transition-[border-color] placeholder:text-transparent focus-visible:border-primary'
+  'peer w-full rounded-2xl border border-border bg-bg-elevated px-4 pb-2.5 pt-6 text-base text-fg shadow-[var(--shadow-sm)] transition-[border-color] placeholder:text-transparent focus-visible:border-primary aria-[invalid=true]:border-danger'
 const labelClass =
-  'pointer-events-none absolute left-4 top-1/2 origin-left -translate-y-1/2 text-sm text-fg-subtle transition-all peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-primary peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs'
+  'pointer-events-none absolute left-4 top-1/2 origin-left -translate-y-1/2 text-sm text-fg-muted transition-all peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-primary peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs'
+const errorClass = 'mt-1.5 hidden text-sm text-danger'
 ---
 
 <section class="section-pad section-defer" id="contact" data-reveal>
@@ -45,11 +56,23 @@ const labelClass =
       {intro && <p class="prose-measure mx-auto text-fg-muted">{intro}</p>}
     </div>
 
-      <form
+    <div
+      class="hidden space-y-4 rounded-[var(--radius-xl)] border border-success/40 bg-bg-elevated p-6 text-center shadow-[var(--shadow-md)] sm:p-8"
+      data-form-thanks
+      tabindex="-1"
+      role="status"
+    >
+      <h3 class="text-xl font-semibold text-fg" data-form-thanks-title>{successTitle}</h3>
+      <p class="text-fg-muted" data-form-thanks-body>{successMessage}</p>
+      <button type="button" class="btn btn-ghost" data-form-again>{sendAnotherLabel}</button>
+    </div>
+
+    <form
       class="relative space-y-5 rounded-[var(--radius-xl)] border border-border bg-bg-elevated p-4 shadow-[var(--shadow-md)] sm:p-8"
       method="POST"
       action="/api/contact"
       data-contact-form
+      novalidate
     >
       <div class="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
         <label>
@@ -59,97 +82,146 @@ const labelClass =
       </div>
 
       <div class="grid gap-4 sm:grid-cols-2">
-        <label class="relative block sm:col-span-2">
-          <span class="sr-only">({t(locale, 'common.required')})</span>
-          <input
-            type="text"
-            name="name"
-            required
-            autocomplete="name"
-            enterkeyhint="next"
-            placeholder={t(locale, 'form.name')}
-            class={fieldClass}
-          />
-          <span class={labelClass}>{t(locale, 'form.name')}</span>
-        </label>
-        <label class="relative block sm:col-span-2">
-          <input
-            type="email"
-            name="email"
-            required
-            autocomplete="email"
-            inputmode="email"
-            enterkeyhint="next"
-            placeholder={t(locale, 'form.email')}
-            class={fieldClass}
-          />
-          <span class={labelClass}>{t(locale, 'form.email')}</span>
-        </label>
+        <div class="sm:col-span-2">
+          <label class="relative block">
+            <input
+              type="text"
+              name="name"
+              id="contact-name"
+              required
+              aria-required="true"
+              aria-invalid="false"
+              aria-describedby="contact-name-error"
+              autocomplete="name"
+              enterkeyhint="next"
+              placeholder={t(locale, 'form.name')}
+              class={fieldClass}
+            />
+            <span class={labelClass}>
+              {t(locale, 'form.name')}
+              <span class="text-danger" aria-hidden="true">*</span>
+              <span class="sr-only">({requiredLabel})</span>
+            </span>
+          </label>
+          <p id="contact-name-error" class={errorClass} data-field-error="name" role="alert"></p>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label class="relative block">
+            <input
+              type="email"
+              name="email"
+              id="contact-email"
+              required
+              aria-required="true"
+              aria-invalid="false"
+              aria-describedby="contact-email-error"
+              autocomplete="email"
+              inputmode="email"
+              enterkeyhint="next"
+              placeholder={t(locale, 'form.email')}
+              class={fieldClass}
+            />
+            <span class={labelClass}>
+              {t(locale, 'form.email')}
+              <span class="text-danger" aria-hidden="true">*</span>
+              <span class="sr-only">({requiredLabel})</span>
+            </span>
+          </label>
+          <p id="contact-email-error" class={errorClass} data-field-error="email" role="alert"></p>
+        </div>
+
         {
           showPhone && (
-            <label class="relative block">
-              <input
-                type="tel"
-                name="phone"
-                autocomplete="tel"
-                inputmode="tel"
-                enterkeyhint="next"
-                placeholder={t(locale, 'form.phone')}
-                class={fieldClass}
-              />
-              <span class={labelClass}>{t(locale, 'form.phone')}</span>
-            </label>
+            <div>
+              <label class="relative block">
+                <input
+                  type="tel"
+                  name="phone"
+                  id="contact-phone"
+                  autocomplete="tel"
+                  inputmode="tel"
+                  enterkeyhint="next"
+                  placeholder={t(locale, 'form.phone')}
+                  class={fieldClass}
+                />
+                <span class={labelClass}>{t(locale, 'form.phone')}</span>
+              </label>
+            </div>
           )
         }
         {
           showCompany && (
-            <label class="relative block">
-              <input
-                type="text"
-                name="company"
-                autocomplete="organization"
-                enterkeyhint="next"
-                placeholder={t(locale, 'form.company')}
-                class={fieldClass}
-              />
-              <span class={labelClass}>{t(locale, 'form.company')}</span>
-            </label>
+            <div>
+              <label class="relative block">
+                <input
+                  type="text"
+                  name="company"
+                  id="contact-company"
+                  autocomplete="organization"
+                  enterkeyhint="next"
+                  placeholder={t(locale, 'form.company')}
+                  class={fieldClass}
+                />
+                <span class={labelClass}>{t(locale, 'form.company')}</span>
+              </label>
+            </div>
           )
         }
       </div>
 
-      <label class="relative block">
-        <textarea
-          name="message"
-          required
-          rows="5"
-          enterkeyhint="send"
-          placeholder={t(locale, 'form.message')}
-          class="peer w-full rounded-2xl border border-border bg-bg px-4 pb-2.5 pt-7 text-base text-fg shadow-[var(--shadow-sm)] transition-[border-color] placeholder:text-transparent focus-visible:border-primary"
-        ></textarea>
-        <span class="pointer-events-none absolute left-4 top-4 text-sm text-fg-subtle transition-all peer-focus:top-2.5 peer-focus:text-xs peer-focus:text-primary peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:text-xs">
-          {t(locale, 'form.message')}
-        </span>
-      </label>
+      <div>
+        <label class="relative block">
+          <textarea
+            name="message"
+            id="contact-message"
+            required
+            aria-required="true"
+            aria-invalid="false"
+            aria-describedby="contact-message-error"
+            rows="5"
+            enterkeyhint="send"
+            placeholder={t(locale, 'form.message')}
+            class={`peer w-full rounded-2xl border border-border bg-bg px-4 pb-2.5 pt-7 text-base text-fg shadow-[var(--shadow-sm)] transition-[border-color] placeholder:text-transparent focus-visible:border-primary aria-[invalid=true]:border-danger`}
+          ></textarea>
+          <span class="pointer-events-none absolute left-4 top-4 text-sm text-fg-muted transition-all peer-focus:top-2.5 peer-focus:text-xs peer-focus:text-primary peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:text-xs">
+            {t(locale, 'form.message')}
+            <span class="text-danger" aria-hidden="true">*</span>
+            <span class="sr-only">({requiredLabel})</span>
+          </span>
+        </label>
+        <p id="contact-message-error" class={errorClass} data-field-error="message" role="alert"></p>
+      </div>
 
-      <label class="flex min-h-11 cursor-pointer items-start gap-3 text-sm text-fg-muted">
-        <input
-          type="checkbox"
-          name="consent"
-          value="yes"
-          required
-          class="mt-1 size-5 shrink-0 rounded border-border accent-primary"
-        />
-        <span>{t(locale, 'form.consent')}</span>
-      </label>
+      <div>
+        <label class="flex min-h-11 cursor-pointer items-start gap-3 text-sm text-fg-muted">
+          <input
+            type="checkbox"
+            name="consent"
+            id="contact-consent"
+            value="yes"
+            required
+            aria-required="true"
+            aria-invalid="false"
+            aria-describedby="contact-consent-error"
+            class="mt-1 size-5 shrink-0 rounded border-border accent-primary"
+          />
+          <span>
+            {t(locale, 'form.consent')}
+            <span class="text-danger" aria-hidden="true">*</span>
+            <span class="sr-only">({requiredLabel})</span>
+          </span>
+        </label>
+        <p id="contact-consent-error" class={errorClass} data-field-error="consent" role="alert"></p>
+      </div>
 
       {
-        turnstileSiteKey ? (
-          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="auto" />
+        turnstileConfigured ? (
+          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="auto"></div>
         ) : (
-          import.meta.env.DEV && (
-            <p class="text-xs text-fg-subtle">{t(locale, 'form.turnstileMissing')}</p>
-          )
+          <p class="rounded-xl border border-danger/40 bg-danger/5 px-3 py-2 text-sm text-danger" role="status">
+            {t(locale, 'form.turnstileMissing')}
+          </p>
         )
       }
 
@@ -157,14 +229,17 @@ const labelClass =
       <button
         type="submit"
         data-submit
-        class="btn btn-brand w-full disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        class="btn btn-brand inline-flex w-full items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        disabled={!turnstileConfigured && !allowSubmitWithoutTurnstile}
       >
-        {submitLabel}
+        <span
+          class="hidden size-4 animate-spin rounded-full border-2 border-primary-fg/30 border-t-primary-fg"
+          data-submit-spinner
+          aria-hidden="true"
+        ></span>
+        <span data-submit-label>{submitLabel}</span>
       </button>
       <div aria-live="polite" aria-atomic="true" class="space-y-2">
-        <p class="hidden text-sm font-medium text-success" data-form-success role="status">
-          {str(section.successMessage) || t(locale, 'form.success')}
-        </p>
         <p class="hidden text-sm font-medium text-danger" data-form-error role="alert">
           {errorGeneric}
         </p>
@@ -173,7 +248,7 @@ const labelClass =
   </div>
 </section>
 
-{turnstileSiteKey && (
+{turnstileConfigured && (
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 )}
 
@@ -185,35 +260,145 @@ const labelClass =
     errorMissing,
     errorEmail,
     errorTooLong,
+    errorRateLimited,
+    errorMisconfigured,
+    errorTurnstile,
+    errorFieldRequired,
   }}
 >
   function messageForError(code) {
     if (code === 'missing_fields') return errorMissing
     if (code === 'invalid_email') return errorEmail
     if (code === 'too_long') return errorTooLong
+    if (code === 'rate_limited') return errorRateLimited
+    if (code === 'server_misconfigured') return errorMisconfigured
+    if (code === 'turnstile_failed') return errorTurnstile
     return errorGeneric
+  }
+
+  function clearFieldErrors(form) {
+    form.querySelectorAll('[data-field-error]').forEach((el) => {
+      el.textContent = ''
+      el.classList.add('hidden')
+    })
+    form.querySelectorAll('[aria-invalid]').forEach((el) => {
+      el.setAttribute('aria-invalid', 'false')
+    })
+  }
+
+  function setFieldError(form, name, message) {
+    const field = form.elements.namedItem(name)
+    const errorEl = form.querySelector(`[data-field-error="${name}"]`)
+    if (field instanceof HTMLElement) field.setAttribute('aria-invalid', 'true')
+    if (errorEl) {
+      errorEl.textContent = message
+      errorEl.classList.remove('hidden')
+    }
+  }
+
+  function validateClient(form) {
+    clearFieldErrors(form)
+    let firstInvalid = null
+    const name = String(new FormData(form).get('name') || '').trim()
+    const email = String(new FormData(form).get('email') || '').trim()
+    const message = String(new FormData(form).get('message') || '').trim()
+    const consent = form.elements.namedItem('consent')
+
+    if (!name) {
+      setFieldError(form, 'name', errorFieldRequired)
+      firstInvalid = firstInvalid || form.elements.namedItem('name')
+    }
+    if (!email) {
+      setFieldError(form, 'email', errorFieldRequired)
+      firstInvalid = firstInvalid || form.elements.namedItem('email')
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setFieldError(form, 'email', errorEmail)
+      firstInvalid = firstInvalid || form.elements.namedItem('email')
+    }
+    if (!message) {
+      setFieldError(form, 'message', errorFieldRequired)
+      firstInvalid = firstInvalid || form.elements.namedItem('message')
+    }
+    if (!(consent instanceof HTMLInputElement && consent.checked)) {
+      setFieldError(form, 'consent', errorFieldRequired)
+      firstInvalid = firstInvalid || consent
+    }
+
+    if (firstInvalid instanceof HTMLElement) {
+      firstInvalid.focus()
+      return false
+    }
+    return true
+  }
+
+  function setSubmitting(form, submit, on) {
+    form.setAttribute('aria-busy', on ? 'true' : 'false')
+    if (!(submit instanceof HTMLButtonElement)) return
+    submit.disabled = on || submit.dataset.forceDisabled === 'true'
+    const label = submit.querySelector('[data-submit-label]')
+    const spinner = submit.querySelector('[data-submit-spinner]')
+    if (label) label.textContent = on ? sendingLabel : submitLabel
+    spinner?.classList.toggle('hidden', !on)
+  }
+
+  function showThanks(form, thanks) {
+    form.classList.add('hidden')
+    thanks?.classList.remove('hidden')
+    thanks?.focus()
   }
 
   function bindContactForm() {
     const form = document.querySelector('[data-contact-form]')
+    const thanks = document.querySelector('[data-form-thanks]')
     if (!(form instanceof HTMLFormElement) || form.dataset.bound === 'true') return
     form.dataset.bound = 'true'
 
-    const success = form.querySelector('[data-form-success]')
     const error = form.querySelector('[data-form-error]')
     const submit = form.querySelector('[data-submit]')
+    const again = document.querySelector('[data-form-again]')
+
+    if (submit instanceof HTMLButtonElement && submit.disabled) {
+      submit.dataset.forceDisabled = 'true'
+    }
+
+    const params = new URLSearchParams(window.location.search)
+    const prefillEmail = params.get('email')
+    const emailField = form.elements.namedItem('email')
+    if (prefillEmail && emailField instanceof HTMLInputElement && !emailField.value) {
+      emailField.value = prefillEmail
+      emailField.dispatchEvent(new Event('input', {bubbles: true}))
+    }
+
+    ;['name', 'email', 'message', 'consent'].forEach((name) => {
+      const el = form.elements.namedItem(name)
+      el?.addEventListener('input', () => {
+        if (el instanceof HTMLElement) el.setAttribute('aria-invalid', 'false')
+        const err = form.querySelector(`[data-field-error="${name}"]`)
+        err?.classList.add('hidden')
+      })
+      el?.addEventListener('change', () => {
+        if (el instanceof HTMLElement) el.setAttribute('aria-invalid', 'false')
+        const err = form.querySelector(`[data-field-error="${name}"]`)
+        err?.classList.add('hidden')
+      })
+    })
+
+    again?.addEventListener('click', () => {
+      thanks?.classList.add('hidden')
+      form.classList.remove('hidden')
+      clearFieldErrors(form)
+      form.reset()
+      if (window.turnstile) window.turnstile.reset()
+      const nameField = form.elements.namedItem('name')
+      if (nameField instanceof HTMLElement) nameField.focus()
+    })
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault()
-      success?.classList.add('hidden')
       error?.classList.add('hidden')
+      if (!validateClient(form)) return
 
-      if (!form.reportValidity()) return
-
-      if (submit instanceof HTMLButtonElement) {
-        submit.disabled = true
-        submit.textContent = sendingLabel
-      }
+      setSubmitting(form, submit, true)
 
       try {
         const res = await fetch('/api/contact', {
@@ -226,11 +411,16 @@ const labelClass =
           if (error) {
             error.textContent = messageForError(data.error)
             error.classList.remove('hidden')
+            error.focus?.()
           }
+          if (Array.isArray(data.missing)) {
+            for (const field of data.missing) setFieldError(form, field, errorFieldRequired)
+          }
+          if (data.error === 'invalid_email') setFieldError(form, 'email', errorEmail)
           if (window.turnstile) window.turnstile.reset()
           return
         }
-        success?.classList.remove('hidden')
+        showThanks(form, thanks)
         form.reset()
         if (window.turnstile) window.turnstile.reset()
       } catch {
@@ -239,10 +429,7 @@ const labelClass =
           error.classList.remove('hidden')
         }
       } finally {
-        if (submit instanceof HTMLButtonElement) {
-          submit.disabled = false
-          submit.textContent = submitLabel
-        }
+        setSubmitting(form, submit, false)
       }
     })
   }

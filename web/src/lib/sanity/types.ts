@@ -8,9 +8,23 @@ export type LocaleEntry<T = string> = {
 export type LocaleString = Partial<Record<Locale, LocaleEntry<string>>>
 export type LocaleText = LocaleString
 
+export type SanityImageMetadata = {
+  dimensions?: {
+    width?: number
+    height?: number
+    aspectRatio?: number
+  }
+  lqip?: string
+}
+
 export type SanityImage = {
   _type?: string
-  asset?: {_ref?: string; _id?: string; url?: string}
+  asset?: {
+    _ref?: string
+    _id?: string
+    url?: string
+    metadata?: SanityImageMetadata
+  }
   alt?: string | LocaleString
   hotspot?: {x: number; y: number; height: number; width: number}
   crop?: {top: number; bottom: number; left: number; right: number}
@@ -46,6 +60,12 @@ export type LocaleSeo = {
   ogImage?: SanityImage
 }
 
+export type SocialLink = {
+  platform?: string
+  url?: string
+  label?: LocaleString
+}
+
 export type SiteSettings = {
   siteName?: LocaleString
   legalName?: string
@@ -54,6 +74,7 @@ export type SiteSettings = {
   email?: string
   phone?: string
   address?: LocaleText
+  socialLinks?: SocialLink[]
   defaultSeo?: LocaleSeo
 }
 
@@ -105,6 +126,7 @@ export type Section = {
 
 export type HomePage = {
   title?: string
+  reviewed?: boolean
   sections?: Section[]
   seo?: LocaleSeo
 }

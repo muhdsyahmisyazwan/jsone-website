@@ -1,5 +1,6 @@
 ---
 import type {Locale} from '../../i18n/locales'
+import {t} from '../../i18n/utils'
 import SanityImage from '../sanity/SanityImage.astro'
 import {resolveLocaleString} from '../../lib/sanity/locale'
 import type {LocaleString, SanityImage as Img} from '../../lib/sanity/types'
@@ -20,14 +21,29 @@ const heading =
     : resolveLocaleString(section.heading, locale)
 const logos = (section.logos || []).filter((l) => l.image)
 const loop = [...logos, ...logos]
+const marqueeId = 'logo-strip-marquee'
 ---
 
 {
   logos.length > 0 && (
     <section class="section-defer border-y border-border bg-bg-elevated/50 py-12" data-reveal>
       <div class="container-site space-y-8">
-        {heading && <p class="eyebrow text-center">{heading}</p>}
-        <div class="marquee is-inview">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          {heading && <p class="eyebrow text-center sm:text-left">{heading}</p>}
+          <button
+            type="button"
+            class="btn btn-ghost btn-sm"
+            data-marquee-toggle
+            aria-pressed="false"
+            aria-controls={marqueeId}
+            data-label-pause={t(locale, 'common.pause')}
+            data-label-play={t(locale, 'common.play')}
+            aria-label={t(locale, 'common.pauseMarquee')}
+          >
+            {t(locale, 'common.pause')}
+          </button>
+        </div>
+        <div class="marquee is-inview" id={marqueeId}>
           <div class="marquee-track items-center px-4">
             {loop.map((logo) => {
               const img = (
@@ -48,6 +64,7 @@ const loop = [...logos, ...logos]
                   class="inline-flex min-h-11 items-center"
                 >
                   {img}
+                  <span class="sr-only"> ({t(locale, 'common.opensNewTab')})</span>
                 </a>
               ) : (
                 <span class="inline-flex min-h-11 items-center">{img}</span>

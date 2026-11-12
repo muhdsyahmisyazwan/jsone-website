@@ -19,6 +19,7 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings" && _id == "siteS
   email,
   phone,
   address,
+  socialLinks[]{ platform, url, label },
   defaultSeo{
     metaTitle,
     metaDescription,
@@ -47,8 +48,10 @@ export const footerQuery = groq`*[_type == "footer" && _id == "footer"][0]{
   copyright
 }`
 
-export const homePageQuery = groq`*[_type == "homePage" && _id == "homePage"][0]{
+/** coalesce(reviewed, true): legacy docs without the field still render; explicit false hides. */
+export const homePageQuery = groq`*[_type == "homePage" && _id == "homePage" && coalesce(reviewed, true) == true][0]{
   title,
+  reviewed,
   seo{
     metaTitle,
     metaDescription,

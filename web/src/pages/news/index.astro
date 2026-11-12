@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import SanityImage from '../../components/sanity/SanityImage.astro'
+import EmptyState from '../../components/ui/EmptyState.astro'
 import {localePath} from '../../i18n/paths'
 import {t} from '../../i18n/utils'
 import {loadNewsIndex} from '../../lib/pages/loadPage'
@@ -21,11 +22,17 @@ const data = await loadNewsIndex(locale)
     <div class="container-site space-y-10">
       <div class="space-y-3">
         <p class="eyebrow">{t(locale, 'nav.news')}</p>
-        <h1 class="display-lg text-fg">{t(locale, 'nav.news')}</h1>
+        <h1 class="display-lg text-fg">{t(locale, 'news.heroTitle')}</h1>
+        <p class="prose-measure text-fg-muted">{t(locale, 'news.heroSubtitle')}</p>
       </div>
       {
         data.articles.length === 0 ? (
-          <p class="text-fg-muted">{t(locale, 'news.empty')}</p>
+          <EmptyState
+            title={t(locale, 'nav.news')}
+            body={t(locale, 'news.empty')}
+            actionHref={localePath(locale, '/contact/')}
+            actionLabel={t(locale, 'nav.getInTouch')}
+          />
         ) : (
           <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {data.articles.map((article) => (

@@ -2,6 +2,8 @@
 
 Headless CMS for the JS One corporate site (`/web`).
 
+**Public site language:** English only. Studio still offers EN / MS / ZH so translations can be prepared; MS/ZH are **not** live on the website yet. See [`docs/PRODUCT-DECISIONS.md`](../docs/PRODUCT-DECISIONS.md).
+
 ## Setup
 
 1. Create a Sanity project at [sanity.io/manage](https://www.sanity.io/manage) (or run `npx sanity@latest login` then `npx sanity@latest init --env` inside this folder).
@@ -34,10 +36,18 @@ Studio runs at http://localhost:3333 by default.
 
 ### Reviewed flags
 
-- **Document-level** (`page`, `news`): boolean `reviewed` - must be `true` to publish to the live site.
+- **Document-level** (`page`, `news`): boolean `reviewed` - must be `true` for the front end to use the document.
 - **Field-level** (`localeString`, `localeText`, etc.): each locale has `{ value, reviewed }`.
 
-Front-end queries (Phase 3) must filter on these flags so unreviewed copy never ships by accident.
+Front-end queries filter on these flags so unreviewed copy never ships by accident.
+
+**Editor priority today:** review and publish **English**. MS/ZH fields are optional prep until the public multi-locale go-live ([IMPROVEMENTS.md](../docs/IMPROVEMENTS.md) Phase 7).
+
+**Publish gate:** Page, News, and Homepage Publish actions stay disabled until **Reviewed for publish** is checked.
+
+**Site status tool:** Studio → Site status reads `GET {previewOrigin}/api/health` (CORS allowed for Studio / localhost) for rebuild freshness and contact readiness.
+
+**Seeding:** Follow [docs/SEED.md](../docs/SEED.md) so Fallback\* pages are replaced by CMS sections.
 
 ### Page builder blocks
 
@@ -57,15 +67,20 @@ SANITY_STUDIO_PREVIEW_ORIGIN=https://www.jsone.com.my
 
 Preview mode enable URL on the site: `/api/preview?secret=<SANITY_PREVIEW_SECRET>&redirect=/`
 
-Match `SANITY_PREVIEW_SECRET` in Cloudflare Pages env vars.
+Match `SANITY_PREVIEW_SECRET` on the **Ubuntu Node server** env (`web/.env` / systemd).
+
+Static HTML reflects the **last rebuild** until the Sanity webhook runs. Presentation is for routing/context; publish + rebuild for public updates.
 
 ## Rebuild webhook
 
-In Sanity Manage → API → Webhooks:
+**Production (Ubuntu):** In Sanity Manage → API → Webhooks:
 
-- URL: `https://www.jsone.com.my/api/sanity-webhook?secret=<SANITY_WEBHOOK_SECRET>`
+- URL: `https://www.jsone.com.my/api/sanity-webhook` (**do not** append `?secret=`)
+- Header: `x-sanity-webhook-secret: <SANITY_WEBHOOK_SECRET>` (or Bearer / Sanity signature)
 - Trigger on create/update/delete for content types you care about
-- Cloudflare Pages → Deploy hooks → paste URL into `CF_DEPLOY_HOOK_URL`
+- On the VM, set `REBUILD_COMMAND` to the absolute path of `scripts/rebuild.sh` — see [DEPLOY-UBUNTU.md](../docs/DEPLOY-UBUNTU.md)
+
+Production go-live checklist: [docs/GO-LIVE.md](../docs/GO-LIVE.md).
 
 ## Roles (admin vs editor)
 

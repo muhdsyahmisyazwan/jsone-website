@@ -77,6 +77,9 @@ const learnMore = t(locale, 'common.learnMore')
                 >
                   {item.link.label || learnMore}
                   <Icon name="arrow" class="size-4" />
+                  {item.link.openInNewTab && (
+                    <span class="sr-only"> ({t(locale, 'common.opensNewTab')})</span>
+                  )}
                 </a>
               )}
             </li>

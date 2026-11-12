@@ -1,4 +1,5 @@
 ---
+import PageHero from './ui/PageHero.astro'
 import type {Locale} from '../i18n/locales'
 import {localePath} from '../i18n/paths'
 import {t} from '../i18n/utils'
@@ -15,54 +16,83 @@ const stats = [
   {valueKey: 'home.statsClientsValue', labelKey: 'home.statsClientsLabel'},
 ] as const
 
-const partners = [
-  'OpenText',
-  'SAP',
-  'Extended ECM',
-  'Data Archiving',
-  'Document Access',
-  'VIM',
-  'Accounts Payable',
-  'AMS',
-]
+const partnerKeys = [
+  'home.partnerOpenText',
+  'home.partnerSap',
+  'home.partnerExtendedEcm',
+  'home.partnerArchiving',
+  'home.partnerDocAccess',
+  'home.partnerVim',
+  'home.partnerAp',
+  'home.partnerAms',
+] as const
+
+const cases = [
+  {title: 'clients.case1Title', body: 'clients.case1Body'},
+  {title: 'clients.case2Title', body: 'clients.case2Body'},
+  {title: 'clients.case3Title', body: 'clients.case3Body'},
+] as const
+
+const recognition = [
+  'clients.recogOpentext',
+  'clients.recogSapCompetence',
+  'clients.recogSapAward',
+  'clients.recogMsc',
+] as const
 ---
 
-<section class="relative overflow-hidden">
-  <div class="pointer-events-none absolute inset-0 surface-grid opacity-50" aria-hidden="true"></div>
-  <div class="container-site space-y-4 py-20 lg:py-24">
-    <p class="eyebrow">{t(locale, 'nav.clients')}</p>
-    <h1 class="display-xl max-w-3xl text-fg">{t(locale, 'clients.heroTitle')}</h1>
-    <p class="prose-measure text-base text-fg-muted sm:text-lg">
-      {t(locale, 'clients.heroSubtitle')}
-    </p>
-  </div>
-</section>
+<PageHero
+  eyebrow={t(locale, 'nav.clients')}
+  title={t(locale, 'clients.heroTitle')}
+  subtitle={t(locale, 'clients.heroSubtitle')}
+/>
 
 <section class="section-pad section-defer" data-reveal>
-  <div class="container-site space-y-12">
-    <div class="grid max-w-3xl grid-cols-3 gap-4 border-y border-border py-8">
-      {
-        stats.map((stat) => (
-          <div class="min-w-0">
-            <p class="metric text-2xl font-semibold text-fg sm:text-3xl">
-              {t(locale, stat.valueKey)}
-            </p>
-            <p class="mt-1 text-sm text-fg-muted">{t(locale, stat.labelKey)}</p>
-          </div>
-        ))
-      }
+  <div class="container-site space-y-14">
+    <div class="space-y-4">
+      <h2 class="display-md text-fg">{t(locale, 'clients.statsHeading')}</h2>
+      <div class="grid max-w-3xl grid-cols-3 gap-4 border-y border-border py-8">
+        {
+          stats.map((stat) => (
+            <div class="min-w-0">
+              <p class="metric text-2xl font-semibold text-fg sm:text-3xl">
+                {t(locale, stat.valueKey)}
+              </p>
+              <p class="mt-1 text-sm text-fg-muted">{t(locale, stat.labelKey)}</p>
+            </div>
+          ))
+        }
+      </div>
     </div>
 
     <div class="space-y-4">
-      <h2 class="display-md text-fg">{t(locale, 'home.partnersHeading')}</h2>
+      <h2 class="display-md text-fg">{t(locale, 'clients.partnersHeading')}</h2>
+      <p class="prose-measure text-fg-muted">{t(locale, 'clients.partnersBody')}</p>
       <ul class="flex flex-wrap gap-3" data-reveal-stagger>
         {
-          partners.map((label) => (
+          partnerKeys.map((key) => (
             <li
-              class="rounded-full border border-border bg-bg-elevated px-4 py-2 text-sm text-fg-muted"
+              class="inline-flex min-h-11 items-center rounded-full border border-border bg-bg-elevated px-5 font-mono text-sm text-fg-muted shadow-[var(--shadow-sm)]"
               data-reveal-child
             >
-              {label}
+              {t(locale, key)}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="space-y-6">
+      <div class="space-y-3">
+        <h2 class="display-md text-fg">{t(locale, 'clients.casesHeading')}</h2>
+        <p class="prose-measure text-fg-muted">{t(locale, 'clients.casesBody')}</p>
+      </div>
+      <ul class="grid gap-4 sm:grid-cols-3" data-reveal-stagger>
+        {
+          cases.map((item) => (
+            <li class="space-y-2 border-l-2 border-primary/40 pl-4" data-reveal-child>
+              <h3 class="font-semibold text-fg">{t(locale, item.title)}</h3>
+              <p class="text-sm leading-relaxed text-fg-muted">{t(locale, item.body)}</p>
             </li>
           ))
         }
@@ -70,8 +100,27 @@ const partners = [
     </div>
 
     <div class="space-y-4">
+      <h2 class="display-md text-fg">{t(locale, 'clients.recognitionHeading')}</h2>
+      <p class="prose-measure text-fg-muted">{t(locale, 'clients.recognitionBody')}</p>
+      <ul class="grid gap-3 sm:grid-cols-2" data-reveal-stagger>
+        {
+          recognition.map((key) => (
+            <li
+              class="rounded-2xl border border-border bg-bg-elevated px-5 py-4 text-sm text-fg-muted shadow-[var(--shadow-sm)]"
+              data-reveal-child
+            >
+              {t(locale, key)}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="space-y-4 border-t border-border pt-10">
       <h2 class="display-md text-fg">{t(locale, 'clients.trustHeading')}</h2>
       <p class="prose-measure text-fg-muted">{t(locale, 'clients.trustBody')}</p>
+      <h3 class="text-lg font-semibold text-fg">{t(locale, 'clients.ctaHeading')}</h3>
+      <p class="prose-measure text-fg-muted">{t(locale, 'clients.ctaBody')}</p>
       <a href={localePath(locale, '/contact/')} class="btn btn-primary">
         {t(locale, 'home.ctaPrimary')}
       </a>

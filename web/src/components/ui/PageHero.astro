@@ -1,0 +1,35 @@
+---
+interface Props {
+  eyebrow?: string
+  title: string
+  subtitle?: string
+  /** Two-column layout when a media/illustration slot is provided */
+  split?: boolean
+}
+
+const {eyebrow, title, subtitle, split = false} = Astro.props
+---
+
+<section class="relative overflow-hidden">
+  <div class="pointer-events-none absolute inset-0 surface-grid opacity-50" aria-hidden="true"></div>
+  <div
+    class:list={[
+      'container-site py-16 sm:py-20 lg:py-24',
+      split ? 'grid items-center gap-10 lg:grid-cols-2' : 'space-y-4',
+    ]}
+  >
+    <div class="space-y-4">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h1 class="display-xl max-w-3xl text-fg">{title}</h1>
+      {subtitle && <p class="prose-measure text-base text-fg-muted sm:text-lg">{subtitle}</p>}
+      <slot />
+    </div>
+    {
+      split && (
+        <div class="hidden lg:block">
+          <slot name="media" />
+        </div>
+      )
+    }
+  </div>
+</section>

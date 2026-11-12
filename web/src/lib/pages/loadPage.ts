@@ -87,8 +87,8 @@ export async function loadNewsIndex(locale: Locale) {
     navigation,
     footer,
     articles,
-    title: `${t(locale, 'nav.news')} - ${siteName}`,
-    description: t(locale, 'home.description'),
+    title: t(locale, 'news.metaTitle') || `${t(locale, 'nav.news')} - ${siteName}`,
+    description: t(locale, 'news.metaDescription') || t(locale, 'home.description'),
   }
 }
 

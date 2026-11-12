@@ -1,4 +1,5 @@
 ---
+import PageHero from './ui/PageHero.astro'
 import type {Locale} from '../i18n/locales'
 import {t} from '../i18n/utils'
 import Icon from './icons/Icon.astro'
@@ -51,21 +52,14 @@ const timeline = [
 ] as const
 ---
 
-<section class="relative overflow-hidden">
-  <div class="pointer-events-none absolute inset-0 surface-grid opacity-50" aria-hidden="true"></div>
-  <div class="container-site grid items-center gap-10 py-20 lg:grid-cols-2 lg:py-24">
-    <div class="space-y-4">
-      <p class="eyebrow">{t(locale, 'nav.about')}</p>
-      <h1 class="display-xl text-fg">{t(locale, 'about.heroTitle')}</h1>
-      <p class="prose-measure text-base text-fg-muted sm:text-lg">
-        {t(locale, 'about.heroSubtitle')}
-      </p>
-    </div>
-    <div class="hidden lg:block">
-      <NetworkGraph class="w-full text-fg-subtle" />
-    </div>
-  </div>
-</section>
+<PageHero
+  split
+  eyebrow={t(locale, 'nav.about')}
+  title={t(locale, 'about.heroTitle')}
+  subtitle={t(locale, 'about.heroSubtitle')}
+>
+  <NetworkGraph slot="media" class="w-full text-fg-subtle" />
+</PageHero>
 
 <section class="section-pad section-defer" data-reveal>
   <div class="container-site grid items-center gap-10 lg:grid-cols-2 lg:gap-16">

@@ -1,17 +1,25 @@
 /**
  * Role-based access for Sanity Content Lake.
  *
- * Apply these via:
- * 1. Sanity Manage → Project → API → Roles (custom roles), OR
- * 2. sanity.config.ts `acl` / resource permissions when using Sanity Roles API.
+ * ## How to apply (Sanity Manage)
+ *
+ * 1. Open https://www.sanity.io/manage → your project → **API** → **Roles**
+ * 2. Create custom roles matching the matrix below (or map existing viewers/editors).
+ * 3. Invite users with **Administrator** or **Editor** only — avoid granting project
+ *    owner rights to content editors.
+ *
+ * This file is the source of truth for intended permissions. Sanity’s hosted ACL UI
+ * must be configured manually; Studio also gates **Publish** on `reviewed`
+ * (`src/actions/requireReviewed.ts`).
  *
  * Intended roles:
- * - administrator - full access (schemas, content, project settings)
- * - editor - create/update content; cannot manage members or delete singletons carelessly
+ * - administrator — full access (schemas, content, project settings)
+ * - editor — create/update/publish content; cannot manage members or delete singletons
  *
- * Content rules enforced in Studio + front end:
- * - `reviewed` must be true (document-level) or locale `reviewed` flags (field-level)
- *   before content is rendered on the live site (Phase 3 queries).
+ * Content rules:
+ * - Document-level `reviewed` (page, news, homePage) must be true before Publish.
+ * - Field-level locale `reviewed` flags gate EN/MS/ZH strings on the live site.
+ * - Homepage: `coalesce(reviewed, true)` in GROQ — set `reviewed` explicitly after seeding.
  */
 
 export const ROLE_ADMIN = 'administrator'
@@ -19,8 +27,6 @@ export const ROLE_EDITOR = 'editor'
 
 /**
  * Permission grants expressed as documentation for project setup.
- * Sanity custom roles are configured in the Manage UI; keep this file as the
- * source of truth for what each role should be allowed to do.
  */
 export const roleMatrix = {
   [ROLE_ADMIN]: {
@@ -32,12 +38,22 @@ export const roleMatrix = {
     description: 'Create and edit content; publish reviewed documents',
     content: ['create', 'read', 'update', 'publish'] as const,
     /** Editors should not delete singletons or manage project settings */
-    deny: ['delete:siteSettings', 'delete:navigation', 'delete:footer', 'delete:homePage', 'manageMembers'],
+    deny: [
+      'delete:siteSettings',
+      'delete:navigation',
+      'delete:footer',
+      'delete:homePage',
+      'manageMembers',
+    ],
   },
 } as const
 
-/**
- * Initial value helper: new page/news docs start unreviewed.
- * (Already set via schema initialValue; kept here for query/docs reference.)
- */
 export const unpublishedUntilReviewedFilter = `reviewed == true`
+
+export const rolesSetupChecklist = [
+  'Create Administrator + Editor custom roles in Sanity Manage',
+  'Editors: grant create/update/publish on documents; deny delete on singletons',
+  'Administrators: full content + project member/API access',
+  'Confirm Publish is disabled in Studio until Reviewed is checked',
+  'Use Site status tool to confirm last rebuild after publish',
+] as const

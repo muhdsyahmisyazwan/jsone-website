@@ -1,8 +1,10 @@
 ---
+import PageHero from './ui/PageHero.astro'
 import type {Locale} from '../i18n/locales'
 import {localePath} from '../i18n/paths'
 import {t} from '../i18n/utils'
 import Icon from './icons/Icon.astro'
+import type {ServiceIconName} from './icons/names'
 
 interface Props {
   locale: Locale
@@ -10,46 +12,121 @@ interface Props {
 
 const {locale} = Astro.props
 
-const industries = [
-  'home.indOil',
-  'home.indGov',
-  'home.indFinance',
-  'home.indTelco',
-  'home.indHealthcare',
-  'home.indManufacturing',
-] as const
+const industries: {
+  title: string
+  challenge: string
+  help: string
+  solutions: string
+  outcome?: string
+  icon: ServiceIconName
+}[] = [
+  {
+    title: 'industries.oilTitle',
+    challenge: 'industries.oilChallenge',
+    help: 'industries.oilHelp',
+    solutions: 'industries.oilSolutions',
+    outcome: 'industries.oilOutcome',
+    icon: 'chart',
+  },
+  {
+    title: 'industries.govTitle',
+    challenge: 'industries.govChallenge',
+    help: 'industries.govHelp',
+    solutions: 'industries.govSolutions',
+    outcome: 'industries.govOutcome',
+    icon: 'shield',
+  },
+  {
+    title: 'industries.financeTitle',
+    challenge: 'industries.financeChallenge',
+    help: 'industries.financeHelp',
+    solutions: 'industries.financeSolutions',
+    icon: 'workflow',
+  },
+  {
+    title: 'industries.telcoTitle',
+    challenge: 'industries.telcoChallenge',
+    help: 'industries.telcoHelp',
+    solutions: 'industries.telcoSolutions',
+    icon: 'plug',
+  },
+  {
+    title: 'industries.healthTitle',
+    challenge: 'industries.healthChallenge',
+    help: 'industries.healthHelp',
+    solutions: 'industries.healthSolutions',
+    icon: 'users',
+  },
+  {
+    title: 'industries.mfgTitle',
+    challenge: 'industries.mfgChallenge',
+    help: 'industries.mfgHelp',
+    solutions: 'industries.mfgSolutions',
+    icon: 'layers',
+  },
+]
 ---
 
-<section class="relative overflow-hidden">
-  <div class="pointer-events-none absolute inset-0 surface-grid opacity-50" aria-hidden="true"></div>
-  <div class="container-site space-y-4 py-20 lg:py-24">
-    <p class="eyebrow">{t(locale, 'nav.industries')}</p>
-    <h1 class="display-xl max-w-3xl text-fg">{t(locale, 'industries.heroTitle')}</h1>
-    <p class="prose-measure text-base text-fg-muted sm:text-lg">
-      {t(locale, 'industries.heroSubtitle')}
-    </p>
-  </div>
-</section>
+<PageHero
+  eyebrow={t(locale, 'nav.industries')}
+  title={t(locale, 'industries.heroTitle')}
+  subtitle={t(locale, 'industries.heroSubtitle')}
+/>
 
 <section class="section-pad section-defer" data-reveal>
-  <div class="container-site space-y-8">
-    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
+  <div class="container-site space-y-10">
+    <div class="space-y-3">
+      <h2 class="display-md text-fg">{t(locale, 'industries.listHeading')}</h2>
+      <p class="prose-measure text-fg-muted">{t(locale, 'industries.listBody')}</p>
+    </div>
+    <ul class="grid gap-6 lg:grid-cols-2" data-reveal-stagger>
       {
-        industries.map((key) => (
-          <li
-            class="card flex items-center gap-4 p-5 sm:p-6"
-            data-reveal-child
-          >
-            <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-fg">
-              <Icon name="chart" class="size-5" />
-            </span>
-            <h2 class="text-lg font-semibold text-fg">{t(locale, key)}</h2>
+        industries.map((item) => (
+          <li class="card flex flex-col gap-4 p-5 sm:p-6" data-reveal-child>
+            <div class="flex items-center gap-4">
+              <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-fg">
+                <Icon name={item.icon} class="size-5" />
+              </span>
+              <h3 class="text-lg font-semibold text-fg">{t(locale, item.title)}</h3>
+            </div>
+            <div class="space-y-3 text-sm leading-relaxed">
+              <div>
+                <p class="font-semibold text-fg">{t(locale, 'industries.challengeLabel')}</p>
+                <p class="mt-1 text-fg-muted">{t(locale, item.challenge)}</p>
+              </div>
+              <div>
+                <p class="font-semibold text-fg">{t(locale, 'industries.helpLabel')}</p>
+                <p class="mt-1 text-fg-muted">{t(locale, item.help)}</p>
+              </div>
+              <div>
+                <p class="font-semibold text-fg">{t(locale, 'industries.solutionsLabel')}</p>
+                <p class="mt-1 font-mono text-xs text-fg-muted sm:text-sm">{t(locale, item.solutions)}</p>
+              </div>
+              {item.outcome && (
+                <div class="border-t border-border pt-3">
+                  <p class="font-semibold text-primary">{t(locale, 'industries.outcomeLabel')}</p>
+                  <p class="mt-1 text-fg-muted">{t(locale, item.outcome)}</p>
+                </div>
+              )}
+            </div>
           </li>
         ))
       }
     </ul>
-    <a href={localePath(locale, '/contact/')} class="btn btn-primary">
-      {t(locale, 'nav.getInTouch')}
-    </a>
+  </div>
+</section>
+
+<section class="section-pad section-defer border-t border-border" data-reveal>
+  <div class="container-site space-y-4">
+    <h2 class="display-md text-fg">{t(locale, 'industries.ctaHeading')}</h2>
+    <p class="prose-measure text-fg-muted">{t(locale, 'industries.ctaBody')}</p>
+    <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+      <a href={localePath(locale, '/contact/')} class="btn btn-primary">
+        {t(locale, 'nav.getInTouch')}
+      </a>
+      <a href={localePath(locale, '/solutions/')} class="btn btn-ghost">
+        {t(locale, 'home.ctaSecondary')}
+      </a>
+    </div>
   </div>
 </section>

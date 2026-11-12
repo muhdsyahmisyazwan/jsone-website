@@ -1,0 +1,28 @@
+---
+interface Props {
+  eyebrow?: string
+  title: string
+  body?: string
+  actionHref?: string
+  actionLabel?: string
+  /** Use h1 when this is the page's primary heading (e.g. 404). */
+  titleAs?: 'h1' | 'h2'
+}
+
+const {eyebrow, title, body, actionHref, actionLabel, titleAs = 'h2'} = Astro.props
+const TitleTag = titleAs
+---
+
+<div class="empty-state space-y-4">
+  {eyebrow && <p class="eyebrow justify-center">{eyebrow}</p>}
+  <TitleTag class="display-md text-fg">{title}</TitleTag>
+  {body && <p class="mx-auto max-w-prose text-fg-muted">{body}</p>}
+  {
+    actionHref && actionLabel && (
+      <a href={actionHref} class="btn btn-brand">
+        {actionLabel}
+      </a>
+    )
+  }
+  <slot />
+</div>

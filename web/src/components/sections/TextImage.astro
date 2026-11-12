@@ -1,5 +1,6 @@
 ---
 import type {Locale} from '../../i18n/locales'
+import {t} from '../../i18n/utils'
 import SanityImage from '../sanity/SanityImage.astro'
 import PortableText from '../sanity/PortableText.astro'
 import {resolveLocaleLink, resolveLink} from '../../lib/sanity/links'
@@ -69,7 +70,7 @@ const imageLeft = section.imagePosition === 'left'
           <h2 class="display-md text-fg">{heading}</h2>
           {body && (
             <div class="prose-measure space-y-3 text-fg-muted">
-              <PortableText value={body} />
+              <PortableText value={body} locale={locale} />
             </div>
           )}
           {cta && (
@@ -80,6 +81,9 @@ const imageLeft = section.imagePosition === 'left'
               rel={cta.openInNewTab ? 'noopener noreferrer' : undefined}
             >
               {cta.label}
+              {cta.openInNewTab && (
+                <span class="sr-only"> ({t(locale, 'common.opensNewTab')})</span>
+              )}
             </a>
           )}
         </div>
