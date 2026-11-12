@@ -43,7 +43,7 @@ const legalName = settings?.legalName || t(locale, 'site.legalName')
 const tagline =
   resolveLocaleString(settings?.tagline, locale) || t(locale, 'site.tagline')
 
-const defaultTitle = `${siteName} - ${tagline}`
+const defaultTitle = legalName || siteName
 const title = Astro.props.title ?? defaultTitle
 const description =
   Astro.props.description ??

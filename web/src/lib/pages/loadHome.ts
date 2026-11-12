@@ -24,10 +24,9 @@ export async function loadHome(locale: Locale): Promise<HomePageData> {
     getHomePage(),
   ])
 
-  const siteName =
-    resolveLocaleString(settings?.siteName, locale) || t(locale, 'site.name')
+  const legalName = settings?.legalName || t(locale, 'site.legalName')
   const hasCmsHome = Boolean(home?.sections?.length)
-  const fallbackTitle = t(locale, 'home.metaTitle') || `${siteName} - ${t(locale, 'home.title')}`
+  const fallbackTitle = t(locale, 'home.metaTitle') || legalName
   const fallbackDescription =
     t(locale, 'home.metaDescription') || t(locale, 'home.description')
   const title = hasCmsHome

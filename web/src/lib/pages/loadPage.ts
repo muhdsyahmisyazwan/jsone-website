@@ -9,7 +9,6 @@ import {
   getSiteChrome,
   reservedSlugs,
 } from '../sanity/api'
-import {resolveLocaleString} from '../sanity/locale'
 import type {Footer, Navigation, NewsDoc, PageDoc, SiteSettings} from '../sanity/types'
 
 export async function loadChrome() {
@@ -24,9 +23,7 @@ export async function loadContentPage(locale: Locale, slug: string) {
 
   if (!page) return null
 
-  const title =
-    page.seo?.metaTitle ||
-    `${page.title} - ${resolveLocaleString(settings?.siteName, locale) || t(locale, 'site.name')}`
+  const title = page.seo?.metaTitle || page.title
   const description = page.seo?.metaDescription || page.title || ''
 
   return {settings, navigation, footer, page, title, description}
@@ -46,12 +43,10 @@ export async function loadCmsOrFallbackRoute(
     getPageBySlug(locale, slug),
   ])
 
-  const siteName =
-    resolveLocaleString(settings?.siteName, locale) || t(locale, 'site.name')
   const hasSections = Boolean(page?.sections?.length)
   const title = hasSections
-    ? page!.seo?.metaTitle || `${page!.title} - ${siteName}`
-    : `${t(locale, fallbackMeta.titleKey)} - ${siteName}`
+    ? page!.seo?.metaTitle || page!.title
+    : t(locale, fallbackMeta.titleKey)
   const description = hasSections
     ? page!.seo?.metaDescription || page!.title || ''
     : t(locale, fallbackMeta.descriptionKey)
@@ -80,14 +75,12 @@ export async function loadNewsIndex(locale: Locale) {
     getSiteChrome(),
     getNewsList(locale),
   ])
-  const siteName =
-    resolveLocaleString(settings?.siteName, locale) || t(locale, 'site.name')
   return {
     settings,
     navigation,
     footer,
     articles,
-    title: t(locale, 'news.metaTitle') || `${t(locale, 'nav.news')} - ${siteName}`,
+    title: t(locale, 'news.metaTitle') || t(locale, 'nav.news'),
     description: t(locale, 'news.metaDescription') || t(locale, 'home.description'),
   }
 }
@@ -98,14 +91,12 @@ export async function loadNewsArticle(locale: Locale, slug: string) {
     getNewsBySlug(locale, slug),
   ])
   if (!article) return null
-  const siteName =
-    resolveLocaleString(settings?.siteName, locale) || t(locale, 'site.name')
   return {
     settings,
     navigation,
     footer,
     article,
-    title: article.seo?.metaTitle || `${article.title} - ${siteName}`,
+    title: article.seo?.metaTitle || article.title,
     description: article.seo?.metaDescription || article.excerpt || '',
   }
 }

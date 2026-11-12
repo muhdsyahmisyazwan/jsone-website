@@ -5,7 +5,7 @@ import {t} from '../../i18n/utils'
 
 const locale = 'en'
 const {settings, navigation, footer} = await loadChrome()
-const title = `${t(locale, 'legal.termsTitle')} - ${t(locale, 'site.name')}`
+const title = t(locale, 'legal.termsTitle')
 const description = t(locale, 'legal.termsMeta')
 
 const sections = [
