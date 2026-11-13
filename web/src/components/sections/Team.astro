@@ -1,7 +1,7 @@
 ---
 import type {Locale} from '../../i18n/locales'
 import SanityImage from '../sanity/SanityImage.astro'
-import {resolveLocaleString} from '../../lib/sanity/locale'
+import {resolveMaybeLocaleString} from '../../lib/sanity/locale'
 import type {LocaleString, LocaleText, SanityImage as Img} from '../../lib/sanity/types'
 
 interface Props {
@@ -23,14 +23,18 @@ interface Props {
 }
 
 const {locale, section} = Astro.props
-const str = (v: string | LocaleString | undefined) =>
-  typeof v === 'string' ? v : resolveLocaleString(v, locale)
-
-const heading = str(section.heading)
-const intro = str(section.intro)
-const groups = (section.groups || []).map((g) => ({
-  title: str(g.title),
-  members: (g.members || []).filter((m) => m.name),
+const heading = resolveMaybeLocaleString(section.heading, locale)
+const intro = resolveMaybeLocaleString(section.intro, locale)
+const groups = (section.groups || []).map((group) => ({
+  title: resolveMaybeLocaleString(group.title, locale),
+  members: (group.members || [])
+    .filter((member) => member.name)
+    .map((member) => ({
+      name: member.name,
+      photo: member.photo,
+      role: resolveMaybeLocaleString(member.role, locale),
+      bio: resolveMaybeLocaleString(member.bio, locale),
+    })),
 }))
 ---
 
@@ -63,9 +67,9 @@ const groups = (section.groups || []).map((g) => ({
                   )}
                   <div class="min-w-0">
                     <p class="font-semibold text-fg">{member.name}</p>
-                    {str(member.role) && <p class="text-sm text-fg-muted">{str(member.role)}</p>}
-                    {str(member.bio) && (
-                      <p class="mt-2 text-sm leading-relaxed text-fg-subtle">{str(member.bio)}</p>
+                    {member.role && <p class="text-sm text-fg-muted">{member.role}</p>}
+                    {member.bio && (
+                      <p class="mt-2 text-sm leading-relaxed text-fg-subtle">{member.bio}</p>
                     )}
                   </div>
                 </li>

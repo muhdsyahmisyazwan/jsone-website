@@ -71,11 +71,11 @@ const large = t(locale, 'fontSize.large')
   function syncFontToggles() {
     const current = document.documentElement.getAttribute('data-font-scale') || 'md'
     document.querySelectorAll('[data-font-size-toggle]').forEach((group) => {
-      group.querySelectorAll('[data-font-size]').forEach((btn) => {
-        if (!(btn instanceof HTMLElement)) return
-        const value = btn.getAttribute('data-font-size') || 'md'
-        btn.dataset.active = String(value === current)
-        btn.setAttribute('aria-pressed', String(value === current))
+      group.querySelectorAll('[data-font-size]').forEach((button) => {
+        if (!(button instanceof HTMLElement)) return
+        const value = button.getAttribute('data-font-size') || 'md'
+        button.dataset.active = String(value === current)
+        button.setAttribute('aria-pressed', String(value === current))
       })
     })
   }
@@ -84,9 +84,9 @@ const large = t(locale, 'fontSize.large')
     document.querySelectorAll('[data-font-size-toggle]').forEach((group) => {
       if (!(group instanceof HTMLElement) || group.dataset.bound === 'true') return
       group.dataset.bound = 'true'
-      group.querySelectorAll('[data-font-size]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const value = btn.getAttribute('data-font-size') || 'md'
+      group.querySelectorAll('[data-font-size]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const value = button.getAttribute('data-font-size') || 'md'
           applyFontScale(value)
           syncFontToggles()
         })

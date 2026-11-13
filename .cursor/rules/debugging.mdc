@@ -1,0 +1,44 @@
+---
+alwaysApply: false
+---
+# Debugging
+
+Do not guess-and-patch.
+
+## Process
+
+1. Reproduce or inspect the failure.
+2. Identify the exact failing boundary.
+3. Trace inputs and outputs.
+4. Find the first incorrect state.
+5. Determine the root cause.
+6. Make the smallest correct fix.
+7. Add or update a regression test when appropriate.
+8. Re-run the relevant verification.
+
+## Do not
+
+- randomly change multiple things at once
+- add speculative retries
+- add arbitrary sleeps
+- suppress errors
+- catch exceptions just to hide failures
+- change configuration without understanding why
+- rewrite working code without evidence
+- blame dependencies without checking the actual failure
+
+## Logs
+
+Use existing logging infrastructure.
+
+Add temporary diagnostics only when needed.
+
+Remove temporary debugging output before finishing.
+
+## If reproduction is impossible
+
+Say what is known.
+
+State the most likely cause separately from confirmed facts.
+
+Do not pretend the issue was verified when it wasn't.

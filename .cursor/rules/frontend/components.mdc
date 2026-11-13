@@ -1,0 +1,77 @@
+---
+description: Production-quality frontend component architecture
+globs: "**/*.{astro,tsx,jsx,vue,svelte}"
+alwaysApply: false
+---
+
+# Component Architecture
+
+Components should have clear responsibilities.
+
+## Before creating
+
+Search for:
+
+- similar components
+- existing primitives
+- existing patterns
+- existing variants
+
+Reuse before creating.
+
+## Component boundaries
+
+Create a component when it provides:
+
+- meaningful reuse
+- clear semantic identity
+- manageable complexity
+- independent behavior
+
+Do not create components for every HTML element.
+
+## Props
+
+Prefer explicit, meaningful props.
+
+Avoid prop APIs that encode implementation details.
+
+Bad:
+
+`isSmallRoundedBlue`
+
+Better:
+
+`variant="secondary"`
+
+## Composition
+
+Prefer composition over giant components.
+
+Avoid components that contain unrelated:
+
+- data fetching
+- business logic
+- layout logic
+- state management
+- presentation
+
+unless the existing architecture intentionally does so.
+
+## State
+
+Keep state as local as possible.
+
+Do not introduce global state when local state is sufficient.
+
+## Controlled vs uncontrolled
+
+Follow existing project conventions.
+
+Choose based on actual usage rather than preference.
+
+## Accessibility
+
+Components must preserve semantic HTML and keyboard interaction.
+
+Do not make a `<div>` behave like a button when a `<button>` is appropriate.

@@ -1,0 +1,103 @@
+---
+description: High-end visual design and art direction for frontend interfaces
+globs: "**/*.{astro,tsx,jsx,vue,svelte,css,scss,html}"
+alwaysApply: false
+---
+
+# Design Director
+
+Design interfaces intentionally.
+
+Do not begin by writing JSX.
+
+First establish:
+
+- purpose
+- hierarchy
+- primary action
+- secondary actions
+- information density
+- content structure
+- visual hierarchy
+- responsive behavior
+- interaction states
+
+## Visual hierarchy
+
+Every screen should have a clear:
+
+1. Primary focus
+2. Secondary focus
+3. Supporting information
+4. Actions
+
+Do not make everything visually important.
+
+## Composition
+
+Use:
+
+- alignment
+- whitespace
+- scale
+- contrast
+- typography
+- repetition
+- rhythm
+- grouping
+
+to create hierarchy.
+
+Avoid decorative elements that do not improve comprehension.
+
+## Distinctiveness
+
+Do not default to generic SaaS design.
+
+The interface should have an intentional visual identity.
+
+Before choosing styling, inspect the product's:
+
+- brand
+- existing UI
+- typography
+- color system
+- imagery
+- tone
+- component language
+
+Consistency with the product beats personal preference.
+
+## Content
+
+Design around realistic content.
+
+Do not use:
+
+- repetitive placeholder cards
+- fake metrics everywhere
+- meaningless lorem ipsum
+- unrealistic one-line labels
+
+Consider:
+
+- long titles
+- short titles
+- missing images
+- long names
+- errors
+- empty states
+- localization
+- user-generated content
+
+## Hierarchy over decoration
+
+If forced to choose between:
+
+beautiful decoration
+
+and
+
+clear hierarchy
+
+choose hierarchy.

@@ -1,0 +1,63 @@
+---
+description: Keep Git changes focused and safe
+alwaysApply: true
+---
+
+# Git Discipline
+
+Treat the existing working tree as user-owned state.
+
+Before modifying files:
+
+- inspect relevant Git status/diff when useful
+- do not overwrite user changes
+- do not discard unrelated work
+
+## Scope
+
+Only change files necessary for the task.
+
+Do not:
+
+- format the entire repository
+- update unrelated dependencies
+- reorganize unrelated code
+- rename unrelated files
+- clean unrelated technical debt
+
+## Before finishing
+
+Review the diff.
+
+Look for:
+
+- accidental edits
+- debug statements
+- generated files
+- secrets
+- unrelated formatting
+- temporary code
+- unnecessary dependencies
+
+## Git commands
+
+Do not run destructive commands such as:
+
+- `git reset --hard`
+- `git clean -fd`
+- force pushes
+- mass file deletion
+
+unless the user explicitly requests the specific destructive operation.
+
+Never discard user work merely to get a clean working tree.
+
+## Commits
+
+Do not create a commit unless requested.
+
+If asked to commit:
+
+- inspect the diff first
+- include only relevant changes
+- use a concise commit message

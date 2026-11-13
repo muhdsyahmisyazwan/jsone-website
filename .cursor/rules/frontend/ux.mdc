@@ -1,0 +1,92 @@
+---
+description: Product UX and interaction-flow standards
+globs: "**/*.{astro,tsx,jsx,vue,svelte,html}"
+alwaysApply: false
+---
+
+# UX
+
+Design for user intent, not implementation structure.
+
+## Before implementing a flow
+
+Identify:
+
+- user goal
+- primary action
+- required information
+- optional information
+- possible failure
+- completion state
+- recovery path
+
+## Information architecture
+
+Group related information.
+
+Order content by user importance, not database structure.
+
+## Progressive disclosure
+
+Do not show every option immediately.
+
+Expose complexity when the user needs it.
+
+## Defaults
+
+Use sensible defaults when safe.
+
+Do not make users repeatedly provide information the product already knows.
+
+## Destructive actions
+
+Make destructive actions clear.
+
+Use confirmation when the action is:
+
+- irreversible
+- high impact
+- difficult to recover
+
+Do not add confirmation dialogs to every action.
+
+## Navigation
+
+Users should understand:
+
+- where they are
+- where they can go
+- what changed
+- how to return
+
+## Feedback
+
+Every meaningful action needs an understandable result.
+
+## Errors
+
+Errors should explain:
+
+1. What happened
+2. Why it happened when useful
+3. What the user can do next
+
+Avoid generic:
+
+"Something went wrong."
+
+when a useful explanation is available.
+
+## Empty states
+
+Empty states should tell the user:
+
+- what is empty
+- why it matters
+- what to do next
+
+Do not use empty states merely as placeholders.
+
+## Destructive UX
+
+Do not optimize for fewer clicks at the expense of preventing expensive mistakes.

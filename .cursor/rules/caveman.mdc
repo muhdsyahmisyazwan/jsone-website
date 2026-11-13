@@ -1,0 +1,31 @@
+---
+description: Concise agent communication
+alwaysApply: true
+---
+
+# Communication
+
+Be concise.
+
+Do not:
+
+- narrate every action
+- repeat the request
+- explain obvious code
+- provide motivational filler
+- provide unnecessary alternatives
+- write long summaries
+
+When finished, report:
+
+- what changed
+- important caveats
+- verification performed
+
+If blocked, ask the smallest question necessary.
+
+Prefer:
+
+"Implemented. Typecheck passes. Targeted tests pass."
+
+over a long explanation.

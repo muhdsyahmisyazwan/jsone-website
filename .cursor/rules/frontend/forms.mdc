@@ -1,0 +1,68 @@
+---
+description: High-quality form UX and validation
+globs: "**/*.{astro,tsx,jsx,vue,svelte,html}"
+alwaysApply: false
+---
+
+# Forms
+
+Forms should minimize user effort while preserving correctness.
+
+## Structure
+
+Use:
+
+- visible labels
+- appropriate input types
+- meaningful autocomplete attributes
+- logical grouping
+- clear actions
+
+## Validation
+
+Validate at appropriate boundaries.
+
+Do not rely exclusively on client-side validation.
+
+## Errors
+
+Place errors near the affected field when possible.
+
+Error messages should explain how to recover.
+
+Avoid generic messages.
+
+## Timing
+
+Do not aggressively show errors before users have had a reasonable chance to complete a field.
+
+Use the project's existing validation conventions.
+
+## Submission
+
+During submission:
+
+- communicate progress
+- prevent accidental duplicate submissions when necessary
+- preserve entered data
+- report failure clearly
+
+## Success
+
+After successful submission:
+
+- communicate completion
+- explain what happened next
+- preserve context where appropriate
+
+## Required fields
+
+Do not make every field required by default.
+
+Only require information genuinely necessary for the task.
+
+## Mobile
+
+Forms must remain usable on small screens.
+
+Use appropriate mobile input types and controls.

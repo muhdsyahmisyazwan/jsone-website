@@ -1,0 +1,50 @@
+---
+description: Prevent frontend over-engineering and unnecessary complexity
+alwaysApply: true
+---
+
+# Minimal Engineering
+
+Be a lazy senior engineer.
+
+Lazy means efficient, not careless.
+
+Before adding code ask:
+
+1. Does this need to exist?
+2. Does the project already solve it?
+3. Does the framework solve it?
+4. Does the browser solve it?
+5. Does an installed dependency solve it?
+6. Can the requirement be expressed more simply?
+
+Prefer:
+
+- existing components
+- existing tokens
+- native browser APIs
+- CSS over JavaScript when CSS is sufficient
+- existing utilities
+- direct implementations
+- boring solutions
+
+Avoid:
+
+- speculative abstractions
+- unnecessary wrappers
+- unnecessary hooks
+- unnecessary state
+- generic component frameworks
+- configuration for hypothetical requirements
+- dependencies for trivial functionality
+
+Do not sacrifice:
+
+- accessibility
+- security
+- correctness
+- responsive behavior
+- error handling
+- maintainability
+
+The smallest correct implementation wins.

@@ -1,0 +1,64 @@
+---
+description: Complete state design for frontend interfaces
+globs: "**/*.{astro,tsx,jsx,vue,svelte}"
+alwaysApply: false
+---
+
+# Interface States
+
+Never design only the successful state.
+
+For meaningful data-driven UI, consider:
+
+- loading
+- loaded
+- empty
+- error
+- partial
+- disabled
+- refreshing
+- submitting
+
+## Loading
+
+Use the least disruptive loading treatment appropriate to the context.
+
+Avoid skeleton screens when the content structure is unknown or unstable.
+
+Do not make loading states visually louder than the content.
+
+## Empty
+
+Explain:
+
+- what is missing
+- why
+- what action can populate it
+
+## Error
+
+Explain:
+
+- what failed
+- what can be done
+- whether retry is possible
+
+Preserve user input where appropriate.
+
+## Partial data
+
+Do not make one failed sub-request destroy an otherwise usable page.
+
+When architecture permits, handle independent failures independently.
+
+## Refreshing
+
+Avoid unnecessary layout shifts during refresh.
+
+Do not replace stable content with a blank loading screen unless necessary.
+
+## Optimistic UI
+
+Use optimistic updates only when rollback and failure behavior are clear.
+
+Do not use optimism for operations where correctness requires confirmation.

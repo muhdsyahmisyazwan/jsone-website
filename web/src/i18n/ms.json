@@ -376,7 +376,8 @@
     "play": "Main",
     "pauseMarquee": "Jeda skrol logo",
     "playMarquee": "Mainkan skrol logo",
-    "swipeHint": "Leret untuk lagi"
+    "swipeHint": "Leret untuk lagi",
+    "testimonials": "Testimoni"
   },
   "notFound": {
     "title": "Halaman tidak dijumpai",
@@ -387,6 +388,7 @@
     "email": "Alamat e-mel",
     "phone": "Nombor telefon",
     "company": "Syarikat",
+    "honeypotLabel": "URL syarikat",
     "message": "Mesej",
     "consent": "Saya bersetuju untuk dihubungi mengenai pertanyaan saya.",
     "success": "Terima kasih. Kami akan menghubungi anda tidak lama lagi.",

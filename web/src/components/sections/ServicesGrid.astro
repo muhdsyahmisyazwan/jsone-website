@@ -4,7 +4,7 @@ import {t} from '../../i18n/utils'
 import Icon from '../icons/Icon.astro'
 import {serviceIconName} from '../icons/names'
 import {resolveLocaleLink, resolveLink} from '../../lib/sanity/links'
-import {resolveLocaleString} from '../../lib/sanity/locale'
+import {resolveMaybeLocaleString} from '../../lib/sanity/locale'
 import type {Link, LocaleLink, LocaleString, LocaleText} from '../../lib/sanity/types'
 
 interface Props {
@@ -22,15 +22,12 @@ interface Props {
 }
 
 const {locale, localized = false, section} = Astro.props
-const str = (v: string | LocaleString | undefined) =>
-  typeof v === 'string' ? v : resolveLocaleString(v, locale)
-
-const heading = str(section.heading)
-const intro = str(section.intro)
+const heading = resolveMaybeLocaleString(section.heading, locale)
+const intro = resolveMaybeLocaleString(section.intro, locale)
 const items = (section.items || [])
   .map((item) => ({
-    title: str(item.title),
-    description: str(item.description),
+    title: resolveMaybeLocaleString(item.title, locale),
+    description: resolveMaybeLocaleString(item.description, locale),
     link: localized
       ? resolveLocaleLink(item.link as LocaleLink, locale)
       : resolveLink(item.link as Link, locale),

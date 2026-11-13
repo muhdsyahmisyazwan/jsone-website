@@ -390,7 +390,8 @@
     "play": "Play",
     "pauseMarquee": "Pause scrolling logos",
     "playMarquee": "Play scrolling logos",
-    "swipeHint": "Swipe for more"
+    "swipeHint": "Swipe for more",
+    "testimonials": "Testimonials"
   },
   "notFound": {
     "title": "Page not found",
@@ -401,6 +402,7 @@
     "email": "Email address",
     "phone": "Phone number",
     "company": "Company",
+    "honeypotLabel": "Company URL",
     "message": "Message",
     "consent": "I agree to be contacted about my enquiry.",
     "success": "Thank you. We will get back to you soon.",

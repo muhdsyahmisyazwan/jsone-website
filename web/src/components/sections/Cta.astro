@@ -2,7 +2,7 @@
 import type {Locale} from '../../i18n/locales'
 import {t} from '../../i18n/utils'
 import {resolveLocaleLink, resolveLink} from '../../lib/sanity/links'
-import {resolveLocaleString} from '../../lib/sanity/locale'
+import {resolveMaybeLocaleString} from '../../lib/sanity/locale'
 import type {Link, LocaleLink, LocaleString, LocaleText} from '../../lib/sanity/types'
 
 interface Props {
@@ -17,11 +17,8 @@ interface Props {
 }
 
 const {locale, localized = false, section} = Astro.props
-const str = (v: string | LocaleString | undefined) =>
-  typeof v === 'string' ? v : resolveLocaleString(v, locale)
-
-const heading = str(section.heading)
-const body = str(section.body)
+const heading = resolveMaybeLocaleString(section.heading, locale)
+const body = resolveMaybeLocaleString(section.body, locale)
 const primary = localized
   ? resolveLocaleLink(section.primaryCta as LocaleLink, locale)
   : resolveLink(section.primaryCta as Link, locale)

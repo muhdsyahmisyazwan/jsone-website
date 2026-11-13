@@ -1,0 +1,73 @@
+---
+description: Color system and visual hierarchy
+globs: "**/*.{astro,tsx,jsx,vue,svelte,css,scss,html}"
+alwaysApply: false
+---
+
+# Color
+
+Use color intentionally.
+
+## Roles
+
+Color should communicate:
+
+- hierarchy
+- interaction
+- status
+- emphasis
+- brand
+- meaning
+
+## Palette
+
+Prefer a restrained palette.
+
+Do not introduce a new color when an existing semantic token works.
+
+## Semantic states
+
+Use consistent semantics for:
+
+- success
+- warning
+- error
+- information
+- disabled
+- selected
+- active
+
+## Contrast
+
+Do not rely on color alone to communicate state.
+
+Pair color with:
+
+- text
+- iconography
+- shape
+- position
+- state
+
+when necessary.
+
+## Dark mode
+
+When dark mode exists, design it intentionally.
+
+Do not simply invert colors.
+
+Consider:
+
+- surface hierarchy
+- text contrast
+- borders
+- shadows
+- imagery
+- semantic colors
+
+## Gradients
+
+Gradients require a purpose.
+
+Do not use them as default decoration.

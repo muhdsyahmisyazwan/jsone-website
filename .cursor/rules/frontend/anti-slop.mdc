@@ -1,0 +1,84 @@
+---
+description: Prevent generic AI-generated frontend aesthetics
+globs: "**/*.{astro,tsx,jsx,vue,svelte,css,scss,html}"
+alwaysApply: false
+---
+
+# Anti-Slop UI
+
+Do not produce generic AI-generated interfaces.
+
+Avoid defaulting to:
+
+- purple/blue gradients
+- excessive rounded cards
+- excessive glassmorphism
+- huge hero sections
+- excessive shadows
+- floating blobs
+- decorative gradient text
+- three-column card grids everywhere
+- every section inside a card
+- excessive badges
+- meaningless icons
+- oversized headings
+- excessive pill-shaped controls
+- generic dashboard layouts
+- arbitrary animated backgrounds
+- unnecessary illustrations
+- "AI-looking" visual language
+
+Do not add decoration merely because the page feels empty.
+
+Instead improve:
+
+- typography
+- spacing
+- composition
+- hierarchy
+- content
+- alignment
+- contrast
+- information architecture
+
+## Cards
+
+Cards are not the default container for every piece of content.
+
+Use cards when they create a meaningful grouping or interaction boundary.
+
+Do not cardify everything.
+
+## Color
+
+Do not introduce a large palette.
+
+Prefer a restrained system with deliberate accents.
+
+## Radius
+
+Do not use large border radii everywhere.
+
+Use radius according to component semantics.
+
+## Shadows
+
+Use shadows sparingly.
+
+Elevation should communicate hierarchy, not decoration.
+
+## Motion
+
+Do not animate everything.
+
+Motion must communicate:
+
+- state
+- causality
+- hierarchy
+- continuity
+- feedback
+
+## Rule
+
+If a visual element could be removed without reducing comprehension, interaction, or brand expression, question whether it belongs.

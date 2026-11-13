@@ -1,0 +1,97 @@
+---
+description: Visual quality assurance for frontend implementation
+globs: "**/*.{astro,tsx,jsx,vue,svelte,css,scss,html}"
+alwaysApply: false
+---
+
+# Visual QA
+
+Do not consider a frontend task complete merely because the code compiles.
+
+Inspect the rendered result when tooling allows it.
+
+## Check
+
+### Layout
+- alignment
+- spacing
+- container widths
+- grid behavior
+- vertical rhythm
+- overflow
+- stacking
+
+### Typography
+- font family
+- weight
+- size
+- line height
+- wrapping
+- truncation
+
+### Components
+- sizing
+- radius
+- borders
+- shadows
+- icon alignment
+- button dimensions
+
+### States
+- hover
+- focus
+- active
+- disabled
+- loading
+- error
+- empty
+
+### Responsive
+Check narrow and wide layouts.
+
+Look specifically for:
+
+- overflow
+- clipped content
+- broken grids
+- oversized headings
+- inaccessible controls
+- awkward wrapping
+- navigation failures
+
+### Visual hierarchy
+
+Ask:
+
+- Is the primary action obvious?
+- Is anything competing unnecessarily?
+- Is there enough hierarchy?
+- Is the page too dense?
+- Is the page too empty?
+
+## Visual consistency
+
+Compare new UI against existing screens.
+
+Check for:
+
+- inconsistent spacing
+- inconsistent typography
+- inconsistent controls
+- inconsistent colors
+- inconsistent radius
+- inconsistent interaction behavior
+
+## Final pass
+
+Remove:
+
+- debug UI
+- temporary styles
+- placeholder content
+- accidental borders
+- accidental shadows
+- unnecessary animations
+- unused styles
+
+A technically correct UI can still fail visual QA.

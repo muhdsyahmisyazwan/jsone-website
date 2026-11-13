@@ -1,0 +1,99 @@
+---
+description: Accessibility and inclusive frontend implementation
+globs: "**/*.{astro,tsx,jsx,vue,svelte,css,scss,html}"
+alwaysApply: false
+---
+
+# Accessibility
+
+Accessibility is a functional requirement.
+
+## Semantic HTML
+
+Prefer native elements:
+
+- button
+- a
+- nav
+- main
+- header
+- footer
+- form
+- label
+- input
+- select
+- textarea
+
+Do not recreate native semantics unnecessarily.
+
+## Keyboard
+
+All interactive functionality must be usable with keyboard input.
+
+Ensure:
+
+- logical tab order
+- visible focus
+- keyboard activation
+- no keyboard traps
+
+## Focus
+
+Do not remove focus indicators without providing a better equivalent.
+
+After dialogs/navigation/state changes, manage focus intentionally when necessary.
+
+## Labels
+
+Inputs need meaningful accessible labels.
+
+Do not rely on placeholder text as the only label.
+
+## Images
+
+Provide useful alternative text when an image conveys information.
+
+Decorative images should not create unnecessary screen-reader noise.
+
+## Color
+
+Do not communicate information through color alone.
+
+## Motion
+
+Respect reduced-motion preferences.
+
+## ARIA
+
+Use ARIA when native HTML cannot express the required semantics.
+
+Do not add ARIA unnecessarily.
+
+Prefer correct HTML over excessive ARIA.
+
+## Interactive elements
+
+Do not use:
+
+`<div onClick>`
+
+when a native button or link is appropriate.
+
+## Dialogs
+
+Dialogs must have:
+
+- accessible name
+- appropriate focus management
+- keyboard dismissal where appropriate
+- sensible focus return
+
+## Testing
+
+When appropriate, verify:
+
+- keyboard navigation
+- focus states
+- semantic structure
+- screen-reader labeling
+- contrast

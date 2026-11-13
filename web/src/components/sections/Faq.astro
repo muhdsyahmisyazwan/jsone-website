@@ -2,7 +2,7 @@
 import type {Locale} from '../../i18n/locales'
 import Icon from '../icons/Icon.astro'
 import PortableText from '../sanity/PortableText.astro'
-import {resolveLocaleString} from '../../lib/sanity/locale'
+import {resolveMaybeLocaleString} from '../../lib/sanity/locale'
 import type {LocaleString, LocaleText, PortableTextBlock} from '../../lib/sanity/types'
 
 interface Props {
@@ -19,9 +19,6 @@ interface Props {
 }
 
 const {locale, section} = Astro.props
-const str = (v: string | LocaleString | undefined) =>
-  typeof v === 'string' ? v : resolveLocaleString(v, locale)
-
 function resolveAnswer(
   answer:
     | PortableTextBlock[]
@@ -39,11 +36,11 @@ function resolveAnswer(
   return pick(locale) ?? pick('en')
 }
 
-const heading = str(section.heading)
-const intro = str(section.intro)
+const heading = resolveMaybeLocaleString(section.heading, locale)
+const intro = resolveMaybeLocaleString(section.intro, locale)
 const items = (section.items || [])
   .map((item) => ({
-    question: str(item.question),
+    question: resolveMaybeLocaleString(item.question, locale),
     answer: resolveAnswer(item.answer),
   }))
   .filter((i) => i.question)

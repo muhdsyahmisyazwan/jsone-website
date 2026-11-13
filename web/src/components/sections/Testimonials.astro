@@ -3,7 +3,7 @@ import type {Locale} from '../../i18n/locales'
 import {t} from '../../i18n/utils'
 import Icon from '../icons/Icon.astro'
 import SanityImage from '../sanity/SanityImage.astro'
-import {resolveLocaleString} from '../../lib/sanity/locale'
+import {resolveMaybeLocaleString} from '../../lib/sanity/locale'
 import type {LocaleString, LocaleText, SanityImage as Img} from '../../lib/sanity/types'
 
 interface Props {
@@ -21,15 +21,12 @@ interface Props {
 }
 
 const {locale, section} = Astro.props
-const str = (v: string | LocaleString | undefined) =>
-  typeof v === 'string' ? v : resolveLocaleString(v, locale)
-
-const heading = str(section.heading)
+const heading = resolveMaybeLocaleString(section.heading, locale)
 const items = (section.items || [])
   .map((item) => ({
-    quote: str(item.quote),
+    quote: resolveMaybeLocaleString(item.quote, locale),
     author: item.author,
-    role: str(item.role),
+    role: resolveMaybeLocaleString(item.role, locale),
     avatar: item.avatar,
   }))
   .filter((i) => i.quote)
@@ -72,7 +69,7 @@ const swipeHint = t(locale, 'common.swipeHint')
           role="list"
           data-testimonial-scroller
           tabindex="0"
-          aria-label={heading || 'Testimonials'}
+          aria-label={heading || t(locale, 'common.testimonials')}
         >
           {items.map((item, index) => (
             <article

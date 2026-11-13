@@ -1,0 +1,106 @@
+---
+description: Product-specific visual identity
+globs: "**/*.{astro,tsx,jsx,vue,svelte,css,scss}"
+alwaysApply: false
+---
+
+# Product Visual Identity
+
+## Personality
+
+- precise
+- professional
+- calm
+- structured
+- trustworthy
+- engineering-minded (OpenText ECM / SAP specialist, not generic SaaS)
+
+## Typography
+
+Primary:
+`--font-sans` (Plus Jakarta Sans Variable) with CJK-safe system fallbacks
+
+Display:
+`--font-display` (same family as sans)
+
+Secondary:
+`--font-mono` (system mono) - codes, registration numbers, technical labels
+
+Do not load full CJK web fonts. Use the existing typography tokens and font-scale toggle.
+
+## Color
+
+Background:
+`--bg` / `--color-bg`
+
+Elevated surface:
+`--bg-elevated` / `--color-bg-elevated`
+
+Muted surface:
+`--bg-muted` / `--color-bg-muted`
+
+Foreground:
+`--fg` / `--color-fg`
+
+Muted / subtle text:
+`--fg-muted` / `--fg-subtle`
+
+Border:
+`--border` / `--border-strong`
+
+Primary:
+`--primary` / `--color-primary` (brand cyan family; AA-safe for white text)
+
+Accent:
+`--accent` / `--color-accent` (lime `#C0C820` family)
+
+Focus ring:
+`--ring`
+
+Navy invert chrome:
+`--bg-invert` (deep navy `#000C28` / `#001F5C` family)
+
+Do not introduce colors outside the design system without justification.
+Prefer semantic tokens over raw logo hex (`#00B8E0`, `#C0C820`, `#001F5C`) in components.
+
+## Shape
+
+Default radius:
+`--radius-md` (0.75rem)
+
+Use larger radius only for:
+- cards / panels / media frames (`--radius-lg` / `--radius-xl`)
+- smaller controls / chips (`--radius-sm`)
+
+## Density
+
+Target density:
+comfortable marketing site (room for Malay ~20-30% longer copy when Phase 7 ships)
+
+No fixed-width buttons or tight headings.
+
+## Motion
+
+Motion personality:
+subtle, intentional presence
+
+Prefer:
+`--duration-fast` / `--duration-base`, `--ease-out`, fade/opacity and light elevation
+
+Avoid:
+bouncy springs, long decorative loops, motion that delays reading or form completion
+
+## Visual references
+
+The site should feel closer to:
+
+- precision B2B / enterprise IT services
+- calm corporate engineering brand
+- clear content hierarchy over dashboard chrome
+
+Avoid feeling like:
+
+- generic SaaS dashboard
+- template marketplace UI
+- AI-generated landing page
+- purple-on-white, cream+terracotta+serif, or broadsheet newspaper layouts

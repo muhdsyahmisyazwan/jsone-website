@@ -1,0 +1,139 @@
+---
+description: Typography, type hierarchy, and UI copy standards
+globs: "**/*.{astro,tsx,jsx,vue,svelte,css,scss,html}"
+alwaysApply: false
+---
+
+# Typography
+
+Typography is a primary part of the interface.
+
+Do not treat it as decoration.
+
+## Hierarchy
+
+Establish clear levels for:
+
+- display
+- heading
+- subheading
+- body
+- metadata
+- labels
+- captions
+
+Do not create arbitrary font sizes for every element.
+
+Use the coherent type scale in `web/src/styles/global.css` (`text-xs` through `text-9xl` via `--font-scale`).
+
+## Font choices
+
+Respect the existing brand/system fonts (Plus Jakarta Sans Variable + CJK-safe fallbacks).
+
+Do not introduce a new font without a reason.
+Do not load full CJK web fonts.
+
+## Weight
+
+Use weight intentionally.
+
+Do not make everything bold.
+
+## Line height
+
+Body text should prioritize comfortable reading.
+
+Headings may use tighter line height when appropriate.
+
+## Measure
+
+Avoid extremely wide text blocks.
+
+Long-form content should use a readable line length.
+
+## Contrast
+
+Text hierarchy should come from a combination of:
+
+- size
+- weight
+- spacing
+- color
+- position
+
+not simply making everything larger.
+
+## Numbers
+
+For metrics, prices, dates, and tabular values:
+
+- align numbers appropriately
+- preserve readable precision
+- avoid unnecessary decimals
+- use consistent formatting
+
+## UI Copy
+
+Typography includes the words displayed to users, not just visual styling.
+
+Prefer clear, complete, and human-readable wording.
+
+Avoid shortened words, truncated labels, or informal abbreviations when space is not genuinely limited.
+
+Prefer:
+
+- "Settings" instead of "Prefs"
+- "Notifications" instead of "Notifs"
+- "Information" instead of "Info"
+- "Configuration" instead of "Config"
+- "Application" instead of "App" (unless the product officially uses "App")
+- "Telephone Number" or "Phone Number" instead of "Phone No."
+- "Quantity" instead of "Qty"
+- "Maximum" instead of "Max"
+- "Minimum" instead of "Min"
+
+Use complete sentences for helper text, descriptions, validation messages, and empty states.
+
+Avoid vague or clipped labels that require users to guess their meaning.
+
+## Acceptable Abbreviations
+
+Use abbreviations only when they are:
+
+- official product terminology
+- widely recognized technical standards
+- industry-standard units or symbols
+- necessary because of genuine space constraints
+
+Examples include:
+
+- API
+- URL
+- PDF
+- CSV
+- HTML
+- CSS
+- JSON
+- HTTP
+- HTTPS
+- ECM
+- SAP
+- CMS
+- SEO
+- WCAG
+
+Do not invent new abbreviations or shorten words for stylistic reasons.
+
+## Consistency
+
+Use the same terminology throughout the product.
+
+Avoid mixing abbreviated and full versions of the same term.
+
+Example:
+
+✓ "Notifications" everywhere
+
+✗ "Notifications" on one page and "Notifs" on another
+
+Consistency improves readability, professionalism, and user confidence.

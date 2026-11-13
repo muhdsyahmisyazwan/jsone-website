@@ -32,6 +32,20 @@ export function resolveLocaleString(
 }
 
 /**
+ * Resolve a section field that may be a plain string (document locale)
+ * or a field-level LocaleString (homepage / chrome).
+ */
+export function resolveMaybeLocaleString(
+  value: string | LocaleString | undefined | null,
+  locale: Locale,
+  fallback = '',
+): string {
+  if (value == null) return fallback
+  if (typeof value === 'string') return value
+  return resolveLocaleString(value, locale, fallback)
+}
+
+/**
  * Alt text from a localizedImage (alt is localeString) or contentImage (alt is string).
  */
 export function resolveImageAlt(

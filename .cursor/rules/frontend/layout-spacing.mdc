@@ -1,0 +1,71 @@
+---
+description: Layout, grid, alignment and spacing system
+globs: "**/*.{astro,tsx,jsx,vue,svelte,css,scss,html}"
+alwaysApply: false
+---
+
+# Layout and Spacing
+
+Use a coherent spacing system.
+
+Avoid arbitrary values unless necessary.
+
+## Hierarchy
+
+Spacing should communicate relationships.
+
+Use:
+
+- smaller spacing within groups
+- larger spacing between groups
+- larger section spacing between major concepts
+
+## Alignment
+
+Prefer intentional alignment.
+
+Look for:
+
+- shared edges
+- consistent columns
+- baseline alignment
+- predictable gutters
+
+## Layout
+
+Prefer CSS layout primitives:
+
+- flex
+- grid
+- container queries
+- max-width
+- min/max sizing
+- gap
+
+Avoid JavaScript for layout when CSS can solve it.
+
+## Containers
+
+Use meaningful content widths.
+
+Do not stretch text-heavy interfaces across unnecessarily wide screens.
+
+## Grids
+
+Do not force grid layouts when content does not naturally form a grid.
+
+## Whitespace
+
+Whitespace is structural.
+
+Do not fill empty space with unnecessary UI.
+
+## Absolute positioning
+
+Use absolute positioning for intentional overlays, not as the primary layout system.
+
+## Z-index
+
+Keep stacking contexts understandable.
+
+Avoid arbitrary giant z-index values.

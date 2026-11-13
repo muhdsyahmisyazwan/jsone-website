@@ -1,0 +1,70 @@
+---
+description: Frontend performance and runtime efficiency
+globs: "**/*.{astro,tsx,jsx,vue,svelte,css,scss,html}"
+alwaysApply: false
+---
+
+# Frontend Performance
+
+Performance is part of UX.
+
+## First question
+
+Do not optimize blindly.
+
+Identify actual bottlenecks when possible.
+
+## Prefer
+
+- server rendering where appropriate
+- static rendering where appropriate
+- browser-native APIs
+- CSS over JS for visual effects
+- responsive images
+- lazy loading when appropriate
+- code splitting where useful
+- stable layouts
+
+## Avoid
+
+- unnecessary client-side JavaScript
+- large dependencies for small features
+- unnecessary global state
+- expensive work on every render
+- unnecessary effects
+- repeated network requests
+- layout thrashing
+- unnecessary re-renders
+
+## Images
+
+Optimize:
+
+- dimensions
+- format
+- loading strategy
+- responsive behavior
+
+Avoid shipping huge images to small displays.
+
+## Fonts
+
+Avoid unnecessary font weights and families.
+
+## Animation
+
+Prefer compositor-friendly properties where appropriate.
+
+Avoid expensive animations that cause layout recalculation.
+
+## Data fetching
+
+Avoid duplicate requests.
+
+Follow existing caching and data-fetching architecture.
+
+## Performance vs readability
+
+Do not introduce complicated optimization patterns without evidence.
+
+Simple code is preferred until performance requirements justify complexity.

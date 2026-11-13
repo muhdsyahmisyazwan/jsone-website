@@ -1,0 +1,88 @@
+---
+description: Security guardrails for all code changes
+alwaysApply: true
+---
+
+# Security
+
+Security is never optional for the sake of simplicity.
+
+## Never weaken
+
+Do not remove or bypass:
+
+- authentication
+- authorization
+- permission checks
+- CSRF protection
+- input validation
+- output encoding
+- rate limiting
+- audit logging where required
+- secure cookie settings
+- encryption
+- secret handling
+- tenant isolation
+- database constraints protecting integrity
+
+## Input
+
+Treat external input as untrusted.
+
+Validate at trust boundaries.
+
+Do not assume:
+
+- frontend validation is sufficient
+- API clients are honest
+- database values are always valid
+- environment variables are safe
+- user-controlled IDs belong to the current user
+
+## Secrets
+
+Never:
+
+- hardcode secrets
+- commit API keys
+- print credentials
+- expose tokens in logs
+- place secrets in client-side code
+
+Use the project's existing secret-management approach.
+
+## Dependencies
+
+Do not add dependencies casually.
+
+When adding one, consider:
+
+- maintenance
+- security history
+- supply-chain risk
+- necessity
+- existing alternatives
+
+## Dangerous operations
+
+Be especially careful with:
+
+- shell execution
+- SQL
+- filesystem operations
+- deserialization
+- authentication
+- authorization
+- uploads
+- redirects
+- HTML rendering
+- template rendering
+- dynamic code execution
+
+Prefer established safe APIs and project patterns.
+
+## Security vs minimalism
+
+If the secure implementation requires more code, write more code.
+
+Do not golf security.

@@ -136,7 +136,7 @@ const webPageJsonLd = {
           } catch (e) {}
         }
         applyJsonePrefs()
-        // ClientRouter swaps in SSR defaults - re-apply saved prefs
+        // ClientRouter swaps in SSR defaults - re-apply saved preferences
         if (!window.__jsoneThemeBoot) {
           window.__jsoneThemeBoot = true
           document.addEventListener('astro:before-swap', function (event) {
@@ -342,19 +342,22 @@ const webPageJsonLd = {
           io.observe(el)
         })
 
-        document.querySelectorAll('[data-marquee-toggle]').forEach((btn) => {
-          if (!(btn instanceof HTMLElement) || btn.dataset.bound === 'true') return
-          btn.dataset.bound = 'true'
-          const targetId = btn.getAttribute('aria-controls')
-          const marquee = targetId ? document.getElementById(targetId) : btn.closest('section')?.querySelector('.marquee')
+        document.querySelectorAll('[data-marquee-toggle]').forEach((button) => {
+          if (!(button instanceof HTMLElement) || button.dataset.bound === 'true') return
+          button.dataset.bound = 'true'
+          const targetId = button.getAttribute('aria-controls')
+          const marquee = targetId
+            ? document.getElementById(targetId)
+            : button.closest('section')?.querySelector('.marquee')
           if (!(marquee instanceof HTMLElement)) return
-          btn.addEventListener('click', () => {
+          button.addEventListener('click', () => {
             const paused = marquee.classList.toggle('is-paused')
-            const play = btn.getAttribute('data-label-play') || 'Play'
-            const pause = btn.getAttribute('data-label-pause') || 'Pause'
-            btn.setAttribute('aria-pressed', String(paused))
-            btn.textContent = paused ? play : pause
-            btn.setAttribute('aria-label', paused ? play : pause)
+            const playLabel = button.getAttribute('data-label-play') || ''
+            const pauseLabel = button.getAttribute('data-label-pause') || ''
+            const label = paused ? playLabel : pauseLabel
+            button.setAttribute('aria-pressed', String(paused))
+            button.textContent = label
+            button.setAttribute('aria-label', label)
           })
         })
       }

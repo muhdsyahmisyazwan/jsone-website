@@ -376,7 +376,8 @@
     "play": "播放",
     "pauseMarquee": "暂停滚动标志",
     "playMarquee": "播放滚动标志",
-    "swipeHint": "滑动查看更多"
+    "swipeHint": "滑动查看更多",
+    "testimonials": "客户评价"
   },
   "notFound": {
     "title": "页面未找到",
@@ -387,6 +388,7 @@
     "email": "电子邮箱",
     "phone": "电话号码",
     "company": "公司",
+    "honeypotLabel": "公司网址",
     "message": "留言",
     "consent": "我同意就本次咨询接受联系。",
     "success": "感谢您。我们会尽快与您联系。",

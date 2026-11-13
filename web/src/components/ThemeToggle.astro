@@ -40,76 +40,83 @@ const toSystem = t(locale, 'theme.toSystem')
 </button>
 
 <script define:vars={{toLight, toDark, toSystem, label}}>
-  function resolveTheme(pref) {
-    if (pref === 'light' || pref === 'dark') return pref
+  function resolveTheme(preference) {
+    if (preference === 'light' || preference === 'dark') return preference
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   }
 
-  function applyTheme(pref) {
-    const resolved = resolveTheme(pref)
-    document.documentElement.setAttribute('data-theme', resolved)
-    document.documentElement.setAttribute('data-theme-pref', pref)
+  function syncThemeColorMeta() {
     const meta = document.querySelector('meta[name="theme-color"]')
-    if (meta) {
-      meta.setAttribute('content', resolved === 'dark' ? '#000c28' : '#f4f7fb')
-    }
+    if (!meta) return
+    const themeColor = getComputedStyle(document.documentElement)
+      .getPropertyValue('--theme-color')
+      .trim()
+    if (themeColor) meta.setAttribute('content', themeColor)
+  }
+
+  function applyTheme(preference) {
+    const resolved = resolveTheme(preference)
+    document.documentElement.setAttribute('data-theme', resolved)
+    document.documentElement.setAttribute('data-theme-pref', preference)
+    syncThemeColorMeta()
     try {
-      localStorage.setItem('jsone-theme', pref)
+      localStorage.setItem('jsone-theme', preference)
     } catch {}
     return resolved
   }
 
   /**
-   * Three prefs (system / light / dark), but skip steps that would not change
-   * the resolved appearance (e.g. system→light when the OS is already light).
+   * Three preferences (system / light / dark), but skip steps that would not change
+   * the resolved appearance (for example system to light when the OS is already light).
    */
-  function nextPref(current) {
-    const pref = current === 'light' || current === 'dark' || current === 'system' ? current : 'system'
-    const resolved = resolveTheme(pref)
-    const os = resolveTheme('system')
+  function nextPreference(current) {
+    const preference =
+      current === 'light' || current === 'dark' || current === 'system' ? current : 'system'
+    const resolved = resolveTheme(preference)
+    const systemResolved = resolveTheme('system')
 
-    if (pref === 'system') {
+    if (preference === 'system') {
       // Leave system by locking the opposite of what the user currently sees.
       return resolved === 'dark' ? 'light' : 'dark'
     }
-    if (pref === 'light') return 'dark'
-    // dark → system when that looks different; otherwise flip to light
-    return os === 'dark' ? 'light' : 'system'
+    if (preference === 'light') return 'dark'
+    // dark to system when that looks different; otherwise flip to light
+    return systemResolved === 'dark' ? 'light' : 'system'
   }
 
-  function syncToggle(btn) {
-    const pref = document.documentElement.getAttribute('data-theme-pref') || 'system'
-    const sun = btn.querySelector('[data-icon-sun]')
-    const moon = btn.querySelector('[data-icon-moon]')
-    const system = btn.querySelector('[data-icon-system]')
-    sun?.classList.toggle('opacity-0', pref !== 'light')
-    moon?.classList.toggle('opacity-0', pref !== 'dark')
-    system?.classList.toggle('opacity-0', pref !== 'system')
+  function syncToggle(button) {
+    const preference = document.documentElement.getAttribute('data-theme-pref') || 'system'
+    const sun = button.querySelector('[data-icon-sun]')
+    const moon = button.querySelector('[data-icon-moon]')
+    const system = button.querySelector('[data-icon-system]')
+    sun?.classList.toggle('opacity-0', preference !== 'light')
+    moon?.classList.toggle('opacity-0', preference !== 'dark')
+    system?.classList.toggle('opacity-0', preference !== 'system')
 
-    const next = nextPref(pref)
+    const next = nextPreference(preference)
     const nextLabel = next === 'light' ? toLight : next === 'dark' ? toDark : toSystem
-    btn.setAttribute('aria-label', `${label}: ${nextLabel}`)
-    btn.setAttribute('title', nextLabel)
+    button.setAttribute('aria-label', `${label}: ${nextLabel}`)
+    button.setAttribute('title', nextLabel)
   }
 
   function bindThemeToggle() {
-    document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
-      if (!(btn instanceof HTMLElement) || btn.dataset.bound === 'true') return
-      btn.dataset.bound = 'true'
-      syncToggle(btn)
-      btn.addEventListener('click', () => {
-        const pref = document.documentElement.getAttribute('data-theme-pref') || 'system'
-        applyTheme(nextPref(pref))
-        document.querySelectorAll('[data-theme-toggle]').forEach((b) => {
-          if (b instanceof HTMLElement) syncToggle(b)
+    document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+      if (!(button instanceof HTMLElement) || button.dataset.bound === 'true') return
+      button.dataset.bound = 'true'
+      syncToggle(button)
+      button.addEventListener('click', () => {
+        const preference = document.documentElement.getAttribute('data-theme-pref') || 'system'
+        applyTheme(nextPreference(preference))
+        document.querySelectorAll('[data-theme-toggle]').forEach((other) => {
+          if (other instanceof HTMLElement) syncToggle(other)
         })
       })
     })
   }
 
   function syncAllToggles() {
-    document.querySelectorAll('[data-theme-toggle]').forEach((b) => {
-      if (b instanceof HTMLElement) syncToggle(b)
+    document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+      if (button instanceof HTMLElement) syncToggle(button)
     })
   }
 
@@ -123,8 +130,8 @@ const toSystem = t(locale, 'theme.toSystem')
     })
     document.addEventListener('astro:after-swap', syncAllToggles)
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-      const pref = document.documentElement.getAttribute('data-theme-pref') || 'system'
-      if (pref === 'system') {
+      const preference = document.documentElement.getAttribute('data-theme-pref') || 'system'
+      if (preference === 'system') {
         applyTheme('system')
         syncAllToggles()
       }

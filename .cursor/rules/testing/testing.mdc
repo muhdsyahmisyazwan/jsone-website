@@ -1,0 +1,68 @@
+---
+description: Testing strategy for code changes
+alwaysApply: true
+---
+
+# Testing
+
+Tests are part of the implementation, not an optional afterthought.
+
+## Before writing tests
+
+Inspect existing tests.
+
+Follow the repository's existing:
+
+- test framework
+- naming
+- fixtures
+- factories
+- mocks
+- setup/teardown
+- assertion style
+
+Do not invent a new testing pattern.
+
+## Test behavior, not implementation
+
+Prefer tests that verify:
+
+- observable behavior
+- business rules
+- API contracts
+- important edge cases
+- failure behavior
+
+Avoid tests that tightly couple to internal implementation details unless necessary.
+
+## Test scope
+
+Use the smallest useful test.
+
+For a small change:
+
+1. targeted test
+2. relevant test suite
+3. broader suite if risk warrants it
+
+Do not run an enormous test suite unnecessarily when a focused test provides sufficient confidence.
+
+## When to add tests
+
+Add or update tests when:
+
+- behavior changes
+- a bug is fixed
+- a new business rule is introduced
+- an important edge case is introduced
+- a regression is reasonably possible
+
+Do not add meaningless tests merely to increase coverage numbers.
+
+## Verification
+
+After changes, run the most relevant available checks.
+
+Report failures honestly.
+
+Never modify tests solely to make the implementation pass unless the expected behavior itself has changed.

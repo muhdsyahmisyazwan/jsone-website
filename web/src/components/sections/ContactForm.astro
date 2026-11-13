@@ -1,7 +1,7 @@
 ---
 import type {Locale} from '../../i18n/locales'
 import {t} from '../../i18n/utils'
-import {resolveLocaleString} from '../../lib/sanity/locale'
+import {resolveMaybeLocaleString} from '../../lib/sanity/locale'
 import type {LocaleString, LocaleText} from '../../lib/sanity/types'
 
 interface Props {
@@ -17,11 +17,8 @@ interface Props {
 }
 
 const {locale, section} = Astro.props
-const str = (v: string | LocaleString | undefined) =>
-  typeof v === 'string' ? v : resolveLocaleString(v, locale)
-
-const heading = str(section.heading) || t(locale, 'nav.contact')
-const intro = str(section.intro)
+const heading = resolveMaybeLocaleString(section.heading, locale) || t(locale, 'nav.contact')
+const intro = resolveMaybeLocaleString(section.intro, locale)
 const showPhone = section.showPhone !== false
 const showCompany = section.showCompany !== false
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined
@@ -39,7 +36,7 @@ const errorMisconfigured = t(locale, 'form.errorMisconfigured')
 const errorTurnstile = t(locale, 'form.errorTurnstile')
 const errorFieldRequired = t(locale, 'form.fieldRequired')
 const successTitle = t(locale, 'form.successTitle')
-const successMessage = str(section.successMessage) || t(locale, 'form.success')
+const successMessage = resolveMaybeLocaleString(section.successMessage, locale) || t(locale, 'form.success')
 const sendAnotherLabel = t(locale, 'form.sendAnother')
 
 const fieldClass =
@@ -76,7 +73,7 @@ const errorClass = 'mt-1.5 hidden text-sm text-danger'
     >
       <div class="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
         <label>
-          Company URL
+          {t(locale, 'form.honeypotLabel')}
           <input type="text" name="company_url" tabindex="-1" autocomplete="off" />
         </label>
       </div>
@@ -277,22 +274,22 @@ const errorClass = 'mt-1.5 hidden text-sm text-danger'
   }
 
   function clearFieldErrors(form) {
-    form.querySelectorAll('[data-field-error]').forEach((el) => {
-      el.textContent = ''
-      el.classList.add('hidden')
+    form.querySelectorAll('[data-field-error]').forEach((errorElement) => {
+      errorElement.textContent = ''
+      errorElement.classList.add('hidden')
     })
-    form.querySelectorAll('[aria-invalid]').forEach((el) => {
-      el.setAttribute('aria-invalid', 'false')
+    form.querySelectorAll('[aria-invalid]').forEach((field) => {
+      field.setAttribute('aria-invalid', 'false')
     })
   }
 
   function setFieldError(form, name, message) {
     const field = form.elements.namedItem(name)
-    const errorEl = form.querySelector(`[data-field-error="${name}"]`)
+    const errorElement = form.querySelector(`[data-field-error="${name}"]`)
     if (field instanceof HTMLElement) field.setAttribute('aria-invalid', 'true')
-    if (errorEl) {
-      errorEl.textContent = message
-      errorEl.classList.remove('hidden')
+    if (errorElement) {
+      errorElement.textContent = message
+      errorElement.classList.remove('hidden')
     }
   }
 
@@ -370,16 +367,16 @@ const errorClass = 'mt-1.5 hidden text-sm text-danger'
     }
 
     ;['name', 'email', 'message', 'consent'].forEach((name) => {
-      const el = form.elements.namedItem(name)
-      el?.addEventListener('input', () => {
-        if (el instanceof HTMLElement) el.setAttribute('aria-invalid', 'false')
-        const err = form.querySelector(`[data-field-error="${name}"]`)
-        err?.classList.add('hidden')
+      const field = form.elements.namedItem(name)
+      field?.addEventListener('input', () => {
+        if (field instanceof HTMLElement) field.setAttribute('aria-invalid', 'false')
+        const errorElement = form.querySelector(`[data-field-error="${name}"]`)
+        errorElement?.classList.add('hidden')
       })
-      el?.addEventListener('change', () => {
-        if (el instanceof HTMLElement) el.setAttribute('aria-invalid', 'false')
-        const err = form.querySelector(`[data-field-error="${name}"]`)
-        err?.classList.add('hidden')
+      field?.addEventListener('change', () => {
+        if (field instanceof HTMLElement) field.setAttribute('aria-invalid', 'false')
+        const errorElement = form.querySelector(`[data-field-error="${name}"]`)
+        errorElement?.classList.add('hidden')
       })
     })
 

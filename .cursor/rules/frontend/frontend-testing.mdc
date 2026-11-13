@@ -1,0 +1,62 @@
+---
+description: Frontend testing standards
+globs: "**/*.{test,spec}.{ts,tsx,js,jsx}"
+alwaysApply: false
+---
+
+# Frontend Testing
+
+Test behavior, not implementation details.
+
+## Prioritize
+
+- user-visible behavior
+- important business rules
+- interaction behavior
+- accessibility behavior
+- error states
+- regression-prone behavior
+
+## Avoid
+
+Tests that merely assert:
+
+- internal state
+- implementation-specific structure
+- incidental CSS
+- exact component hierarchy
+
+unless the implementation itself is the contract.
+
+## Interaction
+
+For interactive components, consider:
+
+- keyboard interaction
+- click/tap behavior
+- disabled behavior
+- loading behavior
+- error behavior
+- success behavior
+
+## Accessibility
+
+Where practical, test:
+
+- accessible names
+- semantic roles
+- keyboard access
+- labels
+- focus behavior
+
+## Visual regression
+
+Use existing visual regression infrastructure if the project has it.
+
+Do not introduce a new visual testing framework just for one small component unless justified.
+
+## Test scope
+
+Prefer the narrowest useful test.
+
+Run broader suites when change risk warrants it.

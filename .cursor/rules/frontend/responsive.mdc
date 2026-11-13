@@ -1,0 +1,70 @@
+---
+description: Responsive and adaptive frontend behavior
+globs: "**/*.{astro,tsx,jsx,vue,svelte,css,scss,html}"
+alwaysApply: false
+---
+
+# Responsive Design
+
+Design for the content, not for arbitrary device names.
+
+Do not assume only:
+
+- mobile
+- tablet
+- desktop
+
+Use breakpoints where the layout actually needs to change.
+
+## Mobile
+
+Do not merely shrink desktop.
+
+Reconsider:
+
+- navigation
+- hierarchy
+- density
+- controls
+- ordering
+- tables
+- sidebars
+- actions
+
+## Responsive behavior
+
+Every major layout should answer:
+
+- What happens when width decreases?
+- What wraps?
+- What stacks?
+- What disappears?
+- What becomes scrollable?
+- What becomes an alternative interaction?
+
+## Touch
+
+Interactive targets must remain usable on touch devices.
+
+Do not depend on hover for essential functionality.
+
+## Overflow
+
+Never allow accidental horizontal page overflow.
+
+Long content must have a deliberate behavior.
+
+## Images
+
+Images should:
+
+- maintain intended aspect ratio
+- avoid layout shifts
+- crop intentionally
+- remain useful across breakpoints
+
+## Testing
+
+Verify representative narrow and wide viewport sizes.
+
+Do not assume CSS is correct without checking the actual rendered result.

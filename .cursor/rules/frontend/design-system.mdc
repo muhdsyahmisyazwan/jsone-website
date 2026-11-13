@@ -1,0 +1,71 @@
+---
+description: Consistent design system and UI primitives
+globs: "**/*.{astro,tsx,jsx,vue,svelte,css,scss,html}"
+alwaysApply: false
+---
+
+# Design System
+
+Treat the existing design system as the source of truth.
+
+Before creating a new component:
+
+1. Search existing components.
+2. Search existing tokens.
+3. Search existing utilities.
+4. Search existing patterns.
+5. Reuse whenever possible.
+
+## Tokens
+
+Prefer semantic tokens over raw values.
+
+Examples from `web/src/styles/global.css`:
+
+--bg / --color-bg
+--fg / --color-fg
+--bg-muted / --fg-muted
+--border / --border-strong
+--primary / --color-primary
+--accent / --color-accent
+--danger / --success
+--ring
+
+Prefer:
+
+`var(--color-primary)` or Tailwind semantic utilities (`bg-primary`, `text-fg`)
+
+over scattered raw colors.
+
+## Components
+
+Components should expose meaningful variants.
+
+Avoid dozens of arbitrary props.
+
+Prefer a small API with clear semantics.
+
+## Consistency
+
+Repeated UI patterns should behave consistently.
+
+Buttons should not have different:
+
+- heights
+- radius
+- typography
+- hover behavior
+- focus behavior
+
+unless there is a clear semantic reason.
+
+## New primitives
+
+Only introduce a new primitive when:
+
+- the pattern repeats
+- the concept has a clear semantic identity
+- reuse improves consistency
+- the abstraction reduces complexity
+
+Do not create abstractions solely for theoretical reuse.

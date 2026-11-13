@@ -1,0 +1,44 @@
+---
+description: Full, professional, and clear language across code and copy
+globs: "**/*.{astro,tsx,jsx,ts,js,vue,svelte,css,scss,html}"
+alwaysApply: false
+---
+
+# Language and Naming
+
+Write everything in full. Do not use shorthand, truncated words, or informal abbreviations anywhere in the codebase or in user-facing copy.
+
+## Naming
+
+Use complete, descriptive names for variables, functions, components, props, and files. Do not shorten words to save characters. For example, prefer `button` over `btn`, prefer `error` over `err`, prefer `user` over `usr`, prefer `configuration` over `cfg`, and prefer `index` over `idx`. Widely accepted technical terms that are already standard in the industry, such as `id`, `url`, `api`, `props`, and `ref`, do not need to be spelled out, since expanding them would reduce clarity rather than improve it.
+
+## Comments and documentation
+
+Write code comments and documentation as complete, grammatically correct sentences. Do not write comments as clipped fragments or note-to-self shorthand.
+
+## User-facing copy
+
+Write all labels, button text, headings, error messages, empty states, emails, notifications, and other user-facing copy in full words, in a professional and clear tone. Do not use text-message-style abbreviations, casual internet shorthand, or unnecessary contractions in product copy.
+
+Visible UI strings come from Sanity or `/web/src/i18n/{en,ms,zh}.json` via `t(locale, key)`. Do not hardcode visible text in components.
+
+## No em dashes
+
+Never use the em dash character (`—`) in user-facing copy, flash messages, emails, notifications, empty placeholders, or UI separators. It reads as generic AI writing.
+
+Prefer:
+
+- a period or new sentence for asides (`Copy it now. It will not be shown again.`)
+- a colon or middot for labels and notes (`Solutions: OpenText ECM`, `· note`)
+- an ASCII hyphen or `N/A` for missing values (`-`, `N/A`)
+- an en dash (`–`) only for numeric or time ranges (`2006–present`, `09:00–18:00`)
+
+Do not introduce new em dashes when editing existing files. Replace them when you touch nearby copy.
+
+## Tone
+
+Keep all written language clear and concise. Writing in full is not a license to add unnecessary words; every sentence should be as short as it can be while still being complete and unambiguous.
+
+## Exceptions
+
+Well-established technical acronyms and initialisms, such as HTML, CSS, ARIA, URL, ID, API, ECM, SAP, and CMS, do not need to be expanded on every use. The goal of this rule is to eliminate invented or unnecessary shorthand, not to eliminate standard technical vocabulary.

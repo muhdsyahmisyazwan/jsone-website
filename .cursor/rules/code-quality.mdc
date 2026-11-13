@@ -1,0 +1,84 @@
+---
+description: Maintainability and code quality standards for implementation changes
+alwaysApply: true
+---
+
+# Code Quality
+
+Optimize for:
+
+1. Correctness
+2. Clarity
+3. Maintainability
+4. Simplicity
+5. Performance where evidence requires it
+
+## Readability
+
+Prefer code that can be understood directly.
+
+Avoid:
+
+- clever one-liners that obscure intent
+- deeply nested conditionals
+- unnecessary indirection
+- magic values
+- duplicated business rules
+- misleading names
+- hidden side effects
+
+A shorter implementation is not better if it is harder to understand.
+
+## Functions
+
+Prefer functions that:
+
+- have one clear responsibility
+- have explicit inputs and outputs
+- avoid unnecessary side effects
+- are easy to test
+
+Do not split code into tiny functions merely to make files look modular.
+
+## Abstractions
+
+Create an abstraction when there is a demonstrated reason:
+
+- repeated behavior
+- meaningful domain concept
+- complexity reduction
+- clear boundary
+- testability improvement
+
+Do not abstract merely because two pieces of code look similar once.
+
+## Existing architecture
+
+Follow the architecture already present in the repository unless the task explicitly requires changing it.
+
+Do not introduce a competing architectural pattern.
+
+## Error handling
+
+Handle errors at the appropriate boundary.
+
+Do not:
+
+- silently swallow errors
+- catch errors without a reason
+- convert useful errors into vague messages
+- add defensive code that the architecture already guarantees
+
+## Comments
+
+Comments should explain WHY, not WHAT.
+
+Good:
+
+`// Required because the upstream API occasionally returns stale cursors.`
+
+Bad:
+
+`// Increment the counter.`
+
+Delete comments that merely repeat the code.

@@ -1,0 +1,77 @@
+---
+description: High-quality interaction design, transitions and motion
+globs: "**/*.{astro,tsx,jsx,vue,svelte,css,scss,html}"
+alwaysApply: false
+---
+
+# Interaction Design
+
+Every interactive element should communicate:
+
+- what it is
+- whether it is interactive
+- what state it is in
+- what happens after interaction
+
+## States
+
+Consider:
+
+- default
+- hover
+- focus
+- active
+- disabled
+- loading
+- success
+- error
+- selected
+
+Do not implement only the happy-path state.
+
+## Motion
+
+Use motion to communicate change.
+
+Good motion explains:
+
+- where something came from
+- where something went
+- what changed
+- what requires attention
+
+Avoid animation for decoration alone.
+
+## Timing
+
+Prefer subtle, fast transitions.
+
+Do not make basic interactions feel slow.
+
+## Reduced motion
+
+Respect:
+
+`prefers-reduced-motion`
+
+Do not rely on motion for comprehension.
+
+## Feedback
+
+Actions should provide appropriate feedback.
+
+Examples:
+
+- button press
+- optimistic update
+- loading state
+- success confirmation
+- error state
+
+Avoid unnecessary toast notifications for trivial actions.
+
+## Hover
+
+Hover is enhancement, not a requirement.
+
+Essential information and functionality must work without hover.
