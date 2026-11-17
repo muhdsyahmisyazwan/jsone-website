@@ -8,7 +8,9 @@ test.describe('smoke', () => {
     await expect(page.locator('#main-content')).toBeVisible()
     await expect(page.getByRole('banner')).toBeVisible()
     await expect(page.getByRole('contentinfo')).toBeVisible()
-    await expect(page.locator('img[alt*="JS One"], [aria-label*="JS One"]').first()).toBeVisible()
+    await expect(
+      page.getByRole('banner').getByRole('img', {name: /J\.?\s*S\.?\s*One/i}),
+    ).toBeVisible()
   })
 
   test('solutions page loads', async ({page}) => {
