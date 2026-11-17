@@ -35,6 +35,16 @@ const copyright =
   resolveLocaleString(footer?.copyright, locale) || t(locale, 'footer.rights')
 const logoAlt = t(locale, 'nav.logoAlt')
 
+/** Decorative wash only — no DOM text (axe color-contrast still checks aria-hidden text). */
+const wordmarkMask = (() => {
+  const safe = siteName
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/"/g, '&quot;')
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="120" viewBox="0 0 1200 120"><text x="0" y="92" font-family="Plus Jakarta Sans,system-ui,sans-serif" font-size="96" font-weight="700" fill="#000">${safe}</text></svg>`
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`
+})()
+
 const fallbackNav = [
   {label: t(locale, 'nav.home'), href: localePath(locale, '/')},
   {label: t(locale, 'nav.about'), href: localePath(locale, '/about/')},
@@ -200,12 +210,11 @@ const showFallbackNav = columns.length === 0
 
   <div class="border-t border-border">
     <div class="container-site flex flex-col gap-6 py-8">
-      <p
-        class="display-lg max-w-full select-none overflow-hidden text-fg/10"
-        aria-label={t(locale, 'footer.wordmarkAria')}
-      >
-        {siteName}
-      </p>
+      <div
+        class="h-[clamp(2.75rem,7vw,4.5rem)] w-full max-w-full bg-fg/10"
+        style={`-webkit-mask: ${wordmarkMask} left center / auto 100% no-repeat; mask: ${wordmarkMask} left center / auto 100% no-repeat;`}
+        aria-hidden="true"
+      ></div>
       <div class="flex flex-wrap items-center justify-between gap-3 text-sm text-fg-subtle">
         <p>© {year} {legalName}. {copyright}</p>
       </div>
