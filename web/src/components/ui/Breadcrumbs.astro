@@ -1,0 +1,80 @@
+---
+/**
+ * Deep-page trail. Current crumb is plain text with aria-current="page".
+ * Optional JSON-LD BreadcrumbList for SEO.
+ */
+import {localePath} from '../../i18n/paths'
+import type {Locale} from '../../i18n/locales'
+import {t} from '../../i18n/utils'
+
+export type BreadcrumbItem = {
+  label: string
+  href?: string
+}
+
+interface Props {
+  locale: Locale
+  items: BreadcrumbItem[]
+  class?: string
+  jsonLd?: boolean
+}
+
+const {locale, items = [], class: className = '', jsonLd = true} = Astro.props
+const crumbs = items.filter((item) => item.label?.trim())
+const withHome =
+  crumbs.length > 0 && crumbs[0]?.href !== localePath(locale, '/')
+    ? [{label: t(locale, 'nav.home'), href: localePath(locale, '/')}, ...crumbs]
+    : crumbs
+
+const siteOrigin = 'https://www.jsone.com.my'
+const jsonLdPayload =
+  jsonLd && withHome.length >= 2
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: withHome.map((item, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: item.label,
+          ...(item.href
+            ? {item: item.href.startsWith('http') ? item.href : `${siteOrigin}${item.href}`}
+            : {}),
+        })),
+      }
+    : null
+---
+
+{
+  withHome.length > 0 && (
+    <>
+      <nav class:list={['breadcrumbs', className]} aria-label={t(locale, 'common.breadcrumbLabel')}>
+        <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-fg-muted">
+          {withHome.map((item, index) => {
+            const isCurrent = index === withHome.length - 1 || !item.href
+            return (
+              <li class="inline-flex min-w-0 items-center gap-2">
+                {index > 0 && (
+                  <span class="text-fg-subtle" aria-hidden="true">
+                    /
+                  </span>
+                )}
+                {isCurrent || !item.href ? (
+                  <span class="min-w-0 text-fg" aria-current="page">
+                    {item.label}
+                  </span>
+                ) : (
+                  <a href={item.href} class="min-w-0 text-fg-muted transition hover:text-primary">
+                    {item.label}
+                  </a>
+                )}
+              </li>
+            )
+          })}
+        </ol>
+      </nav>
+      {jsonLdPayload && (
+        <script type="application/ld+json" set:html={JSON.stringify(jsonLdPayload)} />
+      )}
+    </>
+  )
+}

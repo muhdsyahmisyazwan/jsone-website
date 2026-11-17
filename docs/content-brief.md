@@ -34,34 +34,27 @@ Source materials (local only, gitignored):
 
 Home · About (Company Overview, Our Team) · Solutions · Industries · Clients · Contact
 
-## Homepage messaging (revamp)
+## Homepage messaging (five sections, one job each)
 
-### Hero slides
+Order: Hero → Capabilities → Proof → Why JS One → CTA.  
+Do not add a standalone stats strip, About blurb, Enabling Digital Transformation / How we work block, or Industries grid on the homepage. Stats appear once inside Proof. Full story and methodology live on `/about/` and `/solutions/`.
 
-1. **Enterprise Information. Structured. Controlled. Transformed.**  
-   A trusted OpenText implementation partner helping organizations unlock the full value of enterprise content. CTA: Explore Solutions
-2. **Celebrating 20 Years of Excellence**  
-   Since 2006, delivering enterprise solutions and building long-term partnerships. CTA: Our Journey
-3. **A New Digital Experience, Built for You**  
-   Experience a more intuitive way to explore our solutions and capabilities. CTA: Discover More
+### 1. Hero
 
-### Stats strip
+- **Purpose:** Name the category and invite the next step.
+- **Headline:** Enterprise Information. Structured. Controlled. Transformed.
+- **Supporting:** A trusted OpenText implementation partner helping organizations unlock the full value of enterprise content. Founded 2006. Malaysia-based.
+- **Primary action:** Contact us (secondary: Explore Solutions)
+- **Believe:** JS One is the OpenText / enterprise-content specialist I should evaluate.
+- First viewport only: brand, one headline, one supporting sentence, one CTA group, one visual. No stats in the hero.
 
-20+ years experience · 80+ projects · 60+ clients
+### 2. Capabilities
 
-### About blurb
-
-**Specialist in Enterprise Information Management**  
-Founded in 2006, we help organizations transform how they manage content, data, and business processes across the enterprise.
-
-### Enabling Digital Transformation
-
-- Digitize and streamline operations
-- Integrate systems and workflows
-- Improve governance and compliance
-- Build long-term capabilities
-
-### Core capabilities
+- **Purpose:** Show what JS One sells, framed by transformation outcomes.
+- **Headline:** Solutions that structure, control, and transform enterprise content.
+- **Supporting intro:** Founded in 2006, we help organizations transform how they manage content, data, and business processes across the enterprise.
+- **Outcomes (inline, not a separate section):** Digitize and streamline operations · Integrate systems and workflows · Improve governance and compliance · Build long-term capabilities
+- **Tiles:**
 
 | Title | Body |
 | --- | --- |
@@ -70,17 +63,39 @@ Founded in 2006, we help organizations transform how they manage content, data, 
 | Application Management Services | Malaysia-based operational support and maintenance. |
 | System development | Web/mobile apps; shared services (finance, HR, case management); big data & analytics. |
 
-### Why choose us (homepage bullets)
+- **Primary action:** Explore Solutions
+- **Believe:** They cover the OpenText / SAP stack I need, including after go-live support.
 
-- OpenText specialization
-- Proven enterprise experience
-- Consulting + delivery capability
-- Long-term partnership approach
+### 3. Proof
 
-### Bottom CTA
+- **Purpose:** Evidence that delivery is real. Owns all credibility once (logos, case, credentials, metrics).
+- **Headline:** Trusted by enterprises that need governed content at scale.
+- **Supporting:**
+  - Client logo strip (CMS `logoStrip` when assets exist; fallback uses sector name placeholders until logos are approved)
+  - Short case study seed (replace with a named client when approved): Government big-data engagement - 25TB across 36 locations; scale and multi-site content control
+  - Partner credentials: authorized OpenText reseller and certified implementation partner; OpenText SAP Competence Partner
+  - Metrics (here only): 20+ years · 80+ projects · 60+ clients
+- **Primary action:** View Clients (secondary: Company Overview)
+- **Believe:** Others like me already trust them; partners and numbers are not empty claims.
 
-**Let’s Build Your Digital Foundation**  
-Transform how your organization manages information and drives business outcomes. CTA: Contact Us
+### 4. Why JS One
+
+- **Purpose:** Explain working style after proof, without restating product list or tenure.
+- **Headline:** Built for long-term OpenText delivery, not one-off projects.
+- **Supporting (three points only):**
+  - Consulting and delivery in one team
+  - Malaysia-based AMS continuity after go-live
+  - Partnership approach that respects each customer’s uniqueness and culture
+- **Primary action:** About us
+- **Believe:** Engagement model fits a multi-year ECM / SAP programme.
+
+### 5. CTA
+
+- **Purpose:** Convert interest into a conversation.
+- **Headline:** Let’s build your digital foundation.
+- **Supporting:** Transform how your organization manages information and drives business outcomes.
+- **Primary action:** Contact us
+- **Believe:** Next step is clear and low-friction.
 
 ## About - Company Overview
 

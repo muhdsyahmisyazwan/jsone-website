@@ -20,58 +20,44 @@ const heading =
     ? section.heading
     : resolveLocaleString(section.heading, locale)
 const logos = (section.logos || []).filter((l) => l.image)
-const loop = [...logos, ...logos]
-const marqueeId = 'logo-strip-marquee'
 ---
 
 {
   logos.length > 0 && (
-    <section class="section-defer border-y border-border bg-bg-elevated/50 py-12" data-reveal>
+    <section class="section-defer border-y border-border bg-bg-elevated py-12" data-reveal>
       <div class="container-site space-y-8">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          {heading && <p class="eyebrow text-center sm:text-left">{heading}</p>}
-          <button
-            type="button"
-            class="btn btn-ghost btn-sm"
-            data-marquee-toggle
-            aria-pressed="false"
-            aria-controls={marqueeId}
-            data-label-pause={t(locale, 'common.pause')}
-            data-label-play={t(locale, 'common.play')}
-            aria-label={t(locale, 'common.pauseMarquee')}
-          >
-            {t(locale, 'common.pause')}
-          </button>
-        </div>
-        <div class="marquee is-inview" id={marqueeId}>
-          <div class="marquee-track items-center px-4">
-            {loop.map((logo) => {
-              const img = (
-                <SanityImage
-                  image={logo.image}
-                  locale={locale}
-                  class="logo-theme h-9 w-auto max-w-[8rem] object-contain opacity-70 transition [@media(hover:hover)_and_(pointer:fine)]:hover:opacity-100 sm:h-11 sm:max-w-[10rem]"
-                  widths={[160, 240, 320]}
-                  sizes="160px"
-                  maxWidth={320}
-                />
-              )
-              return logo.href ? (
-                <a
-                  href={logo.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex min-h-11 items-center"
-                >
-                  {img}
-                  <span class="sr-only"> ({t(locale, 'common.opensNewTab')})</span>
-                </a>
-              ) : (
-                <span class="inline-flex min-h-11 items-center">{img}</span>
-              )
-            })}
-          </div>
-        </div>
+        {heading && <p class="eyebrow">{heading}</p>}
+        <ul class="grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3 lg:grid-cols-4">
+          {logos.map((logo) => {
+            const img = (
+              <SanityImage
+                image={logo.image}
+                locale={locale}
+                class="logo-theme h-9 w-auto max-w-[8rem] object-contain opacity-70 transition [@media(hover:hover)_and_(pointer:fine)]:hover:opacity-100 sm:h-11 sm:max-w-[10rem]"
+                widths={[160, 240, 320]}
+                sizes="160px"
+                maxWidth={320}
+              />
+            )
+            return (
+              <li class="flex min-h-16 items-center justify-center bg-bg-elevated px-4 py-3">
+                {logo.href ? (
+                  <a
+                    href={logo.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex min-h-11 items-center"
+                  >
+                    {img}
+                    <span class="sr-only"> ({t(locale, 'common.opensNewTab')})</span>
+                  </a>
+                ) : (
+                  <span class="inline-flex min-h-11 items-center">{img}</span>
+                )}
+              </li>
+            )
+          })}
+        </ul>
       </div>
     </section>
   )

@@ -1,6 +1,7 @@
 import {Hono} from 'hono'
 import type {AppEnv} from '../env.js'
 import {getClientIp} from '../lib/clientIp.js'
+import {isValidMalaysiaPhoneOrEmpty, normalizeMalaysiaPhone} from '../lib/malaysiaPhone.js'
 import {rateLimit} from '../lib/rateLimit.js'
 
 type Variables = {env: AppEnv}
@@ -82,9 +83,13 @@ contactRoutes.post('/contact', async (c) => {
       return c.json({ok: false, error: 'missing_fields', missing}, 400)
     }
     if (!EMAIL_RE.test(email)) return c.json({ok: false, error: 'invalid_email'}, 400)
+    if (!isValidMalaysiaPhoneOrEmpty(phone)) {
+      return c.json({ok: false, error: 'invalid_phone'}, 400)
+    }
     if (message.length > 5000 || name.length > 200) {
       return c.json({ok: false, error: 'too_long'}, 400)
     }
+    const phoneNormalized = normalizeMalaysiaPhone(phone)
 
     const skipTurnstile = env.TURNSTILE_SKIP === 'true'
     if (env.isProduction && skipTurnstile) {
@@ -105,7 +110,7 @@ contactRoutes.post('/contact', async (c) => {
     const text = [
       `Name: ${name}`,
       `Email: ${email}`,
-      phone ? `Phone: ${phone}` : null,
+      phoneNormalized ? `Phone: +${phoneNormalized}` : phone ? `Phone: ${phone}` : null,
       company ? `Company: ${company}` : null,
       `Locale: ${locale}`,
       '',

@@ -1,10 +1,13 @@
 ---
 import PageHero from './ui/PageHero.astro'
+import CaseStudyCard from './trust/CaseStudyCard.astro'
+import PartnerBadgeRow from './trust/PartnerBadgeRow.astro'
 import type {Locale} from '../i18n/locales'
 import {localePath} from '../i18n/paths'
 import {t} from '../i18n/utils'
 import Icon from './icons/Icon.astro'
 import type {ServiceIconName} from './icons/names'
+import {getPartnerBadgesCompact, getSolutionsCases} from '../lib/trust/fallback'
 
 interface Props {
   locale: Locale
@@ -12,26 +15,36 @@ interface Props {
 
 const {locale} = Astro.props
 
-const offers: {title: string; forKey: string; body: string; icon: ServiceIconName}[] = [
+const offers: {
+  id: string
+  title: string
+  forKey: string
+  body: string
+  icon: ServiceIconName
+}[] = [
   {
+    id: 'opentext-ecm',
     title: 'solutions.offerEcmTitle',
     forKey: 'solutions.offerEcmFor',
     body: 'solutions.offerEcmBody',
     icon: 'layers',
   },
   {
+    id: 'sap-integrations',
     title: 'solutions.offerSapTitle',
     forKey: 'solutions.offerSapFor',
     body: 'solutions.offerSapBody',
     icon: 'workflow',
   },
   {
+    id: 'ams',
     title: 'solutions.offerAmsTitle',
     forKey: 'solutions.offerAmsFor',
     body: 'solutions.offerAmsBody',
     icon: 'support',
   },
   {
+    id: 'system-development',
     title: 'solutions.offerDevTitle',
     forKey: 'solutions.offerDevFor',
     body: 'solutions.offerDevBody',
@@ -70,6 +83,10 @@ const howSteps = [
   {title: 'home.howStep3Title', body: 'home.howStep3Body'},
   {title: 'home.howStep4Title', body: 'home.howStep4Body'},
 ] as const
+
+const partnerBadges = getPartnerBadgesCompact(locale)
+const solutionCases = getSolutionsCases(locale)
+const clientsHref = localePath(locale, '/clients/')
 ---
 
 <PageHero
@@ -84,11 +101,11 @@ const howSteps = [
       <h2 class="display-md text-fg">{t(locale, 'solutions.offersHeading')}</h2>
       <p class="prose-measure text-fg-muted">{t(locale, 'solutions.offersBody')}</p>
     </div>
-    <ul class="grid gap-4 sm:grid-cols-2" data-reveal-stagger>
+    <ul class="grid gap-px border border-border bg-border sm:grid-cols-2" data-reveal-stagger>
       {
         offers.map((item) => (
-          <li class="card card-spotlight flex flex-col gap-3 p-5 sm:p-6" data-reveal-child>
-            <span class="inline-flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+          <li id={item.id} class="flex flex-col gap-3 bg-bg-elevated p-5 sm:p-6" data-reveal-child>
+            <span class="inline-flex size-10 items-center justify-center border border-border text-primary">
               <Icon name={item.icon} class="size-5" />
             </span>
             <h3 class="text-lg font-semibold text-fg">{t(locale, item.title)}</h3>
@@ -108,11 +125,11 @@ const howSteps = [
       <p class="prose-measure text-fg-muted">{t(locale, 'solutions.catalogueBody')}</p>
       <p class="prose-measure text-sm text-fg-muted">{t(locale, 'solutions.expertiseBody')}</p>
     </div>
-    <ul class="flex flex-wrap gap-3" data-reveal-stagger>
+    <ul class="grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3 lg:grid-cols-4" data-reveal-stagger>
       {
         catalogue.map((key) => (
           <li
-            class="inline-flex min-h-11 items-center rounded-full border border-border bg-bg-elevated px-5 font-mono text-sm text-fg-muted shadow-[var(--shadow-sm)]"
+            class="flex min-h-11 items-center bg-bg-elevated px-4 font-mono text-sm text-fg-muted"
             data-reveal-child
           >
             {t(locale, key)}
@@ -163,10 +180,41 @@ const howSteps = [
 </section>
 
 <section class="section-pad section-defer border-t border-border" data-reveal>
+  <div class="container-site space-y-10">
+    <PartnerBadgeRow
+      badges={partnerBadges}
+      eyebrow={t(locale, 'trust.badgesCompactEyebrow')}
+    />
+
+    {
+      solutionCases.length > 0 && (
+        <div class="space-y-6">
+          <h2 class="display-md text-fg">{t(locale, 'trust.solutionsCasesHeading')}</h2>
+          <ul class="grid gap-6 sm:grid-cols-2" data-reveal-stagger>
+            {solutionCases.map((item) => (
+              <li>
+                <CaseStudyCard
+                  eyebrow={item.eyebrow}
+                  title={item.title}
+                  body={item.body}
+                  metric={item.metric}
+                  href={clientsHref}
+                  linkLabel={t(locale, 'trust.viewClients')}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<section class="section-pad section-defer border-t border-border" data-reveal>
   <div class="container-site space-y-4">
     <h2 class="display-md text-fg">{t(locale, 'solutions.ctaHeading')}</h2>
     <p class="prose-measure text-fg-muted">{t(locale, 'solutions.ctaBody')}</p>
-    <a href={localePath(locale, '/contact/')} class="btn btn-primary">
+    <a href={localePath(locale, '/contact/')} class="btn btn-cta">
       {t(locale, 'home.ctaPrimary')}
     </a>
   </div>

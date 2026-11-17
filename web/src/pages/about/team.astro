@@ -2,6 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import FallbackTeam from '../../components/FallbackTeam.astro'
 import Sections from '../../components/sections/Sections.astro'
+import Breadcrumbs from '../../components/ui/Breadcrumbs.astro'
+import {localePath} from '../../i18n/paths'
+import {t} from '../../i18n/utils'
 import {loadAboutRoute} from '../../lib/pages/loadPage'
 
 const data = await loadAboutRoute('en', 'about-team', {
@@ -21,7 +24,18 @@ const data = await loadAboutRoute('en', 'about-team', {
 >
   {
     data.page ? (
-      <Sections locale={data.locale} sections={data.page.sections} />
+      <>
+        <div class="container-site pt-6 sm:pt-8">
+          <Breadcrumbs
+            locale={data.locale}
+            items={[
+              {label: t(data.locale, 'nav.about'), href: localePath(data.locale, '/about/')},
+              {label: t(data.locale, 'nav.aboutTeam')},
+            ]}
+          />
+        </div>
+        <Sections locale={data.locale} sections={data.page.sections} />
+      </>
     ) : (
       <FallbackTeam locale={data.locale} />
     )

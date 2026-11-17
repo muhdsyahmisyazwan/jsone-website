@@ -16,10 +16,10 @@ const TitleTag = titleAs
 <div class="empty-state space-y-4">
   {eyebrow && <p class="eyebrow justify-center">{eyebrow}</p>}
   <TitleTag class="display-md text-fg">{title}</TitleTag>
-  {body && <p class="mx-auto max-w-prose text-fg-muted">{body}</p>}
+  {body && <p class="body-md mx-auto max-w-prose text-fg-muted">{body}</p>}
   {
     actionHref && actionLabel && (
-      <a href={actionHref} class="btn btn-primary">
+      <a href={actionHref} class="btn btn-cta">
         {actionLabel}
       </a>
     )

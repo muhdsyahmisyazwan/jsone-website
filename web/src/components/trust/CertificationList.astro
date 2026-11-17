@@ -1,0 +1,35 @@
+---
+/**
+ * Named awards and milestones as text rows. Omits when empty.
+ */
+import type {TrustCertification} from '../../lib/trust/fallback'
+
+interface Props {
+  items: TrustCertification[]
+  heading?: string
+  body?: string
+  class?: string
+}
+
+const {items = [], heading, body, class: className = ''} = Astro.props
+const list = items.filter((item) => item.title?.trim())
+---
+
+{
+  list.length > 0 && (
+    <div class:list={['space-y-4', className]}>
+      {heading && <h2 class="display-md text-fg">{heading}</h2>}
+      {body && <p class="prose-measure text-fg-muted">{body}</p>}
+      <ul class="grid gap-3 sm:grid-cols-2" data-reveal-stagger>
+        {list.map((item) => (
+          <li
+            class="border border-border bg-bg-elevated px-5 py-4 text-sm text-fg-muted"
+            data-reveal-child
+          >
+            {item.title}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}

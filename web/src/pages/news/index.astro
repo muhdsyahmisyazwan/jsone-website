@@ -34,12 +34,12 @@ const data = await loadNewsIndex(locale)
             actionLabel={t(locale, 'nav.getInTouch')}
           />
         ) : (
-          <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul class="grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
             {data.articles.map((article) => (
-              <li>
+              <li class="bg-bg-elevated">
                 <a
                   href={localePath(locale, `/news/${article.slug}/`)}
-                  class="card card-spotlight group flex h-full flex-col overflow-hidden"
+                  class="group flex h-full flex-col overflow-hidden border border-transparent transition-colors hover:border-primary"
                 >
                   {article.mainImage && (
                     <SanityImage

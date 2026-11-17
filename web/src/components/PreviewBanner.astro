@@ -22,19 +22,20 @@ const labels = {
 }
 ---
 
+{/* preview-chrome pins navy so accent text stays AA (theme bg-invert flips in dark). */}
 <div
-  class="sticky top-0 z-50 hidden border-b border-accent bg-bg-invert text-fg-invert"
+  class="preview-chrome sticky top-0 z-50 hidden border-b border-accent"
   role="status"
   data-preview-banner
 >
   <div class="container-site flex flex-col gap-2 px-4 py-2 sm:flex-row sm:items-center sm:justify-between">
     <div class="min-w-0 text-left text-sm">
       <p class="font-medium" data-preview-title>{labels.active}</p>
-      <p class="mt-0.5 text-xs text-fg-invert/80" data-preview-meta>{labels.staticNote}</p>
+      <p class="mt-0.5 text-xs text-white/80" data-preview-meta>{labels.staticNote}</p>
     </div>
     <div class="flex shrink-0 flex-wrap items-center gap-3 text-sm">
       <span
-        class="hidden rounded-full bg-accent/20 px-2.5 py-0.5 text-xs font-semibold text-accent"
+        class="hidden rounded-[var(--radius-sm)] bg-accent/20 px-2.5 py-0.5 text-xs font-semibold text-accent"
         data-preview-badge
       ></span>
       <a href={exitHref} class="font-semibold text-accent underline-offset-2 hover:underline">
@@ -43,11 +44,11 @@ const labels = {
     </div>
   </div>
   <details class="border-t border-white/10 bg-black/20 text-left text-xs">
-    <summary class="cursor-pointer px-4 py-2 text-fg-invert/90">{labels.draft}</summary>
+    <summary class="cursor-pointer px-4 py-2 text-white/90">{labels.draft}</summary>
     <div class="container-site space-y-2 px-4 pb-3" data-preview-panel>
       <p data-preview-panel-status>{labels.loading}</p>
-      <ul class="list-inside list-disc text-fg-invert/80" data-preview-sections></ul>
-      <p class="text-fg-invert/70">{labels.rebuildNote}</p>
+      <ul class="list-inside list-disc text-white/80" data-preview-sections></ul>
+      <p class="text-white/70">{labels.rebuildNote}</p>
     </div>
   </details>
 </div>

@@ -1,9 +1,26 @@
 ---
+/**
+ * Fallback homepage when Sanity homepage content is missing / unreviewed.
+ * Five sections, one job each: Hero → Capabilities → Proof → Why → CTA.
+ */
 import Icon from './icons/Icon.astro'
-import NetworkGraph from './illustrations/NetworkGraph.astro'
+import SapOpenTextMap from './illustrations/SapOpenTextMap.astro'
+import CaseStudyCard from './trust/CaseStudyCard.astro'
+import ClientLogoStrip from './trust/ClientLogoStrip.astro'
+import MetricBand from './trust/MetricBand.astro'
+import PartnerBadgeRow from './trust/PartnerBadgeRow.astro'
+import ProofTestimonial from './trust/ProofTestimonial.astro'
 import {localePath} from '../i18n/paths'
 import type {Locale} from '../i18n/locales'
 import {t} from '../i18n/utils'
+import {
+  getFeaturedCase,
+  getFeaturedTestimonial,
+  getPartnerBadgesFull,
+  getSectorPlaceholders,
+  getTrustMetrics,
+  getTrustMetricsContext,
+} from '../lib/trust/fallback'
 
 interface Props {
   locale: Locale
@@ -16,7 +33,7 @@ const highlight = t(locale, 'home.titleHighlight')
 const titleHtml = highlight && title.includes(highlight)
   ? title.replace(
       highlight,
-      `<span class="gradient-text">${highlight}</span>`,
+      `<span class="title-accent">${highlight}</span>`,
     )
   : title
 
@@ -27,212 +44,97 @@ const capabilities = [
   {title: 'home.capIntegrationTitle', body: 'home.capIntegrationBody', icon: 'plug'},
 ] as const
 
-const stats = [
-  {valueKey: 'home.statsExperienceValue', labelKey: 'home.statsExperienceLabel'},
-  {valueKey: 'home.statsProjectsValue', labelKey: 'home.statsProjectsLabel'},
-  {valueKey: 'home.statsClientsValue', labelKey: 'home.statsClientsLabel'},
-] as const
-
-const howSteps = [
-  {title: 'home.howStep1Title', body: 'home.howStep1Body'},
-  {title: 'home.howStep2Title', body: 'home.howStep2Body'},
-  {title: 'home.howStep3Title', body: 'home.howStep3Body'},
-  {title: 'home.howStep4Title', body: 'home.howStep4Body'},
-] as const
-
-const industries = [
-  'home.indOil',
-  'home.indGov',
-  'home.indFinance',
-  'home.indTelco',
-  'home.indHealthcare',
-  'home.indManufacturing',
+const outcomes = [
+  'home.transformDigitize',
+  'home.transformIntegrate',
+  'home.transformGovern',
+  'home.transformCapabilities',
 ] as const
 
 const whyItems = [
-  {key: 'home.whyOpentext', icon: 'shield'},
-  {key: 'home.whyExperience', icon: 'chart'},
   {key: 'home.whyConsulting', icon: 'users'},
+  {key: 'home.whyAms', icon: 'support'},
   {key: 'home.whyPartnership', icon: 'spark'},
 ] as const
 
-const partnerKeys = [
-  'home.partnerOpenText',
-  'home.partnerSap',
-  'home.partnerExtendedEcm',
-  'home.partnerArchiving',
-  'home.partnerDocAccess',
-  'home.partnerVim',
-  'home.partnerAp',
-  'home.partnerAms',
-] as const
+const trustMetrics = getTrustMetrics(locale)
+const trustContext = getTrustMetricsContext(locale)
+const sectorLabels = getSectorPlaceholders(locale)
+const partnerBadges = getPartnerBadgesFull(locale)
+const featuredCase = getFeaturedCase(locale)
+const featuredTestimonial = getFeaturedTestimonial(locale)
+const clientsHref = localePath(locale, '/clients/')
 ---
 
-<section class="hero-stage relative overflow-hidden">
-  <div class="pointer-events-none absolute inset-0 surface-grid opacity-70" aria-hidden="true"></div>
+<section class="hero-stage relative overflow-hidden border-b border-border">
+  <div class="hero-bleed pointer-events-none absolute inset-0 -z-10 surface-grid" aria-hidden="true"></div>
+
   <div
-    class="pointer-events-none absolute -right-20 top-10 hidden w-[min(52vw,36rem)] opacity-80 lg:block"
-    aria-hidden="true"
+    class="relative lg:min-h-[min(36rem,calc(100dvh-var(--header-height)-2rem))]"
   >
-    <NetworkGraph class="w-full text-fg-subtle" />
-  </div>
-
-  <div class="container-site relative grid min-h-[calc(100svh-var(--header-height)-1rem)] items-center gap-8 py-12 sm:gap-10 sm:py-16 lg:min-h-[calc(100dvh-var(--header-height)-1rem)] lg:grid-cols-[1.15fr_0.85fr] lg:py-20">
-    <div class="space-y-6 sm:space-y-7">
-      <p class="eyebrow">{t(locale, 'site.name')} · {t(locale, 'home.eyebrowBrand')}</p>
-      <h1 class="display-xl max-w-3xl text-fg" data-preview-field="hero-heading" set:html={titleHtml} />
-      <p class="prose-measure text-base leading-relaxed text-fg-muted sm:text-lg">
-        {t(locale, 'home.description')}
-      </p>
-      <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-        <a href={localePath(locale, '/contact/')} class="btn btn-primary w-full sm:w-auto">
-          {t(locale, 'home.ctaPrimary')}
-        </a>
-        <a href={localePath(locale, '/solutions/')} class="btn btn-ghost w-full sm:w-auto">
-          {t(locale, 'home.ctaSecondary')}
-        </a>
-      </div>
-      {/* Stats stay below the first mobile viewport (hero budget) */}
-      <div class="mt-4 hidden max-w-xl grid-cols-3 gap-2 border-t border-border pt-6 sm:mt-0 sm:grid sm:gap-4">
-        {
-          stats.map((stat) => (
-            <div class="min-w-0">
-              <p
-                class="metric text-xl font-semibold text-fg sm:text-3xl"
-                data-count={t(locale, stat.valueKey)}
-              >
-                {t(locale, stat.valueKey)}
-              </p>
-              <p class="mt-1 text-[0.7rem] leading-snug text-fg-subtle sm:text-sm">{t(locale, stat.labelKey)}</p>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-
-    <div class="relative hidden lg:block">
-      <div class="card overflow-hidden p-1">
-        <div class="rounded-[calc(var(--radius-lg)-2px)] bg-bg-muted/70 p-6 surface-dots">
-          <NetworkGraph class="w-full text-fg-subtle" />
-          <div class="mt-4 grid grid-cols-2 gap-3">
-            {
-              capabilities.slice(0, 2).map((item) => (
-                <div class="rounded-xl border border-border bg-bg-elevated/80 p-3">
-                  <p class="font-mono text-[0.65rem] uppercase tracking-wider text-primary">
-                    {t(locale, item.title)}
-                  </p>
-                  <p class="mt-1 text-xs text-fg-muted line-clamp-2">{t(locale, item.body)}</p>
-                </div>
-              ))
-            }
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="border-y border-border bg-bg-elevated/70 py-8 sm:hidden" aria-label={t(locale, 'home.statsExperienceLabel')}>
-  <div class="container-site grid grid-cols-3 gap-2">
-    {
-      stats.map((stat) => (
-        <div class="min-w-0 text-center">
-          <p class="metric text-xl font-semibold text-fg" data-count={t(locale, stat.valueKey)}>
-            {t(locale, stat.valueKey)}
-          </p>
-          <p class="mt-1 text-[0.7rem] leading-snug text-fg-subtle">{t(locale, stat.labelKey)}</p>
-        </div>
-      ))
-    }
-  </div>
-</section>
-
-<section class="border-y border-border bg-bg-elevated/70 py-8" aria-label={t(locale, 'home.partnersHeading')}>
-  <div class="container-site mb-4 flex flex-wrap items-center justify-between gap-3">
-    <p class="eyebrow text-center sm:text-left">{t(locale, 'home.partnersHeading')}</p>
-    <button
-      type="button"
-      class="btn btn-ghost btn-sm"
-      data-marquee-toggle
-      aria-pressed="false"
-      aria-controls="home-partners-marquee"
-      data-label-pause={t(locale, 'common.pause')}
-      data-label-play={t(locale, 'common.play')}
-      aria-label={t(locale, 'common.pauseMarquee')}
+    <div
+      class="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(58%,40rem)] items-center lg:flex"
+      aria-hidden="true"
     >
-      {t(locale, 'common.pause')}
-    </button>
-  </div>
-  <div class="marquee is-inview" id="home-partners-marquee">
-    <div class="marquee-track px-4">
-      {
-        [...partnerKeys, ...partnerKeys].map((key) => (
-          <span class="inline-flex min-h-11 items-center rounded-full border border-border bg-bg px-5 font-mono text-sm text-fg-muted">
-            {t(locale, key)}
-          </span>
-        ))
-      }
+      <SapOpenTextMap locale={locale} class="w-full pr-4 xl:pr-10" />
+    </div>
+
+    <div class="container-site relative grid items-center gap-8 py-10 sm:gap-10 sm:py-14 lg:py-16">
+      <div class="min-w-0 max-w-xl space-y-4 bg-bg py-2 sm:space-y-6 lg:max-w-[42%] lg:py-4">
+        <p class="eyebrow">{t(locale, 'site.name')} · {t(locale, 'home.eyebrowBrand')}</p>
+        <h1 class="display-xl text-fg" data-preview-field="hero-heading" set:html={titleHtml} />
+        <p class="prose-measure text-sm leading-relaxed text-fg-muted sm:text-base lg:text-lg">
+          {t(locale, 'home.description')}
+        </p>
+        <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <a href={localePath(locale, '/contact/')} class="btn btn-cta w-full sm:w-auto">
+            {t(locale, 'home.ctaPrimary')}
+          </a>
+          <a href={localePath(locale, '/solutions/')} class="btn btn-ghost w-full sm:w-auto">
+            {t(locale, 'home.ctaSecondary')}
+          </a>
+        </div>
+      </div>
+
+      <div class="min-w-0 lg:hidden">
+        <SapOpenTextMap locale={locale} class="w-full" />
+      </div>
     </div>
   </div>
 </section>
 
 <section class="section-pad section-defer" data-reveal>
-  <div class="container-site grid items-end gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
-    <div class="space-y-4" data-reveal-child>
-      <p class="eyebrow">{t(locale, 'home.sectionEim')}</p>
-      <h2 class="display-md text-fg">{t(locale, 'home.aboutHeading')}</h2>
-    </div>
-    <p class="prose-measure text-base leading-relaxed text-fg-muted sm:text-lg" data-reveal-child>
-      {t(locale, 'home.aboutBody')}
-    </p>
-  </div>
-</section>
-
-<section class="section-pad section-defer bg-bg-muted/40" data-reveal>
   <div class="container-site space-y-10">
-    <div class="max-w-2xl space-y-3">
-      <p class="eyebrow">{t(locale, 'home.sectionHow')}</p>
-      <h2 class="display-md text-fg">{t(locale, 'home.howHeading')}</h2>
-      <p class="prose-measure text-fg-muted">{t(locale, 'home.howBody')}</p>
-    </div>
-    <ol class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      {
-        howSteps.map((step, index) => (
-          <li class="card card-spotlight relative p-5 sm:p-6" data-reveal-child>
-            <span class="metric text-sm text-primary">0{index + 1}</span>
-            <h3 class="mt-3 text-lg font-semibold text-fg">{t(locale, step.title)}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-fg-muted">{t(locale, step.body)}</p>
-          </li>
-        ))
-      }
-    </ol>
-  </div>
-</section>
-
-<section class="section-pad section-defer" data-reveal>
-  <div class="container-site space-y-10">
-    <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-      <div class="max-w-xl space-y-3">
+    <div class="flex flex-col justify-between gap-4 sm:flex-row sm:flex-wrap sm:items-end">
+      <div class="min-w-0 max-w-2xl space-y-3">
         <p class="eyebrow">{t(locale, 'home.sectionCapabilities')}</p>
         <h2 class="display-md text-fg">{t(locale, 'home.capabilitiesHeading')}</h2>
+        <p class="prose-measure text-fg-muted">{t(locale, 'home.capabilitiesIntro')}</p>
       </div>
-      <a href={localePath(locale, '/solutions/')} class="btn btn-ghost">
-        {t(locale, 'common.learnMore')}
-        <Icon name="arrow" class="size-4" />
+      <a href={localePath(locale, '/solutions/')} class="btn btn-ghost max-w-full">
+        {t(locale, 'home.ctaSecondary')}
+        <Icon name="arrow" class="size-4 shrink-0" />
       </a>
     </div>
 
-    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 lg:auto-rows-fr">
+    <ul class="grid gap-2 sm:grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
       {
-        capabilities.map((item, index) => (
+        outcomes.map((key) => (
           <li
-            class:list={[
-              'card card-spotlight flex flex-col gap-4 p-5 sm:p-6',
-              index === 0 && 'sm:col-span-2 lg:col-span-2 lg:row-span-2',
-            ]}
+            class="border border-border bg-bg-elevated px-4 py-3 text-sm leading-snug text-fg-muted"
             data-reveal-child
           >
-            <span class="inline-flex size-11 items-center justify-center rounded-2xl bg-primary-soft text-primary">
+            {t(locale, key)}
+          </li>
+        ))
+      }
+    </ul>
+
+    <ul class="grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+      {
+        capabilities.map((item) => (
+          <li class="flex flex-col gap-4 bg-bg-elevated p-5 sm:p-6" data-reveal-child>
+            <span class="inline-flex size-10 items-center justify-center border border-border text-primary">
               <Icon name={item.icon} class="size-5" />
             </span>
             <div class="space-y-2">
@@ -253,25 +155,53 @@ const partnerKeys = [
   </div>
 </section>
 
-<section class="section-pad section-defer" data-reveal>
-  <div class="container-site grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
-    <div class="space-y-4">
-      <p class="eyebrow">{t(locale, 'home.sectionIndustries')}</p>
-      <h2 class="display-md text-fg">{t(locale, 'home.industriesHeading')}</h2>
-      <p class="prose-measure text-fg-muted">{t(locale, 'home.industriesBody')}</p>
+<section class="section-pad section-defer bg-bg-muted/40" data-reveal>
+  <div class="container-site space-y-12">
+    <div class="max-w-2xl space-y-3">
+      <p class="eyebrow">{t(locale, 'home.sectionProof')}</p>
+      <h2 class="display-md text-fg">{t(locale, 'home.proofHeading')}</h2>
+      <p class="prose-measure text-fg-muted">{t(locale, 'home.proofSupporting')}</p>
     </div>
-    <ul class="flex flex-wrap gap-3">
-      {
-        industries.map((key) => (
-          <li
-            class="rounded-full border border-border bg-bg-elevated px-4 py-2.5 text-sm font-medium text-fg shadow-[var(--shadow-sm)]"
-            data-reveal-child
-          >
-            {t(locale, key)}
-          </li>
-        ))
-      }
-    </ul>
+
+    <ClientLogoStrip labels={sectorLabels} eyebrow={t(locale, 'trust.sectorsEyebrow')} />
+
+    <MetricBand metrics={trustMetrics} context={trustContext} />
+
+    <PartnerBadgeRow badges={partnerBadges} eyebrow={t(locale, 'trust.badgesEyebrow')} />
+
+    {
+      featuredCase && (
+        <CaseStudyCard
+          eyebrow={featuredCase.eyebrow}
+          title={featuredCase.title}
+          body={featuredCase.body}
+          metric={featuredCase.metric}
+          href={clientsHref}
+          linkLabel={t(locale, 'trust.viewClients')}
+        />
+      )
+    }
+
+    {
+      featuredTestimonial && (
+        <ProofTestimonial
+          locale={locale}
+          quote={featuredTestimonial.quote}
+          author={featuredTestimonial.author}
+          role={featuredTestimonial.role}
+          avatar={featuredTestimonial.avatar}
+        />
+      )
+    }
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+      <a href={clientsHref} class="btn btn-cta w-full sm:w-auto">
+        {t(locale, 'home.proofCtaPrimary')}
+      </a>
+      <a href={localePath(locale, '/about/')} class="btn btn-ghost w-full sm:w-auto">
+        {t(locale, 'home.proofCtaSecondary')}
+      </a>
+    </div>
   </div>
 </section>
 
@@ -279,15 +209,21 @@ const partnerKeys = [
   <div class="container-site">
     <div class="panel-invert surface-grid p-6 sm:p-10 lg:p-14">
       <div class="relative z-[1] grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-center">
-        <div>
-          <p class="eyebrow text-[color:var(--illust-primary-soft)]">{t(locale, 'home.sectionWhy')}</p>
-          <h2 class="display-md mt-3 text-white">{t(locale, 'home.whyHeading')}</h2>
+        <div class="space-y-5">
+          <div>
+            <p class="eyebrow text-[color:var(--illust-primary-soft)]">{t(locale, 'home.sectionWhy')}</p>
+            <h2 class="display-md mt-3 text-white">{t(locale, 'home.whyHeading')}</h2>
+          </div>
+          <a href={localePath(locale, '/about/')} class="btn btn-ghost border-white/25 text-white">
+            {t(locale, 'home.whyCta')}
+            <Icon name="arrow" class="size-4" />
+          </a>
         </div>
-        <ul class="grid gap-3 sm:grid-cols-2">
+        <ul class="grid gap-px border border-white/15 bg-white/15 sm:grid-cols-1">
           {
             whyItems.map((item) => (
-              <li class="flex gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
-                <span class="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-[color:var(--illust-primary-soft)]">
+              <li class="flex gap-3 bg-[#000c28] p-4">
+                <span class="inline-flex size-9 shrink-0 items-center justify-center border border-white/20 text-[color:var(--illust-primary-soft)]">
                   <Icon name={item.icon} class="size-4" />
                 </span>
                 <p class="text-sm font-medium leading-snug text-white/95 sm:text-base">
@@ -304,13 +240,13 @@ const partnerKeys = [
 
 <section class="section-pad section-defer" data-reveal>
   <div class="container-site">
-    <div class="panel-invert overflow-hidden px-6 py-12 sm:px-10 sm:py-16">
+    <div class="panel-invert px-6 py-12 sm:px-10 sm:py-16">
       <div class="relative z-[1] max-w-2xl space-y-5">
         <h2 class="display-md text-white">{t(locale, 'home.ctaHeading')}</h2>
         <p class="prose-measure text-base leading-relaxed text-white/80">
           {t(locale, 'home.ctaBody')}
         </p>
-        <a href={localePath(locale, '/contact/')} class="btn btn-primary">
+        <a href={localePath(locale, '/contact/')} class="btn btn-cta">
           {t(locale, 'home.ctaPrimary')}
         </a>
       </div>

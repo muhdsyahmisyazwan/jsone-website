@@ -5,6 +5,7 @@ import Analytics from '../components/Analytics.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import MobileCtaBar from '../components/MobileCtaBar.astro'
+import ConsentBanner from '../components/ConsentBanner.astro'
 import PreviewBanner from '../components/PreviewBanner.astro'
 import {getLocaleAlternates} from '../i18n/paths'
 import {getLocaleFromPath, htmlLang, type Locale} from '../i18n/locales'
@@ -122,6 +123,8 @@ const webPageJsonLd = {
         function applyJsonePrefs(root) {
           try {
             var el = root || document.documentElement
+            /* Gate scroll-reveal hide behind JS so no-JS users still see content */
+            el.classList.add('js')
             var pref = localStorage.getItem('jsone-theme') || 'system'
             var dark = window.matchMedia('(prefers-color-scheme: dark)').matches
             var resolved = pref === 'light' || pref === 'dark' ? pref : dark ? 'dark' : 'light'
@@ -236,6 +239,7 @@ const webPageJsonLd = {
       <slot />
     </main>
     <Footer locale={locale} settings={settings} footer={footer} />
+    <ConsentBanner locale={locale} />
     <MobileCtaBar locale={locale} settings={settings} />
 
     <script>
@@ -258,20 +262,6 @@ const webPageJsonLd = {
         )
         nodes.forEach((el) => {
           if (!el.classList.contains('is-revealed')) io.observe(el)
-        })
-      }
-
-      function bindSpotlight() {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-        if (window.matchMedia('(hover: none)').matches) return
-        document.querySelectorAll('.card-spotlight').forEach((card) => {
-          if (!(card instanceof HTMLElement) || card.dataset.spotBound === 'true') return
-          card.dataset.spotBound = 'true'
-          card.addEventListener('pointermove', (event) => {
-            const rect = card.getBoundingClientRect()
-            card.style.setProperty('--spot-x', `${event.clientX - rect.left}px`)
-            card.style.setProperty('--spot-y', `${event.clientY - rect.top}px`)
-          })
         })
       }
 
@@ -317,56 +307,9 @@ const webPageJsonLd = {
         nodes.forEach((el) => io.observe(el))
       }
 
-      function bindMarquee() {
-        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        document.querySelectorAll('.marquee').forEach((el) => {
-          if (!(el instanceof HTMLElement)) return
-          if (reduce) {
-            el.classList.add('is-inview')
-            return
-          }
-          if (el.dataset.marqueeBound === 'true') return
-          el.dataset.marqueeBound = 'true'
-          if (!('IntersectionObserver' in window)) {
-            el.classList.add('is-inview')
-            return
-          }
-          const io = new IntersectionObserver(
-            (entries) => {
-              for (const entry of entries) {
-                entry.target.classList.toggle('is-inview', entry.isIntersecting)
-              }
-            },
-            {rootMargin: '10% 0px', threshold: 0.05},
-          )
-          io.observe(el)
-        })
-
-        document.querySelectorAll('[data-marquee-toggle]').forEach((button) => {
-          if (!(button instanceof HTMLElement) || button.dataset.bound === 'true') return
-          button.dataset.bound = 'true'
-          const targetId = button.getAttribute('aria-controls')
-          const marquee = targetId
-            ? document.getElementById(targetId)
-            : button.closest('section')?.querySelector('.marquee')
-          if (!(marquee instanceof HTMLElement)) return
-          button.addEventListener('click', () => {
-            const paused = marquee.classList.toggle('is-paused')
-            const playLabel = button.getAttribute('data-label-play') || ''
-            const pauseLabel = button.getAttribute('data-label-pause') || ''
-            const label = paused ? playLabel : pauseLabel
-            button.setAttribute('aria-pressed', String(paused))
-            button.textContent = label
-            button.setAttribute('aria-label', label)
-          })
-        })
-      }
-
       function bindUi() {
         bindReveal()
-        bindSpotlight()
         bindCountUp()
-        bindMarquee()
       }
 
       bindUi()

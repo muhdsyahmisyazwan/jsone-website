@@ -73,7 +73,7 @@ const swipeHint = t(locale, 'common.swipeHint')
         >
           {items.map((item, index) => (
             <article
-              class="card card-spotlight flex w-[min(85%,20rem)] shrink-0 snap-center flex-col gap-5 p-5 sm:w-[26rem] sm:p-6"
+              class="card flex w-[min(85%,20rem)] shrink-0 snap-center flex-col gap-5 p-5 sm:w-[26rem] sm:p-6"
               role="listitem"
               data-reveal-child
               aria-label={`${index + 1} / ${items.length}`}
@@ -89,7 +89,7 @@ const swipeHint = t(locale, 'common.swipeHint')
                   <SanityImage
                     image={item.avatar}
                     locale={locale}
-                    class="size-12 rounded-full object-cover ring-2 ring-primary/30"
+                    class="size-12 object-cover border border-border"
                     widths={[96, 192]}
                     sizes="48px"
                     maxWidth={192}

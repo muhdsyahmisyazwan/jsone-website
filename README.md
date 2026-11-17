@@ -97,7 +97,7 @@ Environment variables: see [`web/.env.example`](web/.env.example) and [`studio/.
 
 ## Quality targets
 
-- WCAG 2.1 AA (skip link, focus, contrast, labels, reduced motion)
+- WCAG 2.2 AA (see `docs/DESIGN.md` §7: focus not obscured, target size, marquee pause/play, reveal resting state)
 - Lighthouse ≥ 90 (Performance, Accessibility, Best Practices, SEO)
 - Minimal third-party scripts; no full CJK webfonts
 

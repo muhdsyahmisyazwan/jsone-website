@@ -56,6 +56,32 @@ English is the fallback when another language is missing or unreviewed.
 | News | **News** | Title, excerpt, body, image, SEO |
 | Nav / footer / brand | **Navigation**, **Footer**, **Site settings** | Singletons - don’t create duplicates |
 
+### Homepage section order (recommended)
+
+Keep **one job per section**. Preferred order when authoring the Homepage singleton:
+
+1. **Hero** (`homeHero`) - category + primary CTA only. Do not put metrics in the first viewport.
+2. **Capabilities** (`homeServicesGrid`) - what we sell; optional short outcomes in the intro, not a second “about” block.
+3. **Proof** - vertical stack: `homeLogoStrip` (or sector fallback) → delivery metrics **once** → partner credential badges → one case teaser → optional single reviewed testimonial (omit when empty) → View Clients / Company Overview. Do not put certifications here (Clients only).
+4. **Why JS One** (`homeTextImage` or a slim services/list block) - engagement model only; do not restate OpenText product list or tenure.
+5. **CTA** (`homeCta`) - contact conversion.
+
+Avoid stacking a standalone stats strip, a duplicate About blurb, a separate “Enabling Digital Transformation” / method section, or an Industries grid on the homepage (those belong on `/about/`, `/solutions/`, and `/industries/`). Messaging source: [content-brief.md](content-brief.md).
+
+### Trust system (shared)
+
+Fallback pages share trust primitives under `web/src/components/trust/` (badges, metrics, logo/sector strip, case cards, certifications). Placement rules:
+
+| Surface | What to show |
+| ---- | ---- |
+| Homepage Proof | Sector strip (or CMS logos) · metrics once · full partner badges · one case · optional single reviewed testimonial |
+| Solutions | Compact OpenText + SAP badges · 1–2 related cases |
+| Industries | One related case only |
+| Contact | Compact partner badges **or** metrics - not both; never logos |
+| Clients | Full gallery (metrics, sectors/logos, badges, cases, certifications) |
+
+Omit a block when its assets or copy are empty. Do not invent client logos or testimonials. Certifications stay on Clients only. Until licensed badge artwork exists, use mono wordmarks / credential text. Metrics include per-figure context (what each number counts). Designer MVP states, honest **60+ clients** vs 6-slot cluster, and obtain-first order: [DESIGN.md](DESIGN.md) §10 Proof system (realistic assets).
+
 ### Page builder blocks
 
 Hero · Text + image · Services grid · Team · Testimonials · CTA · FAQ · Contact form · Logo strip  

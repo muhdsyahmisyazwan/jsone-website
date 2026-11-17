@@ -64,7 +64,7 @@ const timeline = [
 <section class="section-pad section-defer" data-reveal>
   <div class="container-site grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
     <div class="panel-invert relative aspect-[4/3] overflow-hidden surface-grid">
-      <p class="absolute bottom-6 left-6 z-[1] max-w-[14rem] text-lg font-semibold leading-snug text-white sm:bottom-8 sm:left-8 sm:text-xl">
+      <p class="about-image-callout absolute bottom-6 left-6 z-[1] text-lg font-semibold leading-snug text-white sm:bottom-8 sm:left-8 sm:text-xl">
         {t(locale, 'about.imageCallout')}
       </p>
     </div>
@@ -93,11 +93,11 @@ const timeline = [
 <section class="section-pad section-defer bg-bg-muted/40" data-reveal>
   <div class="container-site space-y-10">
     <h2 class="display-md text-fg">{t(locale, 'about.whyHeading')}</h2>
-    <ul class="grid gap-4 sm:grid-cols-2">
+    <ul class="grid gap-px border border-border bg-border sm:grid-cols-2">
       {
         whyCards.map((card, index) => (
-          <li class="card card-spotlight flex flex-col gap-4 p-6" data-reveal-child>
-            <span class="inline-flex size-11 items-center justify-center rounded-2xl bg-primary-soft text-primary">
+          <li class="flex flex-col gap-4 bg-bg-elevated p-6" data-reveal-child>
+            <span class="inline-flex size-10 items-center justify-center border border-border text-primary">
               <Icon name={serviceIconName(index)} class="size-5" />
             </span>
             <h3 class="text-lg font-semibold text-fg">{t(locale, card.title)}</h3>
@@ -123,7 +123,7 @@ const timeline = [
           <details class="group relative pl-10 sm:pl-12" open={index === 0}>
             <summary class="min-h-11 cursor-pointer list-none py-2 marker:content-none [&::-webkit-details-marker]:hidden">
               <span
-                class="absolute left-0 top-2.5 size-6 rounded-full border-4 border-bg bg-primary sm:size-7"
+                class="absolute left-0 top-2.5 size-4 border border-bg bg-primary sm:size-5"
                 aria-hidden="true"
               />
               <span class="flex flex-wrap items-baseline gap-x-2 text-base font-semibold text-fg sm:text-lg">

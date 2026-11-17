@@ -1,0 +1,39 @@
+---
+/**
+ * Outcome story. Left border treatment (not a heavy card).
+ * Omits when title or body is missing.
+ */
+interface Props {
+  eyebrow?: string
+  title: string
+  body: string
+  metric?: string
+  href?: string
+  linkLabel?: string
+  class?: string
+}
+
+const {eyebrow, title, body, metric, href, linkLabel, class: className = ''} = Astro.props
+const canRender = Boolean(title?.trim() && body?.trim())
+---
+
+{
+  canRender && (
+    <article
+      class:list={['space-y-2 border-l-2 border-primary/40 pl-4', className]}
+      data-reveal-child
+    >
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h3 class="font-semibold text-fg">{title}</h3>
+      <p class="text-sm leading-relaxed text-fg-muted">{body}</p>
+      {metric && (
+        <p class="font-mono text-xs text-primary sm:text-sm">{metric}</p>
+      )}
+      {href && linkLabel && (
+        <a href={href} class="inline-flex min-h-11 items-center text-sm font-semibold text-primary">
+          {linkLabel}
+        </a>
+      )}
+    </article>
+  )
+}

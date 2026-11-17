@@ -2,6 +2,8 @@
 import type {Locale} from '../i18n/locales'
 import {t} from '../i18n/utils'
 import ContactForm from './sections/ContactForm.astro'
+import PartnerBadgeRow from './trust/PartnerBadgeRow.astro'
+import {getPartnerBadgesCompact} from '../lib/trust/fallback'
 
 interface Props {
   locale: Locale
@@ -16,6 +18,7 @@ const hours = t(locale, 'site.hours')
 const hoursNote = t(locale, 'site.hoursNote')
 const registration = t(locale, 'site.registration')
 const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
+const partnerBadges = getPartnerBadgesCompact(locale)
 
 const topics = [
   'contact.topicAssessment',
@@ -26,8 +29,7 @@ const topics = [
 ] as const
 ---
 
-<section class="relative overflow-hidden">
-  <div class="pointer-events-none absolute inset-0 surface-grid opacity-50" aria-hidden="true"></div>
+<section class="relative overflow-hidden border-b border-border">
   <div class="container-site grid gap-10 py-20 lg:grid-cols-2 lg:items-end lg:py-24">
     <div class="space-y-4">
       <p class="eyebrow">{t(locale, 'nav.contact')}</p>
@@ -35,14 +37,19 @@ const topics = [
       <p class="prose-measure text-base text-fg-muted sm:text-lg">
         {t(locale, 'contact.heroSubtitle')}
       </p>
+      <PartnerBadgeRow
+        badges={partnerBadges}
+        eyebrow={t(locale, 'trust.badgesCompactEyebrow')}
+        class="pt-2"
+      />
       <div class="space-y-3 pt-2">
         <h2 class="text-sm font-semibold uppercase tracking-wide text-fg-subtle">
           {t(locale, 'contact.topicsHeading')}
         </h2>
-        <ul class="flex flex-wrap gap-2">
+        <ul class="grid grid-cols-1 gap-px border border-border bg-border sm:grid-cols-2">
           {
             topics.map((key) => (
-              <li class="inline-flex min-h-10 items-center rounded-full border border-border bg-bg-elevated px-4 text-sm text-fg-muted">
+              <li class="flex min-h-10 items-center bg-bg-elevated px-4 text-sm text-fg-muted">
                 {t(locale, key)}
               </li>
             ))
@@ -50,7 +57,7 @@ const topics = [
         </ul>
       </div>
     </div>
-    <div class="space-y-4 rounded-[var(--radius-xl)] border border-border bg-bg-elevated p-6 shadow-[var(--shadow-sm)]">
+    <div class="space-y-4 border border-border bg-bg-elevated p-6">
       <h2 class="text-sm font-semibold uppercase tracking-wide text-fg-subtle">
         {t(locale, 'contact.detailsHeading')}
       </h2>

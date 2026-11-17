@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import Breadcrumbs from '../../components/ui/Breadcrumbs.astro'
 import {loadChrome} from '../../lib/pages/loadPage'
 import {t} from '../../i18n/utils'
 
@@ -28,6 +29,7 @@ const sections = [
 >
   <section class="section-pad">
     <div class="container-site mx-auto max-w-3xl space-y-8">
+      <Breadcrumbs locale={locale} items={[{label: t(locale, 'legal.termsTitle')}]} />
       <header class="space-y-3">
         <h1 class="display-md text-fg">{t(locale, 'legal.termsTitle')}</h1>
         <p class="text-sm text-fg-subtle">{t(locale, 'legal.termsUpdated')}</p>

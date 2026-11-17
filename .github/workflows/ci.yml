@@ -32,6 +32,9 @@ jobs:
       - name: Astro check + server/studio typecheck
         run: npm run typecheck
 
+      - name: Design token contrast (WCAG AA / UI 3:1)
+        run: npm run check:contrast
+
   smoke:
     name: Playwright + Lighthouse
     runs-on: ubuntu-latest

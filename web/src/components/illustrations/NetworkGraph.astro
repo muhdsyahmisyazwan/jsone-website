@@ -13,31 +13,24 @@ const {class: className = ''} = Astro.props
   xmlns="http://www.w3.org/2000/svg"
   aria-hidden="true"
 >
-  <defs>
-    <linearGradient id="ng-line" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="var(--illust-primary)" stop-opacity="0.15"></stop>
-      <stop offset="50%" stop-color="var(--illust-primary)" stop-opacity="0.7"></stop>
-      <stop offset="100%" stop-color="var(--illust-accent)" stop-opacity="0.35"></stop>
-    </linearGradient>
-    <radialGradient id="ng-node" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="var(--illust-primary-soft)"></stop>
-      <stop offset="100%" stop-color="var(--illust-primary)"></stop>
-    </radialGradient>
-  </defs>
-  <g stroke="url(#ng-line)" stroke-width="1.25">
+  <g stroke="var(--illust-primary)" stroke-width="1" stroke-linecap="square">
     <path d="M80 210H220M220 210L320 120M220 210L320 300M320 120H460M320 300H460M460 120L560 180M460 300L560 240M560 180H640M560 240H640"></path>
-    <path d="M320 120V60M320 300V360M460 120V70M460 300V350" opacity="0.55"></path>
+    <path d="M320 120V60M320 300V360M460 120V70M460 300V350" opacity="0.45"></path>
   </g>
-  <g>
-    <circle cx="80" cy="210" r="7" fill="url(#ng-node)"></circle>
-    <circle cx="220" cy="210" r="10" fill="url(#ng-node)"></circle>
-    <circle cx="320" cy="120" r="8" fill="url(#ng-node)"></circle>
-    <circle cx="320" cy="300" r="8" fill="url(#ng-node)"></circle>
-    <circle cx="460" cy="120" r="9" fill="url(#ng-node)"></circle>
-    <circle cx="460" cy="300" r="9" fill="url(#ng-node)"></circle>
-    <circle cx="560" cy="180" r="7" fill="var(--illust-accent)"></circle>
-    <circle cx="560" cy="240" r="7" fill="var(--illust-accent)"></circle>
-    <circle cx="640" cy="180" r="5" fill="var(--illust-primary-soft)"></circle>
-    <circle cx="640" cy="240" r="5" fill="var(--illust-primary-soft)"></circle>
+  <g fill="var(--illust-primary)">
+    <rect x="74" y="204" width="12" height="12"></rect>
+    <rect x="212" y="202" width="16" height="16"></rect>
+    <rect x="312" y="112" width="16" height="16"></rect>
+    <rect x="312" y="292" width="16" height="16"></rect>
+    <rect x="452" y="112" width="16" height="16"></rect>
+    <rect x="452" y="292" width="16" height="16"></rect>
+  </g>
+  <g fill="var(--illust-accent)">
+    <rect x="552" y="172" width="16" height="16"></rect>
+    <rect x="552" y="232" width="16" height="16"></rect>
+  </g>
+  <g fill="var(--illust-primary)" opacity="0.55">
+    <rect x="634" y="174" width="12" height="12"></rect>
+    <rect x="634" y="234" width="12" height="12"></rect>
   </g>
 </svg>

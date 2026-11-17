@@ -10,8 +10,7 @@ interface Props {
 const {eyebrow, title, subtitle, split = false} = Astro.props
 ---
 
-<section class="relative overflow-hidden">
-  <div class="pointer-events-none absolute inset-0 surface-grid opacity-50" aria-hidden="true"></div>
+<section class="relative overflow-hidden border-b border-border">
   <div
     class:list={[
       'container-site py-16 sm:py-20 lg:py-24',
@@ -19,6 +18,7 @@ const {eyebrow, title, subtitle, split = false} = Astro.props
     ]}
   >
     <div class="space-y-4">
+      <slot name="breadcrumbs" />
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
       <h1 class="display-xl max-w-3xl text-fg">{title}</h1>
       {subtitle && <p class="prose-measure text-base text-fg-muted sm:text-lg">{subtitle}</p>}

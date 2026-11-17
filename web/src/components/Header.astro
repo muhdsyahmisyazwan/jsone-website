@@ -28,7 +28,29 @@ const fallbackLinks = [
       {label: t(locale, 'nav.aboutTeam'), href: localePath(locale, '/about/team/')},
     ],
   },
-  {label: t(locale, 'nav.solutions'), href: localePath(locale, '/solutions/')},
+  {
+    label: t(locale, 'nav.solutions'),
+    href: localePath(locale, '/solutions/'),
+    children: [
+      {label: t(locale, 'nav.solutionsAll'), href: localePath(locale, '/solutions/')},
+      {
+        label: t(locale, 'nav.solutionsEcm'),
+        href: localePath(locale, '/solutions/#opentext-ecm'),
+      },
+      {
+        label: t(locale, 'nav.solutionsSap'),
+        href: localePath(locale, '/solutions/#sap-integrations'),
+      },
+      {
+        label: t(locale, 'nav.solutionsAms'),
+        href: localePath(locale, '/solutions/#ams'),
+      },
+      {
+        label: t(locale, 'nav.solutionsDev'),
+        href: localePath(locale, '/solutions/#system-development'),
+      },
+    ],
+  },
   {label: t(locale, 'nav.industries'), href: localePath(locale, '/industries/')},
   {label: t(locale, 'nav.clients'), href: localePath(locale, '/clients/')},
   {label: t(locale, 'nav.news'), href: localePath(locale, '/news/')},
@@ -93,11 +115,11 @@ function isActive(href: string, external?: boolean) {
 ---
 
 <header
-  class="sticky top-0 z-50 px-3 pt-[max(0.5rem,env(safe-area-inset-top))] transition-[padding] duration-200 sm:px-4"
+  class="sticky top-0 z-[var(--z-header)] border-b border-border bg-bg-elevated pt-[max(0,env(safe-area-inset-top))] transition-[padding] duration-200"
   data-site-header
 >
   <div
-    class="container-site relative z-50 flex h-[var(--header-height)] items-center justify-between gap-2 rounded-2xl border border-border bg-bg-elevated/95 px-3 shadow-[var(--shadow-sm)] backdrop-blur-md transition-[height,border-radius,box-shadow,padding] duration-200 sm:bg-bg-elevated/80 sm:px-4 sm:backdrop-blur-xl lg:gap-4"
+    class="container-site relative z-[var(--z-header)] flex min-h-[var(--header-height)] flex-wrap items-center justify-between gap-x-2 gap-y-2 py-1 transition-[min-height,padding] duration-200 lg:gap-4"
     data-header-inner
   >
     <a
@@ -132,7 +154,11 @@ function isActive(href: string, external?: boolean) {
       <span class="sr-only">{siteName}</span>
     </a>
 
-    <nav class="hidden min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1 lg:flex" aria-label={navLabel}>
+    <nav
+      class="hidden min-w-0 flex-1 items-center justify-center gap-1 xl:flex xl:gap-3"
+      aria-label={navLabel}
+      data-desktop-nav
+    >
       {
         links.map((link) => {
           const active = isActive(link.href, link.external)
@@ -142,27 +168,29 @@ function isActive(href: string, external?: boolean) {
                 <button
                   type="button"
                   class:list={[
-                    'inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors',
-                    active ? 'text-primary' : 'text-fg-muted hover:text-fg',
+                    'inline-flex min-h-11 min-w-11 items-center justify-center gap-1 border-b-2 px-2 text-sm font-medium transition-colors xl:px-3',
+                    active
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-fg-muted hover:text-fg',
                   ]}
                   aria-expanded="false"
                   aria-haspopup="true"
                   data-nav-disclosure-trigger
                 >
                   {link.label}
-                  <svg class="size-3.5 opacity-70" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <svg class="size-3.5 shrink-0 opacity-70" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                     <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
                   </svg>
                 </button>
                 <div
-                  class="invisible absolute left-0 top-full z-50 min-w-[13rem] pt-2 opacity-0 transition data-[open=true]:visible data-[open=true]:opacity-100"
+                  class="invisible absolute left-0 top-full z-[var(--z-dropdown)] min-w-[13rem] max-w-[min(100vw-2rem,20rem)] pt-2 opacity-0 transition data-[open=true]:visible data-[open=true]:opacity-100"
                   data-nav-disclosure-panel
                   hidden
                 >
-                  <div class="rounded-2xl border border-border bg-bg-elevated p-2 shadow-[var(--shadow-lg)]">
+                  <div class="border border-border bg-bg-elevated p-1 shadow-[var(--shadow-overlay)]">
                     <a
                       href={link.href}
-                      class="block rounded-xl px-3 py-2.5 text-sm font-medium text-fg transition-colors hover:bg-bg-muted"
+                      class="flex min-h-11 items-center px-3 py-2.5 text-sm font-medium text-fg transition-colors hover:bg-bg-muted"
                       aria-current={active ? 'page' : undefined}
                     >
                       {link.label}
@@ -170,7 +198,7 @@ function isActive(href: string, external?: boolean) {
                     {link.children.map((child) => (
                       <a
                         href={child.href}
-                        class="block rounded-xl px-3 py-2.5 text-sm text-fg-muted transition-colors hover:bg-bg-muted hover:text-fg"
+                        class="flex min-h-11 items-center border-t border-border px-3 py-2.5 text-sm text-fg-muted transition-colors hover:bg-bg-muted hover:text-fg"
                       >
                         {child.label}
                       </a>
@@ -184,8 +212,10 @@ function isActive(href: string, external?: boolean) {
             <a
               href={link.href}
               class:list={[
-                'rounded-full px-3 py-2 text-sm font-medium transition-colors',
-                active ? 'text-primary' : 'text-fg-muted hover:text-fg',
+                'inline-flex min-h-11 min-w-11 items-center justify-center border-b-2 px-2 text-sm font-medium transition-colors xl:px-3',
+                active
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-fg-muted hover:text-fg',
               ]}
               aria-current={active ? 'page' : undefined}
               target={link.external ? '_blank' : undefined}
@@ -199,19 +229,20 @@ function isActive(href: string, external?: boolean) {
       }
     </nav>
 
-    <div class="relative z-10 flex shrink-0 items-center gap-1.5 sm:gap-2">
-      <div class="hidden md:block">
+    <div class="relative z-10 flex shrink-0 flex-wrap items-center justify-end gap-1.5 sm:gap-2">
+      {/* Desktop tools from xl so Malay (+30%) nav labels are not crushed */}
+      <div class="hidden xl:block">
         <FontSizeToggle locale={locale} />
       </div>
       <ThemeToggle locale={locale} class="shrink-0" />
-      <div class="hidden md:block">
-        <a href={contactHref} class="btn btn-primary whitespace-nowrap">
+      <div class="hidden xl:block">
+        <a href={contactHref} class="btn btn-cta">
           {getInTouch}
         </a>
       </div>
       <button
         type="button"
-        class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-bg-elevated text-fg lg:hidden"
+        class="inline-flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-sm)] border border-border-control bg-bg-elevated text-fg xl:hidden"
         data-menu-toggle
         aria-expanded="false"
         aria-controls="mobile-nav"
@@ -229,7 +260,7 @@ function isActive(href: string, external?: boolean) {
 
   <div
     id="mobile-nav"
-    class="fixed inset-0 z-50 hidden bg-bg/98 lg:hidden"
+    class="fixed inset-0 z-[var(--z-overlay)] hidden bg-bg/98 shadow-[var(--shadow-overlay-strong)] xl:hidden"
     data-mobile-nav
     hidden
   >
@@ -238,7 +269,7 @@ function isActive(href: string, external?: boolean) {
         <p class="eyebrow">{navLabel}</p>
         <button
           type="button"
-          class="inline-flex size-12 shrink-0 items-center justify-center rounded-full border border-border"
+          class="inline-flex size-12 shrink-0 items-center justify-center rounded-[var(--radius-sm)] border border-border-control"
           data-menu-close
           aria-label={closeMenu}
         >
@@ -253,7 +284,7 @@ function isActive(href: string, external?: boolean) {
             <>
               <a
                 href={link.href}
-                class="min-h-12 rounded-2xl px-3 py-3.5 text-2xl font-semibold tracking-tight text-fg"
+                class="min-h-12 px-3 py-3.5 text-2xl font-semibold tracking-tight text-fg"
                 data-menu-link
               >
                 {link.label}
@@ -261,7 +292,7 @@ function isActive(href: string, external?: boolean) {
               {link.children?.map((child) => (
                 <a
                   href={child.href}
-                  class="min-h-12 rounded-xl px-4 py-3 text-base text-fg-muted"
+                  class="min-h-12 border-l-2 border-border px-4 py-3 text-base text-fg-muted"
                   data-menu-link
                 >
                   {child.label}
@@ -276,7 +307,7 @@ function isActive(href: string, external?: boolean) {
           <FontSizeToggle locale={locale} />
           <ThemeToggle locale={locale} class="shrink-0" />
         </div>
-        <a href={contactHref} class="btn btn-primary w-full" data-menu-link>
+        <a href={contactHref} class="btn btn-cta w-full" data-menu-link>
           {getInTouch}
         </a>
       </div>
@@ -392,10 +423,7 @@ function isActive(href: string, external?: boolean) {
       const onScroll = () => {
         const condensed = window.scrollY > 24
         header.dataset.condensed = String(condensed)
-        header.classList.toggle('pt-1', condensed)
-        inner.classList.toggle('h-14', condensed)
-        inner.classList.toggle('rounded-xl', condensed)
-        inner.classList.toggle('shadow-[var(--shadow-md)]', condensed)
+        inner.classList.toggle('min-h-14', condensed)
       }
       onScroll()
       window.addEventListener('scroll', onScroll, {passive: true})

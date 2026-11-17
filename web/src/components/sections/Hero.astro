@@ -1,7 +1,7 @@
 ---
 import type {Locale} from '../../i18n/locales'
 import {t} from '../../i18n/utils'
-import NetworkGraph from '../illustrations/NetworkGraph.astro'
+import SapOpenTextMap from '../illustrations/SapOpenTextMap.astro'
 import SanityImage from '../sanity/SanityImage.astro'
 import {resolveLocaleLink, resolveLink} from '../../lib/sanity/links'
 import {resolveMaybeLocaleString} from '../../lib/sanity/locale'
@@ -17,6 +17,7 @@ interface Props {
     primaryCta?: Link | LocaleLink
     secondaryCta?: Link | LocaleLink
     image?: Img
+    /** Ignored in hero: metrics belong in Proof / Clients only. */
     stats?: Array<{label?: string | LocaleString; value?: string | LocaleString}>
   }
 }
@@ -33,23 +34,16 @@ const secondary = localized
   ? resolveLocaleLink(section.secondaryCta as LocaleLink, locale)
   : resolveLink(section.secondaryCta as Link, locale)
 
-const stats = (section.stats || [])
-  .map((s) => ({label: resolveMaybeLocaleString(s.label, locale), value: resolveMaybeLocaleString(s.value, locale)}))
-  .filter((s) => s.label)
+const hasImage = Boolean(section.image)
 ---
 
 {
   heading && (
-    <section class="hero-stage relative overflow-hidden">
-      <div class="pointer-events-none absolute inset-0 surface-grid opacity-60" aria-hidden="true" />
-      <div
-        class="pointer-events-none absolute -right-16 top-16 hidden w-[min(48vw,32rem)] opacity-70 lg:block"
-        aria-hidden="true"
-      >
-        <NetworkGraph class="w-full text-fg-subtle" />
-      </div>
-      {section.image && (
-        <div class="pointer-events-none absolute inset-0 -z-10 opacity-20">
+    <section class="hero-stage relative overflow-hidden border-b border-border">
+      <div class="hero-bleed pointer-events-none absolute inset-0 -z-10 surface-grid" aria-hidden="true"></div>
+
+      {hasImage ? (
+        <div class="pointer-events-none absolute inset-0 -z-10 opacity-25">
           <SanityImage
             image={section.image}
             locale={locale}
@@ -59,65 +53,65 @@ const stats = (section.stats || [])
             lazy={false}
           />
         </div>
+      ) : (
+        <div
+          class="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(58%,40rem)] items-center lg:flex"
+          aria-hidden="true"
+        >
+          <SapOpenTextMap locale={locale} class="w-full pr-4 xl:pr-10" />
+        </div>
       )}
-      <div class="container-site flex min-h-[min(78svh,40rem)] flex-col justify-center gap-6 py-12 sm:py-16 lg:min-h-[min(78dvh,40rem)] lg:py-20">
-        {eyebrow && <p class="eyebrow" data-preview-field="hero-eyebrow">{eyebrow}</p>}
-        <h1 class="display-xl max-w-3xl text-fg" data-preview-field="hero-heading">{heading}</h1>
-        {body && (
-          <p
-            class="prose-measure text-base leading-relaxed text-fg-muted sm:text-lg"
-            data-preview-field="hero-body"
-          >
-            {body}
-          </p>
-        )}
-        {(primary || secondary) && (
-          <div class="flex flex-wrap items-center gap-3 pt-1">
-            {primary && (
-              <a
-                href={primary.href}
-                class="btn btn-primary"
-                target={primary.openInNewTab ? '_blank' : undefined}
-                rel={primary.openInNewTab ? 'noopener noreferrer' : undefined}
-              >
-                {primary.label}
-                {primary.openInNewTab && (
-                  <span class="sr-only"> ({t(locale, 'common.opensNewTab')})</span>
-                )}
-              </a>
-            )}
-            {secondary && (
-              <a
-                href={secondary.href}
-                class="btn btn-ghost"
-                target={secondary.openInNewTab ? '_blank' : undefined}
-                rel={secondary.openInNewTab ? 'noopener noreferrer' : undefined}
-              >
-                {secondary.label}
-                {secondary.openInNewTab && (
-                  <span class="sr-only"> ({t(locale, 'common.opensNewTab')})</span>
-                )}
-              </a>
-            )}
+
+      <div class="container-site relative grid items-center gap-8 py-12 sm:gap-10 sm:py-16 lg:min-h-[min(78dvh,40rem)] lg:py-20">
+        <div class="flex max-w-xl flex-col justify-center gap-6 bg-bg py-2 lg:max-w-[42%] lg:py-4">
+          {eyebrow && <p class="eyebrow" data-preview-field="hero-eyebrow">{eyebrow}</p>}
+          <h1 class="display-xl text-fg" data-preview-field="hero-heading">{heading}</h1>
+          {body && (
+            <p
+              class="prose-measure text-base leading-relaxed text-fg-muted sm:text-lg"
+              data-preview-field="hero-body"
+            >
+              {body}
+            </p>
+          )}
+          {(primary || secondary) && (
+            <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              {primary && (
+                <a
+                  href={primary.href}
+                  class="btn btn-cta w-full sm:w-auto"
+                  target={primary.openInNewTab ? '_blank' : undefined}
+                  rel={primary.openInNewTab ? 'noopener noreferrer' : undefined}
+                >
+                  {primary.label}
+                  {primary.openInNewTab && (
+                    <span class="sr-only"> ({t(locale, 'common.opensNewTab')})</span>
+                  )}
+                </a>
+              )}
+              {secondary && (
+                <a
+                  href={secondary.href}
+                  class="btn btn-ghost w-full sm:w-auto"
+                  target={secondary.openInNewTab ? '_blank' : undefined}
+                  rel={secondary.openInNewTab ? 'noopener noreferrer' : undefined}
+                >
+                  {secondary.label}
+                  {secondary.openInNewTab && (
+                    <span class="sr-only"> ({t(locale, 'common.opensNewTab')})</span>
+                  )}
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+
+        {!hasImage && (
+          <div class="min-w-0 lg:hidden">
+            <SapOpenTextMap locale={locale} class="w-full" />
           </div>
         )}
       </div>
-      {stats.length > 0 && (
-        <div class="border-t border-border bg-bg-elevated/80">
-          <div class="container-site grid gap-6 py-8 sm:grid-cols-3">
-            {stats.map((stat) => (
-              <p class="text-center">
-                {stat.value && (
-                  <span class="metric block text-3xl font-semibold text-fg" data-count={stat.value}>
-                    {stat.value}
-                  </span>
-                )}
-                <span class="mt-1 block text-sm text-fg-muted">{stat.label}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-      )}
     </section>
   )
 }

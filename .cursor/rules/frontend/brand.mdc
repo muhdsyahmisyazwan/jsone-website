@@ -46,7 +46,7 @@ Muted / subtle text:
 `--fg-muted` / `--fg-subtle`
 
 Border:
-`--border` / `--border-strong`
+`--border` / `--border-strong` (decorative dividers) · `--border-control` (inputs, checkboxes, selects, focusable cells; WCAG 1.4.11 ≥3:1)
 
 Primary:
 `--primary` / `--color-primary` (brand cyan family; AA-safe for white text)

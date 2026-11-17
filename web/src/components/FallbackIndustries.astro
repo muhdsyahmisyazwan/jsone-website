@@ -1,10 +1,12 @@
 ---
 import PageHero from './ui/PageHero.astro'
+import CaseStudyCard from './trust/CaseStudyCard.astro'
 import type {Locale} from '../i18n/locales'
 import {localePath} from '../i18n/paths'
 import {t} from '../i18n/utils'
 import Icon from './icons/Icon.astro'
 import type {ServiceIconName} from './icons/names'
+import {getFeaturedCase} from '../lib/trust/fallback'
 
 interface Props {
   locale: Locale
@@ -65,6 +67,9 @@ const industries: {
     icon: 'layers',
   },
 ]
+
+const featuredCase = getFeaturedCase(locale)
+const clientsHref = localePath(locale, '/clients/')
 ---
 
 <PageHero
@@ -79,12 +84,12 @@ const industries: {
       <h2 class="display-md text-fg">{t(locale, 'industries.listHeading')}</h2>
       <p class="prose-measure text-fg-muted">{t(locale, 'industries.listBody')}</p>
     </div>
-    <ul class="grid gap-6 lg:grid-cols-2" data-reveal-stagger>
+    <ul class="grid gap-px border border-border bg-border lg:grid-cols-2" data-reveal-stagger>
       {
         industries.map((item) => (
-          <li class="card flex flex-col gap-4 p-5 sm:p-6" data-reveal-child>
+          <li class="flex flex-col gap-4 bg-bg-elevated p-5 sm:p-6" data-reveal-child>
             <div class="flex items-center gap-4">
-              <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-fg">
+              <span class="inline-flex size-10 shrink-0 items-center justify-center border border-border text-fg">
                 <Icon name={item.icon} class="size-5" />
               </span>
               <h3 class="text-lg font-semibold text-fg">{t(locale, item.title)}</h3>
@@ -116,12 +121,30 @@ const industries: {
   </div>
 </section>
 
+{
+  featuredCase && (
+    <section class="section-pad section-defer border-t border-border" data-reveal>
+      <div class="container-site space-y-6">
+        <h2 class="display-md text-fg">{t(locale, 'trust.industriesCaseHeading')}</h2>
+        <CaseStudyCard
+          eyebrow={featuredCase.eyebrow}
+          title={featuredCase.title}
+          body={featuredCase.body}
+          metric={featuredCase.metric}
+          href={clientsHref}
+          linkLabel={t(locale, 'trust.viewClients')}
+        />
+      </div>
+    </section>
+  )
+}
+
 <section class="section-pad section-defer border-t border-border" data-reveal>
   <div class="container-site space-y-4">
     <h2 class="display-md text-fg">{t(locale, 'industries.ctaHeading')}</h2>
     <p class="prose-measure text-fg-muted">{t(locale, 'industries.ctaBody')}</p>
     <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-      <a href={localePath(locale, '/contact/')} class="btn btn-primary">
+      <a href={localePath(locale, '/contact/')} class="btn btn-cta">
         {t(locale, 'nav.getInTouch')}
       </a>
       <a href={localePath(locale, '/solutions/')} class="btn btn-ghost">

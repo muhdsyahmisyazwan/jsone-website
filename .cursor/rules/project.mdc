@@ -90,7 +90,7 @@ Seed CMS content from `docs/content-brief.md` (mission, vision, timeline, OpenTe
 ## Access & quality
 
 - Sanity roles: admin vs editor
-- WCAG 2.1 AA; Lighthouse 90+
+- WCAG 2.2 AA; Lighthouse 90+
 - Prefer semantic HTML, visible focus, skip link, sufficient contrast
 
 ## Phase discipline

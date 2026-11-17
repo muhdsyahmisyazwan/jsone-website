@@ -1,6 +1,8 @@
 ---
 import PageHero from './ui/PageHero.astro'
+import Breadcrumbs from './ui/Breadcrumbs.astro'
 import type {Locale} from '../i18n/locales'
+import {localePath} from '../i18n/paths'
 import {t} from '../i18n/utils'
 import {fallbackTeamGroups} from '../data/fallbackTeam'
 
@@ -29,7 +31,16 @@ const groups = fallbackTeamGroups.map((group) => ({
   eyebrow={t(locale, 'nav.aboutTeam')}
   title={t(locale, 'aboutTeam.heroTitle')}
   subtitle={t(locale, 'aboutTeam.heroSubtitle')}
-/>
+>
+  <Breadcrumbs
+    slot="breadcrumbs"
+    locale={locale}
+    items={[
+      {label: t(locale, 'nav.about'), href: localePath(locale, '/about/')},
+      {label: t(locale, 'nav.aboutTeam')},
+    ]}
+  />
+</PageHero>
 
 <section class="section-pad section-defer bg-bg-muted/40" data-reveal>
   <div class="container-site max-w-3xl space-y-5">
@@ -52,11 +63,11 @@ const groups = fallbackTeamGroups.map((group) => ({
       groups.map((group) => (
         <div class="space-y-5">
           <p class="eyebrow">{group.title}</p>
-          <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul class="grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
             {group.members.map((member) => (
-              <li class="card card-spotlight flex gap-4 p-5" data-reveal-child>
+              <li class="flex gap-4 bg-bg-elevated p-5" data-reveal-child>
                 <span
-                  class="inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-primary-soft font-semibold text-primary ring-2 ring-primary/30"
+                  class="inline-flex size-12 shrink-0 items-center justify-center border border-border font-semibold text-primary"
                   aria-hidden="true"
                 >
                   {member.initials}

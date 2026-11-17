@@ -1,0 +1,50 @@
+---
+/**
+ * Single Proof quote cell. Omits when quote is missing.
+ * Not a carousel; homepage uses at most one reviewed CMS quote.
+ */
+import SanityImage from '../sanity/SanityImage.astro'
+import type {Locale} from '../../i18n/locales'
+import type {SanityImage as Img} from '../../lib/sanity/types'
+
+interface Props {
+  quote: string
+  author?: string
+  role?: string
+  avatar?: Img
+  locale?: Locale
+  class?: string
+}
+
+const {quote, author, role, avatar, locale = 'en', class: className = ''} = Astro.props
+const canRender = Boolean(quote?.trim())
+const attribution = [author?.trim(), role?.trim()].filter(Boolean).join(' · ')
+---
+
+{
+  canRender && (
+    <blockquote
+      class:list={['border border-border bg-bg-elevated px-5 py-5 sm:px-6 sm:py-6', className]}
+      data-reveal-child
+    >
+      <div class="flex gap-4">
+        {avatar && (
+          <div class="hidden size-12 shrink-0 overflow-hidden border border-border sm:block">
+            <SanityImage
+              image={avatar}
+              locale={locale}
+              class="size-full object-cover"
+              widths={[96, 128]}
+              sizes="48px"
+              maxWidth={128}
+            />
+          </div>
+        )}
+        <div class="min-w-0 space-y-3">
+          <p class="body-md text-fg">“{quote.trim()}”</p>
+          {attribution && <footer class="caption text-fg-subtle">{attribution}</footer>}
+        </div>
+      </div>
+    </blockquote>
+  )
+}

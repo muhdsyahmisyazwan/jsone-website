@@ -1,0 +1,102 @@
+---
+/**
+ * Essential-cookies / PDPA notice. Stacks above the mobile CTA bar.
+ * Dismissed state stored in localStorage (jsone-consent-essential).
+ */
+import {localePath} from '../i18n/paths'
+import type {Locale} from '../i18n/locales'
+import {t} from '../i18n/utils'
+
+interface Props {
+  locale: Locale
+}
+
+const {locale} = Astro.props
+const privacyHref = localePath(locale, '/privacy/')
+---
+
+<div
+  class="consent-banner hidden border-t border-border bg-bg-elevated"
+  data-consent-banner
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby="consent-banner-title"
+  aria-describedby="consent-banner-body"
+  hidden
+>
+  <div class="container-site flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:py-4">
+    <div class="min-w-0 space-y-1">
+      <p id="consent-banner-title" class="text-sm font-semibold text-fg">
+        {t(locale, 'consent.title')}
+      </p>
+      <p id="consent-banner-body" class="text-sm text-fg-muted">
+        {t(locale, 'consent.body')}
+        {' '}
+        <a href={privacyHref} class="font-semibold text-primary hover:opacity-80">
+          {t(locale, 'consent.privacyLink')}
+        </a>
+      </p>
+    </div>
+    <div class="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
+      <button type="button" class="btn btn-brand w-full sm:w-auto" data-consent-accept>
+        {t(locale, 'consent.accept')}
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'jsone-consent-essential'
+
+  function syncConsentLayout(visible: boolean) {
+    document.body.classList.toggle('has-consent-banner', visible)
+    const banner = document.querySelector('[data-consent-banner]')
+    if (!(banner instanceof HTMLElement)) return
+    if (visible) {
+      banner.hidden = false
+      banner.classList.remove('hidden')
+      const height = Math.ceil(banner.getBoundingClientRect().height)
+      document.documentElement.style.setProperty('--consent-banner-height', `${height}px`)
+    } else {
+      banner.hidden = true
+      banner.classList.add('hidden')
+      document.documentElement.style.setProperty('--consent-banner-height', '0px')
+    }
+  }
+
+  function bindConsentBanner() {
+    const banner = document.querySelector('[data-consent-banner]')
+    const accept = document.querySelector('[data-consent-accept]')
+    if (!(banner instanceof HTMLElement) || banner.dataset.bound === 'true') return
+    banner.dataset.bound = 'true'
+
+    let accepted = false
+    try {
+      accepted = localStorage.getItem(STORAGE_KEY) === '1'
+    } catch {
+      accepted = false
+    }
+
+    syncConsentLayout(!accepted)
+
+    accept?.addEventListener('click', () => {
+      try {
+        localStorage.setItem(STORAGE_KEY, '1')
+      } catch {
+        /* private mode: still dismiss for this session */
+      }
+      syncConsentLayout(false)
+    })
+
+    window.addEventListener(
+      'resize',
+      () => {
+        if (document.body.classList.contains('has-consent-banner')) syncConsentLayout(true)
+      },
+      {passive: true},
+    )
+  }
+
+  bindConsentBanner()
+  document.addEventListener('astro:page-load', bindConsentBanner)
+</script>

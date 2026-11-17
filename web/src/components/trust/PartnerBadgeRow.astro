@@ -1,0 +1,53 @@
+---
+/**
+ * Partner authority badges. Omits itself when no badges remain after filtering.
+ * Logos preferred later; wordmark text is the approved fallback.
+ */
+import type {TrustBadge} from '../../lib/trust/fallback'
+
+interface Props {
+  badges: TrustBadge[]
+  eyebrow?: string
+  class?: string
+}
+
+const {badges = [], eyebrow, class: className = ''} = Astro.props
+const items = badges.filter((badge) => badge.name?.trim())
+---
+
+{
+  items.length > 0 && (
+    <div class:list={['space-y-3', className]}>
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <ul
+        class:list={[
+          'grid gap-px border border-border bg-border',
+          items.length === 1 && 'grid-cols-1',
+          items.length === 2 && 'grid-cols-1 sm:grid-cols-2',
+          items.length >= 3 && 'grid-cols-1 sm:grid-cols-2',
+        ]}
+        data-reveal-stagger
+      >
+        {items.map((badge) => (
+          <li
+            class="flex min-h-14 items-center bg-bg-elevated px-4 py-3 font-mono text-sm leading-snug text-fg-muted"
+            data-reveal-child
+          >
+            {badge.href ? (
+              <a
+                href={badge.href}
+                class="text-fg-muted transition hover:text-fg"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {badge.name}
+              </a>
+            ) : (
+              <span>{badge.name}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
